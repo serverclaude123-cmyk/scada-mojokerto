@@ -1,0 +1,1703 @@
+{
+ "version": "1.01",
+ "name": "SCADA Mojokerto",
+ "server": {
+  "name": "Fuxa Server",
+  "id": "0",
+  "type": "FuxaServer",
+  "property": {}
+ },
+ "hmi": {
+  "layout": {
+   "start": "v_scada_mojokerto",
+   "navigation": {
+    "mode": "fix",
+    "type": "inline",
+    "items": [
+     {
+      "icon": "dashboard",
+      "view": "v_scada_mojokerto",
+      "link": "",
+      "text": "Overview"
+     }
+    ]
+   },
+   "header": {
+    "title": "SCADA Mojokerto",
+    "alarms": "modeNone",
+    "infos": "modeNone"
+   },
+   "showdev": true,
+   "inputdialog": "false",
+   "hidenavigation": false,
+   "theme": ""
+  },
+  "views": [
+   {
+    "id": "v_scada_mojokerto",
+    "name": "Overview",
+    "type": "svg",
+    "profile": {
+     "width": 1200,
+     "height": 800,
+     "bkcolor": "#f4f6f8ff"
+    },
+    "items": {
+     "VAL_gw_status": {
+      "id": "VAL_gw_status",
+      "type": "svg-ext-value",
+      "name": "gw_status",
+      "property": {
+       "events": [],
+       "variable": "gw_status",
+       "variableId": "gw_status",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_gw_ip": {
+      "id": "VAL_gw_ip",
+      "type": "svg-ext-value",
+      "name": "gw_ip",
+      "property": {
+       "events": [],
+       "variable": "gw_ip",
+       "variableId": "gw_ip",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "GSE_vsd1_running": {
+      "id": "GSE_vsd1_running",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_running",
+      "property": {
+       "events": [],
+       "variable": "vsd1_running",
+       "variableId": "vsd1_running",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      },
+      "label": "HtmlSemaphore"
+     },
+     "GSE_vsd1_fault": {
+      "id": "GSE_vsd1_fault",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_fault",
+      "property": {
+       "events": [],
+       "variable": "vsd1_fault",
+       "variableId": "vsd1_fault",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      },
+      "label": "HtmlSemaphore"
+     },
+     "GSE_vsd1_comm_ok": {
+      "id": "GSE_vsd1_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_comm_ok",
+      "property": {
+       "events": [],
+       "variable": "vsd1_comm_ok",
+       "variableId": "vsd1_comm_ok",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      },
+      "label": "HtmlSemaphore"
+     },
+     "VAL_vsd1_freq_out": {
+      "id": "VAL_vsd1_freq_out",
+      "type": "svg-ext-value",
+      "name": "vsd1_freq_out",
+      "property": {
+       "events": [],
+       "variable": "vsd1_freq_out",
+       "variableId": "vsd1_freq_out",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd1_freq_set": {
+      "id": "VAL_vsd1_freq_set",
+      "type": "svg-ext-value",
+      "name": "vsd1_freq_set",
+      "property": {
+       "events": [],
+       "variable": "vsd1_freq_set",
+       "variableId": "vsd1_freq_set",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd1_current": {
+      "id": "VAL_vsd1_current",
+      "type": "svg-ext-value",
+      "name": "vsd1_current",
+      "property": {
+       "events": [],
+       "variable": "vsd1_current",
+       "variableId": "vsd1_current",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " A"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd1_volt_dc": {
+      "id": "VAL_vsd1_volt_dc",
+      "type": "svg-ext-value",
+      "name": "vsd1_volt_dc",
+      "property": {
+       "events": [],
+       "variable": "vsd1_volt_dc",
+       "variableId": "vsd1_volt_dc",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd1_volt_out": {
+      "id": "VAL_vsd1_volt_out",
+      "type": "svg-ext-value",
+      "name": "vsd1_volt_out",
+      "property": {
+       "events": [],
+       "variable": "vsd1_volt_out",
+       "variableId": "vsd1_volt_out",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "HXB_vsd1_start": {
+      "id": "HXB_vsd1_start",
+      "type": "svg-ext-html_button",
+      "name": "START",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "plc_start_vsd1",
+       "variableId": "plc_start_vsd1",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "START"
+      },
+      "label": "HtmlButton"
+     },
+     "HXB_vsd1_stop": {
+      "id": "HXB_vsd1_stop",
+      "type": "svg-ext-html_button",
+      "name": "STOP",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "plc_stop_vsd1",
+       "variableId": "plc_stop_vsd1",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "STOP"
+      },
+      "label": "HtmlButton"
+     },
+     "GSE_vsd2_running": {
+      "id": "GSE_vsd2_running",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_running",
+      "property": {
+       "events": [],
+       "variable": "vsd2_running",
+       "variableId": "vsd2_running",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      },
+      "label": "HtmlSemaphore"
+     },
+     "GSE_vsd2_fault": {
+      "id": "GSE_vsd2_fault",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_fault",
+      "property": {
+       "events": [],
+       "variable": "vsd2_fault",
+       "variableId": "vsd2_fault",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      },
+      "label": "HtmlSemaphore"
+     },
+     "GSE_vsd2_comm_ok": {
+      "id": "GSE_vsd2_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_comm_ok",
+      "property": {
+       "events": [],
+       "variable": "vsd2_comm_ok",
+       "variableId": "vsd2_comm_ok",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      },
+      "label": "HtmlSemaphore"
+     },
+     "VAL_vsd2_freq_out": {
+      "id": "VAL_vsd2_freq_out",
+      "type": "svg-ext-value",
+      "name": "vsd2_freq_out",
+      "property": {
+       "events": [],
+       "variable": "vsd2_freq_out",
+       "variableId": "vsd2_freq_out",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd2_freq_set": {
+      "id": "VAL_vsd2_freq_set",
+      "type": "svg-ext-value",
+      "name": "vsd2_freq_set",
+      "property": {
+       "events": [],
+       "variable": "vsd2_freq_set",
+       "variableId": "vsd2_freq_set",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd2_current": {
+      "id": "VAL_vsd2_current",
+      "type": "svg-ext-value",
+      "name": "vsd2_current",
+      "property": {
+       "events": [],
+       "variable": "vsd2_current",
+       "variableId": "vsd2_current",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " A"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd2_volt_dc": {
+      "id": "VAL_vsd2_volt_dc",
+      "type": "svg-ext-value",
+      "name": "vsd2_volt_dc",
+      "property": {
+       "events": [],
+       "variable": "vsd2_volt_dc",
+       "variableId": "vsd2_volt_dc",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd2_volt_out": {
+      "id": "VAL_vsd2_volt_out",
+      "type": "svg-ext-value",
+      "name": "vsd2_volt_out",
+      "property": {
+       "events": [],
+       "variable": "vsd2_volt_out",
+       "variableId": "vsd2_volt_out",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "HXB_vsd2_start": {
+      "id": "HXB_vsd2_start",
+      "type": "svg-ext-html_button",
+      "name": "START",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "plc_start_vsd2",
+       "variableId": "plc_start_vsd2",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "START"
+      },
+      "label": "HtmlButton"
+     },
+     "HXB_vsd2_stop": {
+      "id": "HXB_vsd2_stop",
+      "type": "svg-ext-html_button",
+      "name": "STOP",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "plc_stop_vsd2",
+       "variableId": "plc_stop_vsd2",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "STOP"
+      },
+      "label": "HtmlButton"
+     },
+     "VAL_vsd1_status_word": {
+      "id": "VAL_vsd1_status_word",
+      "type": "svg-ext-value",
+      "name": "vsd1_status_word",
+      "property": {
+       "events": [],
+       "variable": "vsd1_status_word",
+       "variableId": "vsd1_status_word",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd1_err_count": {
+      "id": "VAL_vsd1_err_count",
+      "type": "svg-ext-value",
+      "name": "vsd1_err_count",
+      "property": {
+       "events": [],
+       "variable": "vsd1_err_count",
+       "variableId": "vsd1_err_count",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd2_status_word": {
+      "id": "VAL_vsd2_status_word",
+      "type": "svg-ext-value",
+      "name": "vsd2_status_word",
+      "property": {
+       "events": [],
+       "variable": "vsd2_status_word",
+       "variableId": "vsd2_status_word",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      },
+      "label": "Value"
+     },
+     "VAL_vsd2_err_count": {
+      "id": "VAL_vsd2_err_count",
+      "type": "svg-ext-value",
+      "name": "vsd2_err_count",
+      "property": {
+       "events": [],
+       "variable": "vsd2_err_count",
+       "variableId": "vsd2_err_count",
+       "variableSrc": "mqtt-mojokerto",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      },
+      "label": "Value"
+     }
+    },
+    "variables": {},
+    "svgcontent": "<svg width=\"1200\" height=\"800\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"0\" width=\"1200\" height=\"800\" fill=\"#f4f6f8\" stroke-width=\"0\" id=\"bg\"/><text x=\"40\" y=\"48\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">SCADA Mojokerto - 2 VSD ABB</text><text x=\"40\" y=\"76\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Gateway ESP32</text><g id=\"VAL_gw_status\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"16\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_gw_status_t\" x=\"420\" y=\"76\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"16\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">--</text></g><text x=\"440\" y=\"76\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">IP</text><g id=\"VAL_gw_ip\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"16\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_gw_ip_t\" x=\"640\" y=\"76\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"16\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">---.---.---.---</text></g><rect x=\"40\" y=\"110\" width=\"540\" height=\"430\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_vsd1\"/><text x=\"64\" y=\"150\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">VSD1</text><g id=\"GSE_vsd1_running\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"190\" cy=\"143\" rx=\"13\" ry=\"13\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_running_e\"/></g><text x=\"190\" y=\"170\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">RUN</text><g id=\"GSE_vsd1_fault\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"320\" cy=\"143\" rx=\"13\" ry=\"13\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_fault_e\"/></g><text x=\"320\" y=\"170\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">FAULT</text><g id=\"GSE_vsd1_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"450\" cy=\"143\" rx=\"13\" ry=\"13\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_comm_ok_e\"/></g><text x=\"450\" y=\"170\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><text x=\"64\" y=\"220\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Frek. output</text><g id=\"VAL_vsd1_freq_out\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_freq_out_t\" x=\"470\" y=\"224\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"64\" y=\"266\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Setpoint</text><g id=\"VAL_vsd1_freq_set\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_freq_set_t\" x=\"470\" y=\"270\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"64\" y=\"312\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Arus</text><g id=\"VAL_vsd1_current\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_current_t\" x=\"470\" y=\"316\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"64\" y=\"358\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">DC bus</text><g id=\"VAL_vsd1_volt_dc\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_volt_dc_t\" x=\"470\" y=\"362\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"64\" y=\"404\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Teg. output</text><g id=\"VAL_vsd1_volt_out\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_volt_out_t\" x=\"470\" y=\"408\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><g id=\"HXB_vsd1_start\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"64\" y=\"465\" width=\"120\" height=\"42\" fill=\"#2e7d32\" id=\"svg_HXB_vsd1_start\" stroke=\"#ffffff\"/><foreignObject x=\"64\" y=\"465\" height=\"42\" width=\"120\" id=\"H-HXB_vsd1_start\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #2e7d32; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd1_start\">START</BUTTON></foreignObject></g><g id=\"HXB_vsd1_stop\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"200\" y=\"465\" width=\"120\" height=\"42\" fill=\"#c62828\" id=\"svg_HXB_vsd1_stop\" stroke=\"#ffffff\"/><foreignObject x=\"200\" y=\"465\" height=\"42\" width=\"120\" id=\"H-HXB_vsd1_stop\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #c62828; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd1_stop\">STOP</BUTTON></foreignObject></g><text x=\"340\" y=\"493\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">tulis 1 -> PLC SET/RESET + clear bit</text><rect x=\"620\" y=\"110\" width=\"540\" height=\"430\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_vsd2\"/><text x=\"644\" y=\"150\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">VSD2</text><g id=\"GSE_vsd2_running\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"770\" cy=\"143\" rx=\"13\" ry=\"13\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_running_e\"/></g><text x=\"770\" y=\"170\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">RUN</text><g id=\"GSE_vsd2_fault\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"900\" cy=\"143\" rx=\"13\" ry=\"13\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_fault_e\"/></g><text x=\"900\" y=\"170\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">FAULT</text><g id=\"GSE_vsd2_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1030\" cy=\"143\" rx=\"13\" ry=\"13\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_comm_ok_e\"/></g><text x=\"1030\" y=\"170\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><text x=\"644\" y=\"220\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Frek. output</text><g id=\"VAL_vsd2_freq_out\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_freq_out_t\" x=\"1050\" y=\"224\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"644\" y=\"266\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Setpoint</text><g id=\"VAL_vsd2_freq_set\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_freq_set_t\" x=\"1050\" y=\"270\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"644\" y=\"312\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Arus</text><g id=\"VAL_vsd2_current\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_current_t\" x=\"1050\" y=\"316\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"644\" y=\"358\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">DC bus</text><g id=\"VAL_vsd2_volt_dc\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_volt_dc_t\" x=\"1050\" y=\"362\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"644\" y=\"404\" font-family=\"sans-serif\" font-size=\"15\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Teg. output</text><g id=\"VAL_vsd2_volt_out\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_volt_out_t\" x=\"1050\" y=\"408\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><g id=\"HXB_vsd2_start\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"644\" y=\"465\" width=\"120\" height=\"42\" fill=\"#2e7d32\" id=\"svg_HXB_vsd2_start\" stroke=\"#ffffff\"/><foreignObject x=\"644\" y=\"465\" height=\"42\" width=\"120\" id=\"H-HXB_vsd2_start\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #2e7d32; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd2_start\">START</BUTTON></foreignObject></g><g id=\"HXB_vsd2_stop\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"780\" y=\"465\" width=\"120\" height=\"42\" fill=\"#c62828\" id=\"svg_HXB_vsd2_stop\" stroke=\"#ffffff\"/><foreignObject x=\"780\" y=\"465\" height=\"42\" width=\"120\" id=\"H-HXB_vsd2_stop\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #c62828; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd2_stop\">STOP</BUTTON></foreignObject></g><text x=\"920\" y=\"493\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">tulis 1 -> PLC SET/RESET + clear bit</text><text x=\"40\" y=\"580\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">Diagnosa</text><text x=\"40\" y=\"612\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">VSD1 status word</text><g id=\"VAL_vsd1_status_word\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_status_word_t\" x=\"340\" y=\"612\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">0</text></g><text x=\"40\" y=\"644\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">VSD1 error frames</text><g id=\"VAL_vsd1_err_count\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_err_count_t\" x=\"340\" y=\"644\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">0</text></g><text x=\"620\" y=\"612\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">VSD2 status word</text><g id=\"VAL_vsd2_status_word\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_status_word_t\" x=\"920\" y=\"612\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">0</text></g><text x=\"620\" y=\"644\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">VSD2 error frames</text><g id=\"VAL_vsd2_err_count\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_err_count_t\" x=\"920\" y=\"644\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">0</text></g></svg>",
+    "property": {
+     "events": []
+    }
+   }
+  ]
+ },
+ "devices": {
+  "MQTT Broker": {
+   "id": "mqtt-mojokerto",
+   "name": "MQTT Broker",
+   "enabled": true,
+   "type": "MQTTclient",
+   "polling": 1000,
+   "property": {
+    "address": "mqtts://GANTI-HOST.s1.eu.hivemq.cloud:8883",
+    "username": "GANTI-USER",
+    "password": "GANTI-PASSWORD"
+   },
+   "tags": {
+    "gw_status": {
+     "id": "gw_status",
+     "name": "gw_status",
+     "label": "gw_status",
+     "type": "raw",
+     "address": "scada/mojokerto/gw/status",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "gw_ip": {
+     "id": "gw_ip",
+     "name": "gw_ip",
+     "label": "gw_ip",
+     "type": "raw",
+     "address": "scada/mojokerto/gw/ip",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "gw_uptime": {
+     "id": "gw_uptime",
+     "name": "gw_uptime",
+     "label": "gw_uptime",
+     "type": "raw",
+     "address": "scada/mojokerto/gw/uptime",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_freq_out": {
+     "id": "vsd1_freq_out",
+     "name": "vsd1_freq_out",
+     "label": "vsd1_freq_out",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/freq_out",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_freq_set": {
+     "id": "vsd1_freq_set",
+     "name": "vsd1_freq_set",
+     "label": "vsd1_freq_set",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/freq_set",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_current": {
+     "id": "vsd1_current",
+     "name": "vsd1_current",
+     "label": "vsd1_current",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/current",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_volt_dc": {
+     "id": "vsd1_volt_dc",
+     "name": "vsd1_volt_dc",
+     "label": "vsd1_volt_dc",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/volt_dc",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_volt_out": {
+     "id": "vsd1_volt_out",
+     "name": "vsd1_volt_out",
+     "label": "vsd1_volt_out",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/volt_out",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_freq_cmd": {
+     "id": "vsd1_freq_cmd",
+     "name": "vsd1_freq_cmd",
+     "label": "vsd1_freq_cmd",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/freq_cmd",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_running": {
+     "id": "vsd1_running",
+     "name": "vsd1_running",
+     "label": "vsd1_running",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/running",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_fault": {
+     "id": "vsd1_fault",
+     "name": "vsd1_fault",
+     "label": "vsd1_fault",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/fault",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_ready": {
+     "id": "vsd1_ready",
+     "name": "vsd1_ready",
+     "label": "vsd1_ready",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/ready",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_comm_ok": {
+     "id": "vsd1_comm_ok",
+     "name": "vsd1_comm_ok",
+     "label": "vsd1_comm_ok",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/comm_ok",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_cmd_ok": {
+     "id": "vsd1_cmd_ok",
+     "name": "vsd1_cmd_ok",
+     "label": "vsd1_cmd_ok",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/cmd_ok",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_status_word": {
+     "id": "vsd1_status_word",
+     "name": "vsd1_status_word",
+     "label": "vsd1_status_word",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/status_word",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_err_count": {
+     "id": "vsd1_err_count",
+     "name": "vsd1_err_count",
+     "label": "vsd1_err_count",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/err_count",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_cmd_freq_set": {
+     "id": "vsd1_cmd_freq_set",
+     "name": "vsd1_cmd_freq_set",
+     "label": "vsd1_cmd_freq_set",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd1/cmd/freq_set",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {
+      "pubs": [
+       {
+        "type": "value",
+        "key": "",
+        "value": ""
+       }
+      ],
+      "retain": false
+     }
+    },
+    "vsd2_freq_out": {
+     "id": "vsd2_freq_out",
+     "name": "vsd2_freq_out",
+     "label": "vsd2_freq_out",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/freq_out",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_freq_set": {
+     "id": "vsd2_freq_set",
+     "name": "vsd2_freq_set",
+     "label": "vsd2_freq_set",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/freq_set",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_current": {
+     "id": "vsd2_current",
+     "name": "vsd2_current",
+     "label": "vsd2_current",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/current",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_volt_dc": {
+     "id": "vsd2_volt_dc",
+     "name": "vsd2_volt_dc",
+     "label": "vsd2_volt_dc",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/volt_dc",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_volt_out": {
+     "id": "vsd2_volt_out",
+     "name": "vsd2_volt_out",
+     "label": "vsd2_volt_out",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/volt_out",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_freq_cmd": {
+     "id": "vsd2_freq_cmd",
+     "name": "vsd2_freq_cmd",
+     "label": "vsd2_freq_cmd",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/freq_cmd",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_running": {
+     "id": "vsd2_running",
+     "name": "vsd2_running",
+     "label": "vsd2_running",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/running",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_fault": {
+     "id": "vsd2_fault",
+     "name": "vsd2_fault",
+     "label": "vsd2_fault",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/fault",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_ready": {
+     "id": "vsd2_ready",
+     "name": "vsd2_ready",
+     "label": "vsd2_ready",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/ready",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_comm_ok": {
+     "id": "vsd2_comm_ok",
+     "name": "vsd2_comm_ok",
+     "label": "vsd2_comm_ok",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/comm_ok",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_cmd_ok": {
+     "id": "vsd2_cmd_ok",
+     "name": "vsd2_cmd_ok",
+     "label": "vsd2_cmd_ok",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/cmd_ok",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_status_word": {
+     "id": "vsd2_status_word",
+     "name": "vsd2_status_word",
+     "label": "vsd2_status_word",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/status_word",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_err_count": {
+     "id": "vsd2_err_count",
+     "name": "vsd2_err_count",
+     "label": "vsd2_err_count",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/err_count",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_cmd_freq_set": {
+     "id": "vsd2_cmd_freq_set",
+     "name": "vsd2_cmd_freq_set",
+     "label": "vsd2_cmd_freq_set",
+     "type": "raw",
+     "address": "scada/mojokerto/vsd2/cmd/freq_set",
+     "memaddress": "",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {
+      "pubs": [
+       {
+        "type": "value",
+        "key": "",
+        "value": ""
+       }
+      ],
+      "retain": false
+     }
+    }
+   }
+  },
+  "PLC M221": {
+   "id": "plc-m221",
+   "name": "PLC M221",
+   "enabled": true,
+   "type": "ModbusTCP",
+   "polling": 1000,
+   "property": {
+    "address": "192.168.1.20:502",
+    "slaveid": "1",
+    "connectionOption": "TcpPort",
+    "options": "",
+    "delay": 20
+   },
+   "tags": {
+    "plc_start_vsd1": {
+     "id": "plc_start_vsd1",
+     "name": "plc_start_vsd1",
+     "label": "plc_start_vsd1",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "1",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "plc_stop_vsd1": {
+     "id": "plc_stop_vsd1",
+     "name": "plc_stop_vsd1",
+     "label": "plc_stop_vsd1",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "2",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "plc_start_vsd2": {
+     "id": "plc_start_vsd2",
+     "name": "plc_start_vsd2",
+     "label": "plc_start_vsd2",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "3",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "plc_stop_vsd2": {
+     "id": "plc_stop_vsd2",
+     "name": "plc_stop_vsd2",
+     "label": "plc_stop_vsd2",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "4",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "plc_heartbeat": {
+     "id": "plc_heartbeat",
+     "name": "plc_heartbeat",
+     "label": "plc_heartbeat",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "11",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    }
+   }
+  }
+ },
+ "charts": [],
+ "graphs": [],
+ "alarms": [
+  {
+   "name": "AL_VSD1_FAULT",
+   "property": {
+    "variableId": "vsd1_fault",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "VSD1 TRIPPED (fault)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD1_COMM",
+   "property": {
+    "variableId": "vsd1_comm_ok",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "VSD1 tidak terbaca ESP32 (comm lost)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD2_FAULT",
+   "property": {
+    "variableId": "vsd2_fault",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "VSD2 TRIPPED (fault)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD2_COMM",
+   "property": {
+    "variableId": "vsd2_comm_ok",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "VSD2 tidak terbaca ESP32 (comm lost)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  }
+ ],
+ "recipes": [],
+ "notifications": [],
+ "scripts": [],
+ "reports": [],
+ "texts": [],
+ "mapsLocations": []
+}

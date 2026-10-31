@@ -8,3 +8,6 @@ firmware/.vscode/
 # manual vendor (besar, simpan terpisah)
 docs/manual/
 *.log
+
+# konfigurasi alat bantu lokal (path absolut per komputer)
+.claude/

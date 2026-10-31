@@ -24,8 +24,8 @@
 #define RS485_TX_PIN       17
 #define RS485_RX_PIN       18
 #define RS485_DE_PIN       -1
-#define MB_BAUD            9600        // samakan dengan par 5303 drive (default 9.6 kbit/s)
-#define MB_FORMAT          SERIAL_8N1  // samakan dengan par 5303 (baud) & 5304 (parity) ACS550
+#define MB_BAUD            9600        // samakan dengan par 5303 drive (default pabrik 9.6 kbit/s)
+#define MB_FORMAT          SERIAL_8N1  // samakan dengan par 5304 = 0 (8 NONE 1); default pabrik ACS550 = 8N2
 #define MB_TIMEOUT_MS      300
 #define MB_FRAME_GAP_MS    5
 
@@ -40,10 +40,31 @@ static const char*   VSD_NAME[VSD_COUNT]       = {"vsd1", "vsd2"};
 // Parameter drive NNNN dibaca di register 4NNNN -> alamat PDU = NNNN - 1.
 // Kalau nilai terbaca bergeser 1 parameter, tambah/kurangi 1 (beda master 0-based vs 1-based).
 // Isi 0 untuk menonaktifkan pembacaan.
-#define REG_ETA            3           // 40004 Status Word (profil ABB Drives, par 5305=0)
+#define REG_ETA            3           // 40004 Status Word (profil ABB Drives: par 5305 = 0 ABB DRV LIM)
 #define REG_RFR            102         // par 0103 OUTPUT FREQ, 0.1 Hz
 #define REG_LCR            103         // par 0104 CURRENT, 0.1 A
 #define REG_SETPOINT       110         // par 0111 EXT REF 1 (Hz), 0.1 Hz
+
+// ---------- Blok baca (hemat transaksi RS485) ----------
+// Satu FC03 mengambil par 0103..0111 sekaligus (alamat 102..110) = 1 transaksi,
+// bukan 5. Status Word (alamat 3) tetap dibaca terpisah.
+// Kalau drive menolak rentang ini (exception 02 ILLEGAL DATA ADDRESS), firmware
+// otomatis jatuh kembali ke pembacaan satu-satu; set 0 untuk mematikannya.
+#define MB_BLOCK_READ      1
+#define REG_BLOCK_START    102
+#define REG_BLOCK_COUNT    9           // 102..110
+
+// ---------- Tulis setpoint frekuensi (OPSIONAL, default MATI) ----------
+// 0 = firmware murni read-only (posisi aman: ESP32 tidak bisa mengubah apa pun di drive).
+// 1 = ESP32 boleh menulis REFERENCE 1 lewat MQTT. Tetap TIDAK bisa start/stop motor:
+//     yang ditulis hanya nilai referensi, bukan Control Word (40001).
+// Prasyarat di drive: par 1103 REF1 SELECT = 8 (COMM) dan panel pada mode REM.
+#define ALLOW_SETPOINT_WRITE 0
+#define REG_REF1            1          // 40002 REFERENCE 1 (jangan pernah 0 = Control Word)
+#define REF1_SCALE_MAX      20000      // 20000 = par 1105 REF1 MAX
+#define REF1_MAX_HZ         50.0f      // isi sesuai par 1105 di drive (resolusi 0,1 Hz: 500 = 50,0 Hz)
+#define REF_CLAMP_MIN_HZ    0.0f       // batas bawah yang diterima dari MQTT
+#define REF_CLAMP_MAX_HZ    50.0f      // batas atas yang diterima dari MQTT
 
 // Bit Status Word ABB Drives profile
 #define SW_RDY_ON          0x0001
@@ -64,3 +85,11 @@ static const char*   VSD_NAME[VSD_COUNT]       = {"vsd1", "vsd2"};
 #define MQTT_BASE_TOPIC    "scada/mojokerto"
 #define MQTT_PUBLISH_MS    2000
 #define MQTT_RETAIN        1
+// Topik perintah setpoint: <base>/<vsd>/cmd/freq_set, mis. scada/mojokerto/vsd1/cmd/freq_set.
+// Publish TANPA retained -- perintah retained akan dipakai ulang tiap ESP32 reconnect.
+#define MQTT_CMD_SUFFIX    "cmd/freq_set"
+
+// ---------- Pagar keamanan waktu kompilasi ----------
+#if ALLOW_SETPOINT_WRITE && REG_REF1 == 0
+#error "REG_REF1 = 0 adalah Control Word (40001). Menulis ke sana bisa menjalankan motor."
+#endif

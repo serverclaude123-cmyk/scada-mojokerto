@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Arsitektur &amp; Wiring SCADA Mojokerto</title>
+<style>
+  html, body { margin: 0; background: #fff; color: #1a1a1a;
+               font-family: "Segoe UI", system-ui, sans-serif; }
+  .wrap { max-width: 1440px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p.sub { font-size: 13px; color: #546e7a; margin: 0 0 12px; }
+  svg { width: 100%; height: auto; display: block; }
+  @media print { .wrap { padding: 0; } @page { size: A3 landscape; margin: 8mm; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>SCADA Mojokerto — arsitektur komunikasi &amp; wiring perintah</h1>
+<p class="sub">2&times; VSD ABB ACS550 &middot; ESP32-S3 KhursLabs (W5500) &middot; PLC Schneider M221 &middot; FUXA &middot; broker MQTT TLS 8883</p>
+
+<svg viewBox="0 0 1400 1010" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Diagram arsitektur dan wiring SCADA Mojokerto">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/>
+    </marker>
+    <marker id="arwc" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#880000"/>
+    </marker>
+    <style>
+      .box   { fill:#fff; stroke:#37474f; stroke-width:2; }
+      .boxa  { fill:#eceff1; stroke:#37474f; stroke-width:2; }
+      .sect  { fill:none; stroke:#b0bec5; stroke-width:1.5; stroke-dasharray:6 4; }
+      .t     { font: 14px "Segoe UI", sans-serif; fill:#1a1a1a; }
+      .tb    { font: 600 15px "Segoe UI", sans-serif; fill:#1a1a1a; }
+      .ts    { font: 11.5px "Segoe UI", sans-serif; fill:#546e7a; }
+      .tm    { font: 12px ui-monospace, Consolas, monospace; fill:#0d47a1; }
+      .sh    { font: 600 13px "Segoe UI", sans-serif; fill:#37474f; letter-spacing:.5px; }
+      .w     { stroke:#1a1a1a; stroke-width:2.5; fill:none; }
+      .wA    { stroke:#1a1a1a; stroke-width:2.5; fill:none; }
+      .wB    { stroke:#c62828; stroke-width:2.5; fill:none; }
+      .wG    { stroke:#007700; stroke-width:2; fill:none; }
+      .wc    { stroke:#880000; stroke-width:1.8; fill:none; }
+      .wlan  { stroke:#0d47a1; stroke-width:2.5; fill:none; }
+      .dot   { fill:#1a1a1a; }
+      .dotB  { fill:#c62828; }
+      .dotG  { fill:#007700; }
+    </style>
+  </defs>
+
+  <!-- ================= SECTION 1 : RS485 ================= -->
+  <rect class="sect" x="24" y="40" width="672" height="330" rx="6"/>
+  <text class="sh" x="40" y="66">1 &nbsp; MODBUS RTU / RS485 — ESP32 HANYA MEMBACA</text>
+
+  <!-- ESP32 -->
+  <rect class="boxa" x="60" y="86" width="168" height="92" rx="4"/>
+  <text class="tb" x="144" y="112" text-anchor="middle">ESP32-S3</text>
+  <text class="ts" x="144" y="131" text-anchor="middle">KhursLabs + W5500</text>
+  <text class="tm" x="144" y="150" text-anchor="middle">UART1 TX17 / RX18</text>
+  <text class="ts" x="144" y="168" text-anchor="middle">master Modbus</text>
+
+  <!-- VSD1 -->
+  <rect class="box" x="288" y="86" width="150" height="92" rx="4"/>
+  <text class="tb" x="363" y="112" text-anchor="middle">VSD1 — ACS550</text>
+  <text class="tm" x="363" y="131" text-anchor="middle">5302 ID = 1</text>
+  <text class="ts" x="363" y="150" text-anchor="middle">9802 = STD MODBUS</text>
+  <text class="ts" x="363" y="168" text-anchor="middle">5303 = 9.6k, 5304 = 8N1</text>
+
+  <!-- VSD2 -->
+  <rect class="box" x="488" y="86" width="150" height="92" rx="4"/>
+  <text class="tb" x="563" y="112" text-anchor="middle">VSD2 — ACS550</text>
+  <text class="tm" x="563" y="131" text-anchor="middle">5302 ID = 2</text>
+  <text class="ts" x="563" y="150" text-anchor="middle">9802 = STD MODBUS</text>
+  <text class="ts" x="563" y="168" text-anchor="middle">5303 = 9.6k, 5304 = 8N1</text>
+
+  <!-- bus rails -->
+  <line class="wA" x1="78"  y1="262" x2="648" y2="262"/>
+  <line class="wB" x1="78"  y1="286" x2="648" y2="286"/>
+  <line class="wG" x1="78"  y1="310" x2="648" y2="310"/>
+  <text class="t"  x="664" y="266">A (−)</text>
+  <text class="t"  x="664" y="290">B (+)</text>
+  <text class="t"  x="664" y="314">AGND</text>
+
+  <!-- ESP32 drops -->
+  <line class="wA" x1="108" y1="178" x2="108" y2="262"/>
+  <line class="wB" x1="132" y1="178" x2="132" y2="286"/>
+  <line class="wG" x1="156" y1="178" x2="156" y2="310"/>
+  <circle class="dot"  cx="108" cy="262" r="4.5"/>
+  <circle class="dotB" cx="132" cy="286" r="4.5"/>
+  <circle class="dotG" cx="156" cy="310" r="4.5"/>
+  <text class="ts" x="104" y="254" text-anchor="end">A</text>
+  <text class="ts" x="128" y="278" text-anchor="end">B</text>
+  <text class="ts" x="152" y="302" text-anchor="end">G</text>
+
+  <!-- VSD1 drops -->
+  <line class="wA" x1="318" y1="178" x2="318" y2="262"/>
+  <line class="wB" x1="342" y1="178" x2="342" y2="286"/>
+  <line class="wG" x1="366" y1="178" x2="366" y2="310"/>
+  <circle class="dot"  cx="318" cy="262" r="4.5"/>
+  <circle class="dotB" cx="342" cy="286" r="4.5"/>
+  <circle class="dotG" cx="366" cy="310" r="4.5"/>
+  <text class="tm" x="314" y="254" text-anchor="end">X1:30</text>
+  <text class="tm" x="338" y="278" text-anchor="end">X1:29</text>
+  <text class="tm" x="362" y="302" text-anchor="end">X1:31</text>
+
+  <!-- VSD2 drops -->
+  <line class="wA" x1="518" y1="178" x2="518" y2="262"/>
+  <line class="wB" x1="542" y1="178" x2="542" y2="286"/>
+  <line class="wG" x1="566" y1="178" x2="566" y2="310"/>
+  <circle class="dot"  cx="518" cy="262" r="4.5"/>
+  <circle class="dotB" cx="542" cy="286" r="4.5"/>
+  <circle class="dotG" cx="566" cy="310" r="4.5"/>
+  <text class="tm" x="514" y="254" text-anchor="end">X1:30</text>
+  <text class="tm" x="538" y="278" text-anchor="end">X1:29</text>
+  <text class="tm" x="562" y="302" text-anchor="end">X1:31</text>
+
+  <!-- terminators 120 ohm, between A and B rails at both ends -->
+  <rect class="box" x="70" y="266" width="16" height="16"/>
+  <line class="wA" x1="78" y1="262" x2="78" y2="266"/>
+  <line class="wB" x1="78" y1="282" x2="78" y2="286"/>
+  <text class="ts" x="46" y="246">120 Ω</text>
+
+  <rect class="box" x="640" y="266" width="16" height="16"/>
+  <line class="wA" x1="648" y1="262" x2="648" y2="266"/>
+  <line class="wB" x1="648" y1="282" x2="648" y2="286"/>
+  <text class="ts" x="626" y="246">120 Ω</text>
+
+  <text class="ts" x="40" y="340">Twisted pair berselubung. Shield ke X1:28/32 (SCR), di-ground HANYA di satu ujung.</text>
+  <text class="ts" x="40" y="358">Terminasi di dua ujung bus: modul RS485 ESP32 dan ACS550 terjauh (DIP J2 / jumper J701 pada ACS310).</text>
+
+  <!-- ================= SECTION 2 : LAN + MQTT ================= -->
+  <rect class="sect" x="716" y="40" width="660" height="330" rx="6"/>
+  <text class="sh" x="732" y="66">2 &nbsp; LAN + MQTT (MONITORING)</text>
+
+  <rect class="boxa" x="740" y="86" width="150" height="66" rx="4"/>
+  <text class="t"  x="815" y="110" text-anchor="middle">ESP32 (ETH)</text>
+  <text class="tm" x="815" y="132" text-anchor="middle">192.168.1.50</text>
+
+  <rect class="box" x="920" y="86" width="150" height="66" rx="4"/>
+  <text class="t"  x="995" y="110" text-anchor="middle">PLC M221</text>
+  <text class="tm" x="995" y="132" text-anchor="middle">192.168.1.20:502</text>
+
+  <rect class="box" x="1100" y="86" width="150" height="66" rx="4"/>
+  <text class="t"  x="1175" y="110" text-anchor="middle">PC FUXA</text>
+  <text class="tm" x="1175" y="132" text-anchor="middle">192.168.1.10</text>
+
+  <line class="wlan" x1="815"  y1="152" x2="815"  y2="196"/>
+  <line class="wlan" x1="995"  y1="152" x2="995"  y2="196"/>
+  <line class="wlan" x1="1175" y1="152" x2="1175" y2="196"/>
+
+  <rect class="boxa" x="740" y="196" width="510" height="46" rx="4"/>
+  <text class="t" x="995" y="224" text-anchor="middle">Switch / Router — gateway 192.168.1.1</text>
+  <circle class="dot" cx="815"  cy="196" r="4.5"/>
+  <circle class="dot" cx="995"  cy="196" r="4.5"/>
+  <circle class="dot" cx="1175" cy="196" r="4.5"/>
+
+  <line class="wlan" x1="995" y1="242" x2="995" y2="282"/>
+  <rect class="box" x="840" y="282" width="310" height="50" rx="4"/>
+  <text class="t"  x="995" y="303" text-anchor="middle">Internet → Broker MQTT (free tier)</text>
+  <text class="tm" x="995" y="323" text-anchor="middle">mqtts://&lt;host&gt;:8883 — scada/mojokerto/#</text>
+  <circle class="dot" cx="995" cy="282" r="4.5"/>
+
+  <text class="ts" x="732" y="356">ESP32 publish tiap 2 s (dan saat run/fault/comm berubah). FUXA subscribe dari broker, bukan dari ESP32 langsung.</text>
+
+  <!-- link section 1 -> section 2 -->
+  <line class="wlan" x1="228" y1="118" x2="258" y2="118"/>
+  <path class="wlan" d="M258 118 L258 28 L815 28 L815 86" marker-end="url(#arw)"/>
+  <text class="ts" x="420" y="22">kabel LAN ESP32 → switch</text>
+
+  <!-- ================= SECTION 3 : COMMAND PATH ================= -->
+  <rect class="sect" x="24" y="398" width="1352" height="512" rx="6"/>
+  <text class="sh" x="40" y="424">3 &nbsp; JALUR PERINTAH ON/OFF — FUXA → PLC → KONTAK HARDWIRED KE VSD</text>
+
+  <rect class="box" x="56" y="452" width="170" height="76" rx="4"/>
+  <text class="t"  x="141" y="478" text-anchor="middle">PC FUXA</text>
+  <text class="ts" x="141" y="498" text-anchor="middle">tombol START/STOP</text>
+  <text class="ts" x="141" y="516" text-anchor="middle">tulis 1 (pulse)</text>
+
+  <line class="wc" x1="226" y1="490" x2="386" y2="490" marker-end="url(#arwc)"/>
+  <text class="tm" x="306" y="470" text-anchor="middle">Modbus TCP :502</text>
+  <text class="tm" x="306" y="510" text-anchor="middle">pulse coil</text>
+  <text class="tm" x="306" y="526" text-anchor="middle">%M0..%M3</text>
+
+  <rect class="boxa" x="386" y="452" width="190" height="76" rx="4"/>
+  <text class="t"  x="481" y="478" text-anchor="middle">PLC M221</text>
+  <text class="ts" x="481" y="498" text-anchor="middle">Modbus TCP server</text>
+  <text class="tm" x="481" y="516" text-anchor="middle">192.168.1.20</text>
+
+  <!-- PLC inputs -->
+  <rect class="box" x="56" y="588" width="170" height="52" rx="4"/>
+  <text class="t"  x="141" y="608" text-anchor="middle">Selector LOCAL/REM</text>
+  <text class="tm" x="141" y="628" text-anchor="middle">%I0.0 SEL_REMOTE</text>
+
+  <rect class="box" x="56" y="660" width="170" height="52" rx="4"/>
+  <text class="t"  x="141" y="680" text-anchor="middle">E-STOP (NC)</text>
+  <text class="tm" x="141" y="700" text-anchor="middle">%I0.1 ESTOP_OK</text>
+
+  <rect class="box" x="56" y="732" width="170" height="52" rx="4"/>
+  <text class="t"  x="141" y="752" text-anchor="middle">Relay fault VSD</text>
+  <text class="tm" x="141" y="772" text-anchor="middle">%I0.2 / %I0.3</text>
+
+  <line class="wc" x1="226" y1="614" x2="386" y2="614" marker-end="url(#arwc)"/>
+  <line class="wc" x1="226" y1="686" x2="386" y2="686" marker-end="url(#arwc)"/>
+  <line class="wc" x1="226" y1="758" x2="386" y2="758" marker-end="url(#arwc)"/>
+
+  <!-- PLC logic block -->
+  <rect class="box" x="386" y="568" width="470" height="232" rx="4"/>
+  <text class="sh" x="406" y="594">LOGIKA DI DALAM PLC</text>
+  <text class="tm" x="406" y="618">%M0 START1 → SET %M10 &nbsp;&nbsp; %M1 STOP1 → RESET %M10</text>
+  <text class="tm" x="406" y="638">%M2 START2 → SET %M11 &nbsp;&nbsp; %M3 STOP2 → RESET %M11</text>
+  <text class="ts" x="406" y="658">PLC me-reset sendiri %M0..%M3 (1 klik = 1 perintah)</text>
+  <line class="w" x1="406" y1="672" x2="836" y2="672"/>
+  <text class="tm" x="406" y="694">%Q0.0 := %M10 AND %I0.0 AND %I0.1 AND NOT %I0.2</text>
+  <text class="tm" x="406" y="714">%Q0.1 := %M11 AND %I0.0 AND %I0.1 AND NOT %I0.3</text>
+  <line class="w" x1="406" y1="730" x2="836" y2="730"/>
+  <text class="ts" x="406" y="752">Watchdog: FUXA tulis %MW10 tiap 1 s. Diam 5 s →</text>
+  <text class="ts" x="406" y="770">PLC reset %M10/%M11 → motor stop bila jaringan putus.</text>
+  <text class="ts" x="406" y="790">Mode LOCAL melepas kendali remote.</text>
+
+  <!-- outputs -->
+  <line class="wc" x1="856" y1="624" x2="1016" y2="624" marker-end="url(#arwc)"/>
+  <line class="wc" x1="856" y1="648" x2="956"  y2="648"/>
+  <path class="wc" d="M956 648 L956 760 L1016 760" marker-end="url(#arwc)"/>
+  <text class="tm" x="880" y="612">%Q0.0</text>
+  <text class="tm" x="880" y="668">%Q0.1</text>
+
+  <rect class="box" x="1016" y="590" width="200" height="68" rx="4"/>
+  <text class="t"  x="1116" y="616" text-anchor="middle">VSD1 — DI forward</text>
+  <text class="ts" x="1116" y="640" text-anchor="middle">kontak kering, hardwired</text>
+
+  <rect class="box" x="1016" y="726" width="200" height="68" rx="4"/>
+  <text class="t"  x="1116" y="752" text-anchor="middle">VSD2 — DI forward</text>
+  <text class="ts" x="1116" y="776" text-anchor="middle">kontak kering, hardwired</text>
+
+  <rect class="boxa" x="1246" y="590" width="112" height="204" rx="4"/>
+  <text class="t"  x="1302" y="672" text-anchor="middle">MOTOR</text>
+  <text class="t"  x="1302" y="694" text-anchor="middle">1 &amp; 2</text>
+  <line class="w" x1="1216" y1="624" x2="1246" y2="624"/>
+  <line class="w" x1="1216" y1="760" x2="1246" y2="760"/>
+
+  <text class="ts" x="40" y="840">Start/stop TIDAK lewat Modbus: par 1001 tetap pada terminal/DI. ESP32 tidak ikut di jalur ini sama sekali —</text>
+  <text class="ts" x="40" y="858">walau tulis setpoint diaktifkan (ALLOW_SETPOINT_WRITE 1), ESP32 hanya menulis REFERENCE 1 (40002), bukan Control Word (40001).</text>
+  <text class="ts" x="40" y="884">Garis hitam/merah = RS485 A/B &middot; hijau = AGND &middot; biru = LAN/TCP &middot; merah tua = jalur perintah &middot; ● = sambungan</text>
+
+  <!-- title block -->
+  <rect class="box" x="1016" y="920" width="360" height="74"/>
+  <line class="w" x1="1016" y1="946" x2="1376" y2="946"/>
+  <line class="w" x1="1256" y1="920" x2="1256" y2="994"/>
+  <text class="tb" x="1028" y="939">SCADA Mojokerto — arsitektur &amp; wiring</text>
+  <text class="ts" x="1028" y="964">2× VSD ABB ACS550 · ESP32 · M221 · FUXA</text>
+  <text class="ts" x="1028" y="982">docs/arsitektur-wiring.html</text>
+  <text class="ts" x="1268" y="964">Rev. A</text>
+  <text class="ts" x="1268" y="982">2026-10-31</text>
+
+  <text class="ts" x="40" y="964">Catatan: pinout ESP32 dan urutan TX/RX RS485 dibaca dari silkscreen board, BELUM diuji di hardware.</text>
+  <text class="ts" x="40" y="982">Polaritas label A/B pada modul RS485 bisa terbalik — tukar bila tidak ada balasan.</text>
+</svg>
+</div>
+</body>
+</html>

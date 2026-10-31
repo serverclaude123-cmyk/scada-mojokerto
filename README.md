@@ -1,4 +1,6 @@
-# SCADA 2 VSD Schneider – Mojokerto
+# SCADA 2 VSD ABB – Mojokerto
+
+Target: ABB ACS550 (untuk tes dipakai ACS310). PLC-nya Schneider M221, tapi drive-nya ABB.
 
 ```
 VSD1 ─┐ Modbus RTU (RS485)
@@ -13,7 +15,10 @@ PC FUXA ────────────────────────
 | Monitoring freq out, freq setpoint, arus, run/fault/comm | VSD → ESP32 (Modbus RTU) → MQTT → FUXA |
 | Perintah ON/OFF remote | FUXA → **Modbus TCP ke PLC M221** → output PLC → DI VSD (hardwired) |
 
-ESP32 hanya **membaca** VSD (aman, tidak bisa menjalankan motor). Perintah ON/OFF tetap lewat PLC.
+ESP32 secara default hanya **membaca** VSD (aman, tidak bisa menjalankan motor). Perintah ON/OFF tetap lewat PLC. Tulis setpoint frekuensi tersedia tapi **mati secara default** — lihat bagian "Tulis setpoint frekuensi"; bahkan saat diaktifkan, ESP32 tetap tidak bisa start/stop motor.
+
+Gambar lengkap (arsitektur, wiring RS485 dengan nomor terminal, jalur perintah PLC): **[`docs/arsitektur-wiring.html`](docs/arsitektur-wiring.html)** — buka di browser, bisa di-print A3.
+Proyek FUXA siap import: **[`fuxa/`](fuxa/)**.
 
 ## IP plan (contoh, ubah sesuai LAN)
 | Perangkat | IP |
@@ -50,14 +55,37 @@ ESP32 modul RS485        ACS550 #1 (X1)      ACS550 #2 (X1)
 |---|---|
 | 9802 COMM PROT SEL | 1 (STD MODBUS) |
 | 5302 EFB STATION ID | **1** (VSD1), **2** (VSD2) |
-| 5303 EFB BAUD RATE | 19.2 kbps |
+| 5303 EFB BAUD RATE | 9.6 kbps — **harus sama dengan `MB_BAUD` di `config.h`** |
 | 5304 EFB PARITY | 0 = 8 NONE 1 (default pabrik 1 = 8N2, harus diubah) |
-| 5305 EFB CTRL PROFILE | ABB DRV LIM/FULL (profil ABB Drives) |
+| 5305 EFB CTRL PROFILE | **0** = ABB DRV LIM (profil ABB Drives; 1 = DCU, jangan dipakai) |
 
 - Setelah ganti 9802, power-cycle / tunggu EFB restart. Cek par 5306–5309 (EFB OK/ERR frames) naik saat polling jalan.
 - Start/stop dan referensi tetap lewat terminal/PLC (par 1001 dll), Modbus hanya dibaca.
 
-Register yang dibaca (`config.h`): Status Word `40004`, par 0103 OUTPUT FREQ (`40103`), par 0104 CURRENT (`40104`), par 0111 EXT REF 1 (`40111`). Alamat PDU = nomor − 40001 (jadi 3, 102, 103, 110). Bit status: RDY_REF = run, TRIPPED = fault.
+Register yang dibaca (`config.h`). Alamat PDU = nomor register − 40001:
+
+| Isi | Register | Alamat PDU | Skala |
+|---|---|---|---|
+| Status Word | `40004` | 3 | bit |
+| par 0103 OUTPUT FREQ | `40103` | 102 | 0,1 Hz |
+| par 0104 CURRENT | `40104` | 103 | 0,1 A |
+| par 0107 DC BUS VOLTAGE | `40107` | 106 | 1 V |
+| par 0109 OUTPUT VOLTAGE | `40109` | 108 | 1 V |
+| par 0111 EXT REF 1 | `40111` | 110 | 0,1 Hz |
+
+Bit status: `RDY_REF` = run, `TRIPPED` = fault.
+
+Par 0103–0111 diambil dalam **satu** FC03 (alamat 102, 9 register) supaya lalu lintas RS485 turun dari 6 transaksi jadi 2 per VSD per siklus. Kalau drive menolak rentang itu (exception 02), firmware otomatis kembali membaca satu-satu dan mencatatnya di serial monitor — matikan permanen dengan `MB_BLOCK_READ 0`.
+
+### Tulis setpoint frekuensi (opsional, default MATI)
+`ALLOW_SETPOINT_WRITE 0` di `config.h` membuat firmware murni read-only. Diisi `1`, ESP32 boleh menulis **REFERENCE 1** (`40002`, alamat PDU 1, FC06) dari topik MQTT `scada/mojokerto/vsd1/cmd/freq_set` (dan `vsd2/...`).
+
+- Yang ditulis hanya nilai referensi, **bukan Control Word** (`40001`) — jadi ESP32 tetap tidak bisa start/stop motor. Ada pagar `#error` di `config.h` kalau `REG_REF1` sampai diisi 0.
+- Prasyarat di drive: par **1103 REF1 SELECT = 8 (COMM)** dan panel pada mode **REM**. Tanpa itu nilainya ditulis tapi diabaikan drive.
+- Skala: `20000` = par **1105 REF1 MAX**. Isi `REF1_MAX_HZ` sesuai nilai 1105 di drive (resolusi 0,1 Hz: 500 = 50,0 Hz).
+- Nilai dari MQTT di-clamp ke `REF_CLAMP_MIN_HZ`…`REF_CLAMP_MAX_HZ`.
+- Publish perintah **tanpa retained** — perintah retained akan dipakai ulang tiap kali ESP32 reconnect.
+- Echo: `vsd1/freq_cmd` (Hz yang benar-benar dikirim) dan `vsd1/cmd_ok` (1 = drive mengakui tulisan).
 
 ### Topik MQTT (payload angka/teks biasa, retained)
 Basis: `scada/mojokerto`
@@ -69,16 +97,20 @@ Basis: `scada/mojokerto`
 | `vsd1/freq_out`, `vsd2/freq_out` | frekuensi output (Hz) |
 | `vsd1/freq_set`, `vsd2/freq_set` | setpoint frekuensi (Hz) |
 | `vsd1/current`, `vsd2/current` | arus motor (A) |
-| `vsd1/volt_dc`, `vsd1/volt_out` | tegangan DC bus / output (V) |
-| `vsd1/running`, `vsd1/fault`, `vsd1/ready` | 0 / 1 |
-| `vsd1/comm_ok` | 1 = ESP32 berhasil baca VSD |
-| `vsd1/status_word`, `vsd1/err_count` | diagnosa |
+| `vsd1/volt_dc`, `vsd2/volt_dc` | tegangan DC bus (V) |
+| `vsd1/volt_out`, `vsd2/volt_out` | tegangan output (V) |
+| `vsd1/running`, `vsd1/fault`, `vsd1/ready` (idem `vsd2/…`) | 0 / 1 |
+| `vsd1/comm_ok`, `vsd2/comm_ok` | 1 = ESP32 berhasil baca VSD |
+| `vsd1/status_word`, `vsd1/err_count` (idem `vsd2/…`) | diagnosa |
+| `vsd1/cmd/freq_set`, `vsd2/cmd/freq_set` | **masuk** — setpoint Hz, hanya bila `ALLOW_SETPOINT_WRITE 1` |
+| `vsd1/freq_cmd`, `vsd1/cmd_ok` (idem `vsd2/…`) | echo setpoint yang dikirim + hasilnya |
 
 Publish tiap 2 detik dan langsung saat status run/fault/comm berubah.
 
-### Hal yang HARUS dicek (belum bisa saya verifikasi tanpa tipe VSD)
-- **Alamat register ACS550** saya tulis dari ingatan manual ACS550 (EFB), belum dicocokkan. Uji dengan membandingkan nilai di serial monitor dengan panel drive (par 0103/0104/0111). Kalau bergeser satu parameter, ubah offset ±1 di `config.h` (masalah 0-based vs 1-based).
-- Dekode status memakai profil ABB Drives (par 5305). Kalau profil DCU, bit-nya berbeda.
+### Hal yang HARUS dicek di hardware
+- **Alamat register** sudah dicocokkan ke manual ACS550/ACS310 dan sebagian dibuktikan dengan Modbus Poll di ACS310 (Status Word terbaca). Tetap bandingkan nilai di serial monitor dengan panel drive (par 0103/0104/0111); kalau bergeser satu parameter, ubah offset ±1 di `config.h` (masalah 0-based vs 1-based).
+- Dekode status memakai profil ABB Drives (par 5305 = 0). Kalau profil DCU (5305 = 1), bit-nya berbeda.
+- **Rentang blok baca** 102..110: kalau drive menolak (exception 02), serial monitor mencetak `[MB] … ditolak, pakai baca satu-satu` dan firmware lanjut jalan — bukan kegagalan fatal.
 - `freq_set` = par 0111 EXT REF 1. Kalau setpoint di sistem Anda lewat EXT REF 2 (%) atau panel, sesuaikan.
 - TLS: default `MQTT_TLS_INSECURE=1` (terenkripsi, tapi sertifikat broker tidak diverifikasi). Untuk produksi tempel root CA broker dan matikan flag itu.
 
@@ -88,19 +120,53 @@ Publish tiap 2 detik dan langsung saat status run/fault/comm berubah.
 
 | Alamat | Nama | Arah | Keterangan |
 |---|---|---|---|
-| `%M0` | CMD_VSD1_RUN | FUXA→PLC | 1 = run, 0 = stop |
-| `%M1` | CMD_VSD2_RUN | FUXA→PLC | |
+| `%M0` | START_VSD1 | FUXA→PLC | **pulse**, 1 = perintah start |
+| `%M1` | STOP_VSD1 | FUXA→PLC | **pulse**, 1 = perintah stop |
+| `%M2` | START_VSD2 | FUXA→PLC | **pulse** |
+| `%M3` | STOP_VSD2 | FUXA→PLC | **pulse** |
+| `%MW10` | HEARTBEAT | FUXA→PLC | ditulis FUXA tiap 1 s |
 | `%I0.0` | SEL_REMOTE | input | selector Local/Remote |
 | `%I0.1` | ESTOP_OK | input | NC e-stop |
 | `%I0.2` / `%I0.3` | VSD1/VSD2 fault relay | input | dari relay VSD (opsional) |
 | `%Q0.0` | RUN_VSD1 | output | ke DI forward VSD1 |
 | `%Q0.1` | RUN_VSD2 | output | ke DI forward VSD2 |
 
+Perintah dari FUXA bersifat **pulse**: START dan STOP adalah bit terpisah. Tombol di FUXA
+menulis `1` saat ditekan (mousedown) dan `0` saat dilepas (mouseup), jadi bit-nya naik
+selama tombol ditahan lalu turun sendiri.
+
+PLC memakai SET/RESET langsung ke output:
+
 ```
-%Q0.0 := %M0 AND %I0.0 AND %I0.1 AND NOT %I0.2
-%Q0.1 := %M1 AND %I0.0 AND %I0.1 AND NOT %I0.3
+(* STOP ditaruh SESUDAH START supaya menang dalam satu scan *)
+IF %M0 THEN SET   %Q0.0        (* START VSD1 *)
+IF %M1 THEN RESET %Q0.0        (* STOP VSD1  *)
+IF %M2 THEN SET   %Q0.1        (* START VSD2 *)
+IF %M3 THEN RESET %Q0.1        (* STOP VSD2  *)
+
+(* PENGAMAN: bersihkan bit perintah sendiri, jangan bergantung pada HMI *)
+RESET %M0 ; RESET %M1 ; RESET %M2 ; RESET %M3
+
+(* interlock *)
+IF NOT %I0.0 OR NOT %I0.1 THEN RESET %Q0.0 ; RESET %Q0.1   (* Local / e-stop *)
+IF %I0.2 THEN RESET %Q0.0                                   (* fault VSD1 *)
+IF %I0.3 THEN RESET %Q0.1                                   (* fault VSD2 *)
 ```
-Tambahkan watchdog komunikasi (mis. FUXA menulis `%MW10` heartbeat tiap 1 s; timeout 5 s → reset `%M0/%M1`) supaya motor stop bila PC/jaringan putus. Mode Local (selector) tetap mengutamakan operator di panel.
+
+> **Baris `RESET %M0..%M3` itu wajib, bukan hiasan.** Kalau browser, PC, atau jaringan mati
+> di antara mousedown dan mouseup, bit perintah akan tertinggal `1`. Dengan pola SET/RESET,
+> `%M0` yang terus `1` akan me-SET ulang `%Q0.0` tiap scan sehingga **STOP tidak pernah bisa
+> mematikan motor**. PLC yang membersihkan bitnya sendiri menghilangkan kegagalan itu
+> secara struktural — jangan menggantungkannya pada HMI.
+
+Watchdog komunikasi: FUXA menulis `%MW10` tiap 1 s; kalau nilainya tidak berubah selama 5 s,
+PLC me-reset `%Q0.0`/`%Q0.1` supaya motor berhenti saat PC atau jaringan putus.
+Mode Local (selector) tetap mengutamakan operator di panel.
+
+> **Jangan aktifkan watchdog sebelum heartbeat-nya jalan.** FUXA tidak menulis `%MW10` dengan
+> sendirinya — tag-nya ada, tapi nilainya harus dinaikkan oleh *script* FUXA (Scripts → jadwal 1 s,
+> `$setTag('plc_heartbeat', ($getTag('plc_heartbeat') + 1) % 32767)`). Kalau watchdog dinyalakan di PLC
+> tapi script-nya belum ada, motor tidak akan pernah bisa run.
 
 ## 3. FUXA (PC lokal)
 **Device 1 – MQTT (monitoring)**
@@ -109,12 +175,21 @@ Tambahkan watchdog komunikasi (mis. FUXA menulis `%MW10` heartbeat tiap 1 s; tim
 
 **Device 2 – Modbus TCP (perintah)**
 - Add → *Modbus TCP*; `192.168.1.20:502`, Slave ID 1 (atau 255 untuk M221).
-- Tag `CMD_VSD1_RUN`: Coil, address 0 (`%M0`); `CMD_VSD2_RUN`: Coil, address 1 (`%M1`). Tag heartbeat: Holding Register address 10 (`%MW10`).
+- Tag Coil: `%M0`–`%M3` (START1, STOP1, START2, STOP2). Tag heartbeat: Holding Register `%MW10`.
+  **Catatan alamat:** FUXA memakai alamat 1-based dan mengurangi 1 sebelum mengirim ke bus,
+  jadi `%M0` diisi address **1**, `%M1` → **2**, `%M2` → **3**, `%M3` → **4**, `%MW10` → **11**.
+- Tombol START/STOP memakai aksi *set value* = `1` ke coil masing-masing (pulse).
 - Beri konfirmasi (dialog) pada tombol START/STOP di FUXA.
+- Semua tag di atas sudah jadi di `fuxa/scada-mojokerto.fuxap` — tinggal import, lihat `fuxa/README.md`.
 
 **Layar**: 2 panel (VSD1/VSD2) berisi lampu RUN/FAULT/COMM, nilai Hz out, Hz set, Arus, tombol START/STOP, indikator `gw/status`. Alarm: `fault=1`, `comm_ok=0`, `gw/status=offline`.
 
 Menu/nama field FUXA bisa sedikit berbeda antar versi.
 
 ## Status
-Firmware **belum dikompilasi/diuji** (PlatformIO belum terpasang di PC ini, dan belum ada hardware). Proyek FUXA (.json) belum dibuat, menunggu tag tersambung supaya bisa diverifikasi.
+Firmware **sudah dikompilasi bersih** (arduino-esp32 3.3.12 — RAM 9.7%, Flash 56.7%, tanpa warning),
+tapi **belum pernah dijalankan di hardware**: W5500, pin RS485 17/18, MQTT, dan blok baca 102..110
+semuanya masih belum terbukti.
+
+Proyek FUXA sudah jadi dan sudah diuji import ke FUXA 1.3.5 — lihat `fuxa/README.md`.
+Program PLC M221 belum dibuat; ladder contohnya ada di bagian 2 di atas.
