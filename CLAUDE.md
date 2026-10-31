@@ -4,7 +4,8 @@ Bahasa kerja: Indonesia. Proyek dikerjakan bergantian di PC Windows (hari kerja)
 Percakapan Claude tidak ikut pindah komputer; file ini adalah catatan serah-terima. Perbarui bagian "Status" setiap selesai sesi.
 
 ## Arsitektur
-- VSD ×2 (target ABB ACS550; untuk tes dipakai ACS310) –Modbus RTU RS485– ESP32 (hanya MEMBACA) –LAN– router/gateway –Internet– broker MQTT free tier (HiveMQ Cloud/EMQX Serverless, TLS 8883).
+- VSD ×2 (target ABB ACS550; untuk tes dipakai ACS310) –Modbus RTU RS485– ESP32. ESP32 MEMBACA freq/arus/status **dan MENULIS setpoint** (REFERENCE 1, 40002). ESP32 tidak pernah menulis Control Word, jadi tidak bisa start/stop motor.
+- **Broker MQTT ada di PC lokal** (PC FUXA, 192.168.1.10, plain 1883), BUKAN lagi cloud free tier. ESP32 publish ke situ; FUXA dan klien remote (PC lain / HP) subscribe ke broker yang sama.
 - PLC M221 (LAN, Modbus TCP server) mengirim ON/OFF ke VSD lewat output hardwired. FUXA (PC lokal) subscribe MQTT untuk monitoring dan menulis coil ke PLC untuk perintah remote.
 - Detail wiring, parameter drive, topik MQTT, program PLC, setup FUXA: lihat `README.md`. PDF seting drive: `docs/Setting_VSD_ACS550_Modbus.pdf`, `docs/Setting_VSD_ACS310_Modbus_TEST.pdf`.
 - Gambar arsitektur + wiring RS485 + jalur perintah PLC: `docs/arsitektur-wiring.html` (buka di browser, bisa di-print A3).
@@ -39,7 +40,7 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
   Status Word 40004→3, par 0103 freq out→102, 0104 arus→103, 0107 DC bus→106, 0109 volt out→108, 0111 EXT REF1 (0,1 Hz)→110.
 - Bit Status Word (profil ABB, 5305 = ABB DRV LIM): bit0 RDY_ON, bit1 RDY_RUN, bit2 RDY_REF (run), bit3 TRIPPED.
 - Referensi frekuensi via Modbus: tulis register 40002 (alamat 1, FC06); 20000 = par 1105 REF1 MAX; butuh par 1103 = 8 (COMM) dan panel REM.
-  Sudah diimplementasikan di firmware tapi **default MATI** (`ALLOW_SETPOINT_WRITE 0`). Saat diaktifkan, perintah masuk lewat MQTT
+  **AKTIF** (`ALLOW_SETPOINT_WRITE 1`) karena memang bagian arsitektur. Perintah masuk lewat MQTT
   `scada/mojokerto/vsdN/cmd/freq_set` (publish tanpa retained), ditulis di `pollAll()` bukan di callback MQTT, dan di-clamp
   ke `REF_CLAMP_MIN_HZ`…`REF_CLAMP_MAX_HZ`. Ada `#error` kalau `REG_REF1` sampai 0 (itu Control Word 40001).
 - Par 0103..0111 dibaca satu FC03 (`MB_BLOCK_READ 1`, alamat 102 × 9 register). Kalau drive menolak rentangnya,

@@ -21,11 +21,13 @@ MQTT_DEV = "MQTT Broker"
 PLC_DEV = "PLC M221"
 
 # Isi sebelum / sesudah import -- jangan commit kredensial asli.
-MQTT_URL = "mqtts://GANTI-HOST.s1.eu.hivemq.cloud:8883"
+# Broker ada di PC yang sama dengan FUXA, jadi dari sisi FUXA cukup localhost.
+# (ESP32 TIDAK boleh pakai localhost -- di secrets.h isi IP LAN PC ini.)
+MQTT_URL = "mqtt://localhost:1883"
 MQTT_USER = "GANTI-USER"
 MQTT_PASS = "GANTI-PASSWORD"
 
-PLC_ADDR = "192.168.1.20:502"
+PLC_ADDR = "192.168.1.113:502"
 PLC_SLAVE = "1"  # M221: 1, sebagian firmware menjawab 255
 
 

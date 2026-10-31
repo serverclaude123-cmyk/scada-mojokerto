@@ -63,11 +63,12 @@ static const char*   VSD_NAME[VSD_COUNT]       = {"vsd1", "vsd2"};
 #define REG_BLOCK_COUNT    9           // 102..110
 
 // ---------- Tulis setpoint frekuensi (OPSIONAL, default MATI) ----------
-// 0 = firmware murni read-only (posisi aman: ESP32 tidak bisa mengubah apa pun di drive).
-// 1 = ESP32 boleh menulis REFERENCE 1 lewat MQTT. Tetap TIDAK bisa start/stop motor:
-//     yang ditulis hanya nilai referensi, bukan Control Word (40001).
+// AKTIF: sesuai arsitektur, setpoint frekuensi memang dikirim ESP32 lewat Modbus.
+// Yang ditulis hanya REFERENCE 1 -- BUKAN Control Word (40001) -- jadi ESP32 tetap
+// tidak bisa start/stop motor. ON/OFF tetap sepenuhnya lewat PLC M221.
 // Prasyarat di drive: par 1103 REF1 SELECT = 8 (COMM) dan panel pada mode REM.
-#define ALLOW_SETPOINT_WRITE 0
+// Isi 0 kalau mau sementara mengembalikan firmware ke murni read-only.
+#define ALLOW_SETPOINT_WRITE 1
 #define REG_REF1            1          // 40002 REFERENCE 1 (jangan pernah 0 = Control Word)
 #define REF1_SCALE_MAX      20000      // 20000 = par 1105 REF1 MAX
 #define REF1_MAX_HZ         50.0f      // isi sesuai par 1105 di drive (resolusi 0,1 Hz: 500 = 50,0 Hz)
@@ -87,9 +88,12 @@ static const char*   VSD_NAME[VSD_COUNT]       = {"vsd1", "vsd2"};
 #define OFFLINE_RETRY_MS   5000
 
 // ---------- MQTT ----------
-#define MQTT_PORT_CFG      8883
-#define MQTT_USE_TLS       1
-#define MQTT_TLS_INSECURE  1           // 1 = terenkripsi tapi sertifikat server tidak diverifikasi
+// Broker ada di PC lokal (PC FUXA, 192.168.1.10), bukan lagi cloud free tier.
+// Jadi default-nya plain 1883 tanpa TLS -- lalu lintasnya tidak keluar LAN.
+// Kalau broker nanti dipasang dengan TLS, set MQTT_USE_TLS 1 dan port 8883.
+#define MQTT_PORT_CFG      1883
+#define MQTT_USE_TLS       0
+#define MQTT_TLS_INSECURE  1           // hanya dipakai kalau MQTT_USE_TLS = 1
 #define MQTT_BASE_TOPIC    "scada/mojokerto"
 #define MQTT_PUBLISH_MS    2000
 #define MQTT_RETAIN        1

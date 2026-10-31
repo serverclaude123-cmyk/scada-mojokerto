@@ -37,8 +37,10 @@ Driver MQTT sudah bawaan, tidak perlu plugin.
 ## Cara import
 1. Buka FUXA → menu **☰ → Open/Save project** → **Load project** → pilih `scada-mojokerto.fuxap`.
 2. **Edit kredensial broker** (tidak disimpan di Git): Connections → `MQTT Broker` →
-   ganti `mqtts://GANTI-HOST.s1.eu.hivemq.cloud:8883`, `GANTI-USER`, `GANTI-PASSWORD`.
-3. Cek `PLC M221`: alamat `192.168.1.20:502`, Slave ID `1`. Kalau M221 tidak menjawab,
+   isi `GANTI-USER` / `GANTI-PASSWORD` sesuai user yang dibuat di Mosquitto.
+   URL-nya sudah `mqtt://localhost:1883` karena broker ada di PC yang sama dengan FUXA.
+   (ESP32 tidak boleh pakai `localhost` — di `secrets.h` isi IP LAN PC ini.)
+3. Cek `PLC M221`: alamat `192.168.1.113:502`, Slave ID `1`. Kalau M221 tidak menjawab,
    coba Slave ID `255`.
 
 ## Pemetaan alamat Modbus ke PLC — PERHATIAN

@@ -760,7 +760,7 @@
    "type": "MQTTclient",
    "polling": 1000,
    "property": {
-    "address": "mqtts://GANTI-HOST.s1.eu.hivemq.cloud:8883",
+    "address": "mqtt://localhost:1883",
     "username": "GANTI-USER",
     "password": "GANTI-PASSWORD"
    },
@@ -1350,7 +1350,7 @@
    "type": "ModbusTCP",
    "polling": 1000,
    "property": {
-    "address": "192.168.1.20:502",
+    "address": "192.168.1.113:502",
     "slaveid": "1",
     "connectionOption": "TcpPort",
     "options": "",

@@ -3,19 +3,30 @@
 Target: ABB ACS550 (untuk tes dipakai ACS310). PLC-nya Schneider M221, tapi drive-nya ABB.
 
 ```
-VSD1 ─┐ Modbus RTU (RS485)
-VSD2 ─┴────────────────── ESP32-ETH ──LAN──┐
-                                           ├── Router/Gateway ── Internet ── Broker MQTT (free tier)
-PLC M221 ───────────────────────── LAN ────┤                                   │
-PC FUXA ────────────────────────── LAN ────┘◄──────────── subscribe MQTT ──────┘
+VSD1 ─┐  Modbus RTU (RS485)              LAN 192.168.1.0/24
+VSD2 ─┴──────────────── ESP32-ETH ───────────┐
+         baca freq/arus                      │
+         + TULIS setpoint (REFERENCE 1)      │
+                                             │
+PLC M221 ────────────────────────────────────┤   ON/OFF hardwired ke DI VSD
+                                             │
+PC ini ──────────────────────────────────────┘
+  ├─ broker MQTT   ◄── ESP32 publish, FUXA subscribe
+  └─ FUXA HMI      ──► Modbus TCP ke M221 (tombol START/STOP)
+        ▲
+        └── PC remote / HP: subscribe ke broker yang sama
 ```
 
 | Fungsi | Jalur |
 |---|---|
-| Monitoring freq out, freq setpoint, arus, run/fault/comm | VSD → ESP32 (Modbus RTU) → MQTT → FUXA |
-| Perintah ON/OFF remote | FUXA → **Modbus TCP ke PLC M221** → output PLC → DI VSD (hardwired) |
+| Monitoring freq out, setpoint, arus, run/fault/comm | VSD → ESP32 (Modbus RTU) → MQTT → **broker di PC ini** → FUXA / remote |
+| **Setpoint frekuensi** | MQTT → ESP32 → Modbus RTU **REFERENCE 1 (40002)** → VSD |
+| Perintah ON/OFF | FUXA → **Modbus TCP ke PLC M221** → output PLC → DI VSD (hardwired) |
 
-ESP32 secara default hanya **membaca** VSD (aman, tidak bisa menjalankan motor). Perintah ON/OFF tetap lewat PLC. Tulis setpoint frekuensi tersedia tapi **mati secara default** — lihat bagian "Tulis setpoint frekuensi"; bahkan saat diaktifkan, ESP32 tetap tidak bisa start/stop motor.
+Pembagian kewenangan yang penting: **ESP32 boleh mengatur kecepatan, tapi tidak boleh menjalankan atau
+menghentikan motor.** Yang ditulisnya hanya REFERENCE 1 (`40002`), bukan Control Word (`40001`), dan ada
+pagar `#error` di `config.h` yang mencegah salah arah. Start/stop sepenuhnya milik PLC M221 lewat kontak
+hardwired, dengan interlock Local/Remote dan e-stop di sisi PLC.
 
 Gambar lengkap (arsitektur, wiring RS485 dengan nomor terminal, jalur perintah PLC): **[`docs/arsitektur-wiring.html`](docs/arsitektur-wiring.html)** — buka di browser, bisa di-print A3.
 Proyek FUXA siap import: **[`fuxa/`](fuxa/)**.
@@ -24,9 +35,9 @@ Proyek FUXA siap import: **[`fuxa/`](fuxa/)**.
 | Perangkat | IP |
 |---|---|
 | Router | 192.168.1.1 |
-| PC FUXA | 192.168.1.10 |
-| PLC M221 | 192.168.1.20 |
-| ESP32 | 192.168.1.50 (static, di `config.h`) |
+| PC ini — broker MQTT + FUXA | 192.168.1.10 |
+| PLC M221 | 192.168.1.113 (terbaca di lapangan; rencana awal .20) |
+| ESP32 | 192.168.1.11 (DHCP; `config.h` masih menyetel statis .50 — belum dipakai board) |
 
 ## 1. Firmware ESP32
 Board: KhursLabs ESP32-S3 IoT Acquisition RS485-Ethernet (W5500: CS 5, MOSI 11, SCK 12, MISO 13, RST 21, INT 47; RS485 UART1 **TX 15 / RX 16**, auto-direction). Pin W5500 dan RS485 keduanya sesuai dokumentasi KhursLabs: W5500 dari silkscreen board, RS485 dari contoh resmi `Test_sht20_RS485.ino`. Folder: `firmware/` (PlatformIO, platform pioarduino / arduino-esp32 3.x). Ubah dulu:
@@ -78,8 +89,8 @@ Bit status: `RDY_REF` = run, `TRIPPED` = fault.
 
 Par 0103–0111 diambil dalam **satu** FC03 (alamat 102, 9 register) supaya lalu lintas RS485 turun dari 6 transaksi jadi 2 per VSD per siklus. Kalau drive menolak rentang itu (exception 02), firmware otomatis kembali membaca satu-satu dan mencatatnya di serial monitor — matikan permanen dengan `MB_BLOCK_READ 0`.
 
-### Tulis setpoint frekuensi (opsional, default MATI)
-`ALLOW_SETPOINT_WRITE 0` di `config.h` membuat firmware murni read-only. Diisi `1`, ESP32 boleh menulis **REFERENCE 1** (`40002`, alamat PDU 1, FC06) dari topik MQTT `scada/mojokerto/vsd1/cmd/freq_set` (dan `vsd2/...`).
+### Tulis setpoint frekuensi (AKTIF)
+`ALLOW_SETPOINT_WRITE 1` di `config.h`. ESP32 menulis **REFERENCE 1** (`40002`, alamat PDU 1, FC06) dari topik MQTT `scada/mojokerto/vsd1/cmd/freq_set` (dan `vsd2/...`). Isi `0` kalau mau sementara mengembalikan firmware ke murni read-only.
 
 - Yang ditulis hanya nilai referensi, **bukan Control Word** (`40001`) — jadi ESP32 tetap tidak bisa start/stop motor. Ada pagar `#error` di `config.h` kalau `REG_REF1` sampai diisi 0.
 - Prasyarat di drive: par **1103 REF1 SELECT = 8 (COMM)** dan panel pada mode **REM**. Tanpa itu nilainya ditulis tapi diabaikan drive.
@@ -113,7 +124,7 @@ Publish tiap 2 detik dan langsung saat status run/fault/comm berubah.
 - Dekode status memakai profil ABB Drives (par 5305 = 0). Kalau profil DCU (5305 = 1), bit-nya berbeda.
 - **Rentang blok baca** 102..110: kalau drive menolak (exception 02), serial monitor mencetak `[MB] … ditolak, pakai baca satu-satu` dan firmware lanjut jalan — bukan kegagalan fatal.
 - `freq_set` = par 0111 EXT REF 1. Kalau setpoint di sistem Anda lewat EXT REF 2 (%) atau panel, sesuaikan.
-- TLS: default `MQTT_TLS_INSECURE=1` (terenkripsi, tapi sertifikat broker tidak diverifikasi). Untuk produksi tempel root CA broker dan matikan flag itu.
+- TLS: broker lokal dipakai tanpa TLS (`MQTT_USE_TLS 0`, port 1883) — lalu lintasnya tidak keluar LAN. Kalau broker nanti diberi TLS, set `MQTT_USE_TLS 1` dan port 8883.
 
 ## 2. PLC M221 (SoMachine Basic)
 1. Ethernet: IP 192.168.1.20, gateway 192.168.1.1. Modbus TCP server aktif (port 502, default).
@@ -169,7 +180,37 @@ Mode Local (selector) tetap mengutamakan operator di panel.
 > `$setTag('plc_heartbeat', ($getTag('plc_heartbeat') + 1) % 32767)`). Kalau watchdog dinyalakan di PLC
 > tapi script-nya belum ada, motor tidak akan pernah bisa run.
 
-## 3. FUXA (PC lokal)
+## 3. Broker MQTT (di PC ini)
+
+Broker adalah simpul tengah arsitektur ini: ESP32 publish ke sini, FUXA dan klien remote subscribe dari sini.
+**Belum terpasang** — per 1 Nov 2026 tidak ada yang listen di 1883/8883 di PC ini dan Mosquitto belum ada.
+
+Pilihan paling sederhana: **Eclipse Mosquitto**. Yang perlu ada di `mosquitto.conf`:
+
+```
+listener 1883 0.0.0.0
+allow_anonymous false
+password_file C:\Program Files\mosquitto\passwd
+```
+
+- `listener 1883 0.0.0.0` — tanpa ini Mosquitto hanya mendengar di localhost dan **ESP32 tidak akan bisa masuk**.
+- Buat user dengan `mosquitto_passwd -c passwd esp32`, lalu isi user/password yang sama di `firmware/include/secrets.h`.
+- Buka port 1883 di Windows Firewall untuk jaringan privat.
+- `MQTT_HOST` di `secrets.h` diisi **IP LAN PC ini** (`192.168.1.10`), bukan `localhost`.
+
+PC ini harus tetap menyala: kalau broker mati, FUXA dan semua klien remote kehilangan data,
+walaupun ESP32 dan PLC tetap jalan sendiri.
+
+### Akses dari luar (PC remote / HP)
+Selama semua klien ada di LAN yang sama, cukup arahkan ke `192.168.1.10:1883`.
+
+Untuk akses dari luar jaringan, **jangan port-forward 1883 apa adanya ke internet**. Port MQTT polos
+tanpa TLS berarti user dan password lewat sebagai teks biasa, dan broker yang terbuka akan discan
+dalam hitungan jam — padahal topik `cmd/freq_set` di broker ini bisa mengubah kecepatan motor.
+Dua jalan yang aman: VPN (WireGuard/Tailscale) sehingga HP seolah berada di LAN, atau aktifkan
+TLS di Mosquitto (port 8883, sertifikat) lalu set `MQTT_USE_TLS 1` di `config.h`.
+
+## 4. FUXA (PC lokal)
 **Device 1 – MQTT (monitoring)**
 - Connections → Add → *MQTT client*; URL `mqtts://<host-broker>:8883`, isi user/password.
 - Tambahkan tag dengan tipe *Subscription*, topik penuh, mis. `scada/mojokerto/vsd1/freq_out`, untuk semua topik di tabel di atas.
