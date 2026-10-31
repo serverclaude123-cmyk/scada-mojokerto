@@ -19,11 +19,20 @@ Installer Mosquitto memasang **Windows service** bernama `mosquitto` (Automatic,
 LocalSystem) yang membaca `C:\Users\AIOPC\Tools\mosquitto\mosquitto.conf`.
 Itu yang dipakai sehari-hari -- otomatis hidup saat PC dinyalakan, cocok untuk PC SCADA.
 
-Setelah mengubah config, service harus di-restart. Perlu **Command Prompt sebagai Administrator**:
+Setelah mengubah config, service harus di-restart, dan itu perlu hak Administrator.
+Paling mudah: klik kanan **`setup-admin.cmd`** di folder ini -> **Run as administrator** -> **Yes**.
+Skrip itu me-restart service, membuka port 1883 di firewall, lalu menampilkan hasilnya.
+
+Manual-nya, dari Command Prompt yang dijalankan sebagai Administrator:
 ```
 net stop mosquitto
 net start mosquitto
+netsh advfirewall firewall add rule name="Mosquitto 1883" dir=in action=allow protocol=TCP localport=1883 profile=private
 ```
+
+Catatan: akun `AIOPC` memang anggota grup Administrators, tapi Windows menjalankannya dengan
+token terbatas sampai di-elevate. UAC di PC ini diset `ConsentPromptBehaviorAdmin = 5`, jadi
+yang muncul hanya dialog **Yes/No** -- tidak perlu mengetik password.
 
 ### JEBAKAN: dua broker sekaligus
 Kalau `mosquitto -c ...` dijalankan manual sementara service juga hidup, akan ada **dua broker
