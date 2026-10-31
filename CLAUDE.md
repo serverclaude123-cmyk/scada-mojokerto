@@ -24,7 +24,14 @@ Percakapan Claude tidak ikut pindah komputer; file ini adalah catatan serah-teri
 ## Hardware ESP32
 KhursLabs "ESP32-S3 IoT Acquisition RS485 Modbus-Ethernet" (ESP32-S3-WROOM-1 + modul W5500 Lite).
 Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada dokumentasi online):
-- W5500: CS 5, MOSI 11, SCK 12, MISO 13, RST 21, INT 47 (SPI sama dengan slot TF card).
+- W5500: CS 5, MOSI 11, SCK 12, MISO 13, RST 21 (SPI sama dengan slot TF card).
+  **INT 47 dari silkscreen TERNYATA SALAH.** Dengan IRQ 47, link terdeteksi (`link=yes`)
+  karena itu dibaca lewat register SPI, tapi paket masuk tidak pernah diproses:
+  DHCP tidak dapat jawaban (`ip=0.0.0.0`), IP statis terpasang tapi ARP tidak dibalas,
+  dan MQTT selalu `rc=-2`. Solusinya `W5500_INT_PIN -1` = mode polling, tidak bergantung
+  pin IRQ sama sekali. Begitu diubah: DHCP langsung dapat IP dan MQTT connect.
+- `W5500_SPI_MHZ 8` (default core 20). Diturunkan saat menelusuri masalah di atas;
+  BUKAN itu penyebabnya dan belum diuji apakah 20 MHz juga jalan. Dibiarkan 8 karena aman.
 - RS485 transceiver: **TX 15 / RX 16** di UART1, dari contoh resmi KhursLabs `Test_sht20_RS485.ino`
   (`rxPin = 16 // RX2`, `txPin = 15 // TX2`, `HardwareSerial modul(1)`, 9600 8N1).
   Terminal sekrup "SERIAL 1" (17/18) di casing adalah breakout UART TTL yang TERPISAH, bukan jalur RS485 —

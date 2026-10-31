@@ -370,7 +370,7 @@ void setup() {
 
   WiFi.onEvent(onNetEvent);
   ETH.begin(ETH_PHY_W5500, 1, W5500_CS_PIN, W5500_INT_PIN, W5500_RST_PIN,
-            SPI3_HOST, W5500_SCK_PIN, W5500_MISO_PIN, W5500_MOSI_PIN);
+            SPI3_HOST, W5500_SCK_PIN, W5500_MISO_PIN, W5500_MOSI_PIN, W5500_SPI_MHZ);
 
 #if MQTT_USE_TLS && MQTT_TLS_INSECURE
   netClient.setInsecure();

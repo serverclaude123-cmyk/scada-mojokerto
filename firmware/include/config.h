@@ -9,10 +9,18 @@
 #define W5500_SCK_PIN      12
 #define W5500_MISO_PIN     13
 #define W5500_RST_PIN      21
-#define W5500_INT_PIN      47
+// INT 47 dibaca dari silkscreen tapi BELUM terbukti. Kalau pin IRQ salah,
+// link tetap terdeteksi (itu register SPI) tapi paket masuk tidak pernah
+// diproses -> DHCP diam dan ARP tidak dibalas. Isi -1 untuk mode polling,
+// yang tidak bergantung pada pin IRQ sama sekali.
+#define W5500_INT_PIN      -1
+// Kecepatan SPI ke W5500. Default core arduino-esp32 adalah 20 MHz dan itu
+// terlalu cepat untuk modul ini: PHY tetap melaporkan link=yes tapi paket rusak,
+// sehingga DHCP tidak pernah dapat jawaban dan ARP tidak dibalas.
+#define W5500_SPI_MHZ      8
 
 // IP: 1 = static, 0 = DHCP
-#define USE_STATIC_IP      1
+#define USE_STATIC_IP      0
 #define STATIC_IP          192, 168, 1, 50
 #define STATIC_GW          192, 168, 1, 1
 #define STATIC_MASK        255, 255, 255, 0
