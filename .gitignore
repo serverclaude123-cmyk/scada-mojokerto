@@ -11,3 +11,8 @@ docs/manual/
 
 # konfigurasi alat bantu lokal (path absolut per komputer)
 .claude/
+
+# file password broker (jangan di-commit)
+broker/passwd
+broker/mosquitto.db
+broker/KREDENSIAL-LOKAL.txt
