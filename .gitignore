@@ -16,3 +16,4 @@ docs/manual/
 broker/passwd
 broker/mosquitto.db
 broker/KREDENSIAL-LOKAL.txt
+broker/setup-admin.log
