@@ -20,7 +20,7 @@
 #define W5500_SPI_MHZ      8
 
 // IP: 1 = static, 0 = DHCP
-#define USE_STATIC_IP      0
+#define USE_STATIC_IP      1
 #define STATIC_IP          192, 168, 1, 50
 #define STATIC_GW          192, 168, 1, 1
 #define STATIC_MASK        255, 255, 255, 0
