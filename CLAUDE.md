@@ -99,7 +99,15 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
       User: `esp32` dan `fuxa`. Password ada di `broker/KREDENSIAL-LOKAL.txt` (tidak di Git)
       dan sudah terisi di `firmware/include/secrets.h`.
 - [ ] `rc=5` yang terlihat di board masih wajar: firmware yang terpasang di sana masih
-      menuju broker cloud lama. Hilang setelah board di-flash dengan build sekarang.
+      menuju broker cloud lama lewat TLS (`ssl_starttls_handshake` error di serial).
+      Hilang setelah board di-flash dengan build sekarang (plain 1883 ke broker lokal).
+- IP ESP32 berpindah-pindah karena DHCP: pernah .11, lalu .3. Build sekarang memakai IP
+      statis .50 (`USE_STATIC_IP 1`), yang lebih cocok untuk gateway. Tidak kritis karena
+      ESP32 hanya klien keluar, tapi memudahkan diagnosa.
+- **RISIKO saat flash:** firmware yang sekarang jalan BERHASIL bicara dengan VSD2 memakai
+      pin yang dipilih di PC toko, sementara build repo memakai TX15/RX16 dari contoh vendor.
+      Kalau ternyata beda, flash akan memutus komunikasi yang sudah jalan. Backup flash dulu
+      (`esptool read_flash`) sebelum menimpa — sumbernya tidak ada di mana pun.
 - [ ] Blok baca 102..110 BELUM terbukti: firmware yang terpasang di board kemungkinan versi
       sebelum perubahan itu (log `[vsd…]` formatnya sama di kedua versi, jadi tidak bisa dibedakan dari log).
 - [ ] Firmware di board sudah MENYIMPANG dari repo: ada baris log `[NET] eth=... link=... mqtt=... state=...`
