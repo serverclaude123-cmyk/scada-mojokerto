@@ -104,6 +104,16 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
 - IP ESP32 berpindah-pindah karena DHCP: pernah .11, lalu .3. Build sekarang memakai IP
       statis .50 (`USE_STATIC_IP 1`), yang lebih cocok untuk gateway. Tidak kritis karena
       ESP32 hanya klien keluar, tapi memudahkan diagnosa.
+- **Backup flash board SUDAH diambil** (1 Nov 2026) sebelum ditimpa:
+  `backup-firmware/esp32s3-full-16MB-20261101.bin`, 16777216 byte,
+  sha256 `c5d491f1f5eb6c67a79055d125c816c667fe47f5535f831a0c87bc8dbf805222`.
+  Berisi firmware PC toko (ada string `[NET] eth=`) yang sumbernya tidak ada di mana pun.
+  **Folder itu di-gitignore dan tidak boleh di-commit**: dump memuat `secrets.h` lama yang
+  ter-compile, termasuk host/user/password broker HiveMQ, sebagai teks biasa. Repo ini public.
+  Kembalikan dengan: `esptool --port COM3 --baud 921600 write_flash 0 <file.bin>`
+  (set `PYTHONIOENCODING=utf-8` dulu, kalau tidak progress bar memicu UnicodeEncodeError).
+- Chip sebenarnya: ESP32-S3 rev v0.2, PSRAM 8 MB, **flash 16 MB** — padahal `platformio.ini`
+  menyetel `board_upload.flash_size = 4MB`. Perlu dirapikan supaya tidak menyia-nyiakan flash.
 - **RISIKO saat flash:** firmware yang sekarang jalan BERHASIL bicara dengan VSD2 memakai
       pin yang dipilih di PC toko, sementara build repo memakai TX15/RX16 dari contoh vendor.
       Kalau ternyata beda, flash akan memutus komunikasi yang sudah jalan. Backup flash dulu

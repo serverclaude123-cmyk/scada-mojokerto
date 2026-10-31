@@ -17,3 +17,7 @@ broker/passwd
 broker/mosquitto.db
 broker/KREDENSIAL-LOKAL.txt
 broker/setup-admin.log
+
+# Dump flash board. JANGAN pernah di-commit: berisi secrets.h lama yang
+# ter-compile (host/user/password broker cloud) sebagai teks biasa.
+backup-firmware/
