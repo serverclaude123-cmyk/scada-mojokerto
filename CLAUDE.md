@@ -92,8 +92,14 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
       bit0 RDY_ON = 0 dan bit9 REMOTE = 0 → drive sedang di mode LOCAL, wajar karena belum di-REM.
 - [ ] **VSD1 tidak menjawab** (`[vsd1] OFF`, err naik terus 14→19→23). Cek par 5302 = 1,
       kabel A/B ke drive itu, terminasi, dan apakah drive-nya hidup.
-- [ ] **MQTT ditolak broker: `rc=5`** = MQTT_CONNECT_UNAUTHORIZED (user/password salah di `secrets.h`).
-      Broker-nya sendiri terjangkau; ini murni kredensial.
+- [x] **Broker MQTT lokal JALAN** (1 Nov 2026): Mosquitto 2.1.2 sebagai Windows service,
+      listener `0.0.0.0:1883` saja, firewall dibuka untuk profil privat. Terverifikasi:
+      anonim dan password salah DITOLAK (`not authorised`), kredensial benar sukses baik
+      lewat `localhost` maupun lewat `192.168.1.10` (jalur yang dipakai ESP32).
+      User: `esp32` dan `fuxa`. Password ada di `broker/KREDENSIAL-LOKAL.txt` (tidak di Git)
+      dan sudah terisi di `firmware/include/secrets.h`.
+- [ ] `rc=5` yang terlihat di board masih wajar: firmware yang terpasang di sana masih
+      menuju broker cloud lama. Hilang setelah board di-flash dengan build sekarang.
 - [ ] Blok baca 102..110 BELUM terbukti: firmware yang terpasang di board kemungkinan versi
       sebelum perubahan itu (log `[vsd…]` formatnya sama di kedua versi, jadi tidak bisa dibedakan dari log).
 - [ ] Firmware di board sudah MENYIMPANG dari repo: ada baris log `[NET] eth=... link=... mqtt=... state=...`
