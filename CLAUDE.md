@@ -89,14 +89,19 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
       ternyata cocok dengan API 3.x — hanya terbukti meng-compile, belum pernah jalan di board.
 - [x] Baca par 0103..0111 dalam satu FC03 + fallback otomatis; jalur tulis REFERENCE 1 ditulis (default MATI).
 - [x] Proyek FUXA dibuat dan diuji import ke FUXA 1.3.5.
-- [ ] Tes tulis setpoint via 40002 (1103 = 8, 1104 = 0, 1105 = 250 saat tes terakhir) — kode siap,
-      aktifkan `ALLOW_SETPOINT_WRITE 1` saat mau dites.
+- [ ] Tes tulis setpoint via 40002 BELUM dilakukan. `ALLOW_SETPOINT_WRITE 1` sudah aktif dan
+      ESP32 sudah subscribe `scada/mojokerto/vsdN/cmd/freq_set`, tapi drive perlu par 1103 = 8
+      (COMM) dan panel di mode REM dulu. Status Word menunjukkan bit9 REMOTE = 0 (masih LOCAL).
 - [x] **TERBUKTI DI HARDWARE (1 Nov 2026, baca serial COM3):**
       W5500 jalan (`eth=UP ip=192.168.1.11`, DHCP — bukan statis .50);
       RS485 ke VSD2 jalan (`[vsd2] ON eta=0x1030 err=0`);
       par 0107 DC bus terbaca nyata **286 V** → alamat register 106 BENAR.
       Status Word 0x1030 = bit4 OFF_2_STA + bit5 OFF_3_STA + bit12 EXT_RUN_ENABLE,
       bit0 RDY_ON = 0 dan bit9 REMOTE = 0 → drive sedang di mode LOCAL, wajar karena belum di-REM.
+- [x] **RANTAI DATA PENUH TERBUKTI** (1 Nov 2026): VSD -> ESP32 (Modbus RTU TX15/RX16 @ 19200)
+      -> MQTT -> broker lokal. Topik yang terbit: `gw/status online`, `gw/ip 192.168.1.50`,
+      `vsd2/comm_ok 1`, `vsd2/volt_dc 288`, `vsd2/status_word 4144` (0x1030).
+      Blok baca 102..110 diterima drive (tidak ada pesan fallback).
 - [ ] **VSD1 tidak menjawab** (`[vsd1] OFF`, err naik terus 14→19→23). Cek par 5302 = 1,
       kabel A/B ke drive itu, terminasi, dan apakah drive-nya hidup.
 - [x] **Broker MQTT lokal JALAN** (1 Nov 2026): Mosquitto 2.1.2 sebagai Windows service,
@@ -105,12 +110,12 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
       lewat `localhost` maupun lewat `192.168.1.10` (jalur yang dipakai ESP32).
       User: `esp32` dan `fuxa`. Password ada di `broker/KREDENSIAL-LOKAL.txt` (tidak di Git)
       dan sudah terisi di `firmware/include/secrets.h`.
-- [ ] `rc=5` yang terlihat di board masih wajar: firmware yang terpasang di sana masih
-      menuju broker cloud lama lewat TLS (`ssl_starttls_handshake` error di serial).
-      Hilang setelah board di-flash dengan build sekarang (plain 1883 ke broker lokal).
-- IP ESP32 berpindah-pindah karena DHCP: pernah .11, lalu .3. Build sekarang memakai IP
-      statis .50 (`USE_STATIC_IP 1`), yang lebih cocok untuk gateway. Tidak kritis karena
-      ESP32 hanya klien keluar, tapi memudahkan diagnosa.
+- [x] `rc=5` SELESAI: board sudah di-flash dengan build repo. Sekarang `mqtt=ok rc=0`
+      ke broker lokal, dan ESP32 subscribe kedua topik perintah setpoint.
+- [x] IP statis **192.168.1.50 terbukti jalan**: ETH naik di alamat itu, MQTT connect, dan dari
+      PC board menjawab ping dengan ARP `92-a9-90-f3-36-f1`. Sebelum pin INT diperbaiki, statis
+      terlihat terpasang tapi tidak terjangkau — itu gejala IRQ, bukan salah konfigurasi statis.
+      DHCP juga sudah diuji dan jalan (dapat .3), jadi keduanya bisa dipakai.
 - **Backup flash board SUDAH diambil** (1 Nov 2026) sebelum ditimpa:
   `backup-firmware/esp32s3-full-16MB-20261101.bin`, 16777216 byte,
   sha256 `c5d491f1f5eb6c67a79055d125c816c667fe47f5535f831a0c87bc8dbf805222`.
