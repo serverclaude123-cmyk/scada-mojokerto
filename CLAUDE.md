@@ -83,7 +83,20 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
 - [x] Proyek FUXA dibuat dan diuji import ke FUXA 1.3.5.
 - [ ] Tes tulis setpoint via 40002 (1103 = 8, 1104 = 0, 1105 = 250 saat tes terakhir) — kode siap,
       aktifkan `ALLOW_SETPOINT_WRITE 1` saat mau dites.
-- [ ] Belum diuji di hardware sama sekali: W5500, RS485 TX15/RX16, MQTT, dan blok baca 102..110.
+- [x] **TERBUKTI DI HARDWARE (1 Nov 2026, baca serial COM3):**
+      W5500 jalan (`eth=UP ip=192.168.1.11`, DHCP — bukan statis .50);
+      RS485 ke VSD2 jalan (`[vsd2] ON eta=0x1030 err=0`);
+      par 0107 DC bus terbaca nyata **286 V** → alamat register 106 BENAR.
+      Status Word 0x1030 = bit4 OFF_2_STA + bit5 OFF_3_STA + bit12 EXT_RUN_ENABLE,
+      bit0 RDY_ON = 0 dan bit9 REMOTE = 0 → drive sedang di mode LOCAL, wajar karena belum di-REM.
+- [ ] **VSD1 tidak menjawab** (`[vsd1] OFF`, err naik terus 14→19→23). Cek par 5302 = 1,
+      kabel A/B ke drive itu, terminasi, dan apakah drive-nya hidup.
+- [ ] **MQTT ditolak broker: `rc=5`** = MQTT_CONNECT_UNAUTHORIZED (user/password salah di `secrets.h`).
+      Broker-nya sendiri terjangkau; ini murni kredensial.
+- [ ] Blok baca 102..110 BELUM terbukti: firmware yang terpasang di board kemungkinan versi
+      sebelum perubahan itu (log `[vsd…]` formatnya sama di kedua versi, jadi tidak bisa dibedakan dari log).
+- [ ] Firmware di board sudah MENYIMPANG dari repo: ada baris log `[NET] eth=... link=... mqtt=... state=...`
+      yang tidak ada di `main.cpp` repo. Minta sumber yang terpasang supaya repo cocok dengan kenyataan.
 - [ ] Program PLC M221 belum dibuat (ladder contoh SET/RESET ada di README.md).
 - [ ] FUXA: tombol momentary baru terverifikasi sampai sisi server (`setValue` 1 lalu 0);
       frame di kabel belum dicek dengan alat yang bisa dipercaya.
