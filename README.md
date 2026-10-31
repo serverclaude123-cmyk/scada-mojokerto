@@ -29,9 +29,10 @@ Proyek FUXA siap import: **[`fuxa/`](fuxa/)**.
 | ESP32 | 192.168.1.50 (static, di `config.h`) |
 
 ## 1. Firmware ESP32
-Board: KhursLabs ESP32-S3 IoT Acquisition RS485-Ethernet (W5500: CS 5, MOSI 11, SCK 12, MISO 13, RST 21, INT 47; RS485 UART1 pin 17/18, dianggap auto-direction). Pin dibaca dari silkscreen board, belum diuji. Folder: `firmware/` (PlatformIO, platform pioarduino / arduino-esp32 3.x). Ubah dulu:
+Board: KhursLabs ESP32-S3 IoT Acquisition RS485-Ethernet (W5500: CS 5, MOSI 11, SCK 12, MISO 13, RST 21, INT 47; RS485 UART1 **TX 15 / RX 16**, auto-direction). Pin W5500 dan RS485 keduanya sesuai dokumentasi KhursLabs: W5500 dari silkscreen board, RS485 dari contoh resmi `Test_sht20_RS485.ino`. Folder: `firmware/` (PlatformIO, platform pioarduino / arduino-esp32 3.x). Ubah dulu:
 1. `include/secrets.h` → host/user/password broker MQTT.
-2. `include/config.h` → IP, baud (`MB_BAUD` harus sama dengan par 5303 drive), slave ID VSD, alamat register. Kalau RS485 tidak ada balasan, tukar `RS485_TX_PIN`/`RS485_RX_PIN`.
+2. `include/config.h` → IP, baud (`MB_BAUD` harus sama dengan par 5303 drive), slave ID VSD, alamat register.
+   Terminal sekrup "SERIAL 1" (17/18) **bukan** jalur RS485 — itu breakout UART TTL terpisah.
 
 ```bash
 cd firmware
@@ -188,7 +189,7 @@ Menu/nama field FUXA bisa sedikit berbeda antar versi.
 
 ## Status
 Firmware **sudah dikompilasi bersih** (arduino-esp32 3.3.12 — RAM 9.7%, Flash 56.7%, tanpa warning),
-tapi **belum pernah dijalankan di hardware**: W5500, pin RS485 17/18, MQTT, dan blok baca 102..110
+tapi **belum pernah dijalankan di hardware**: W5500, RS485 TX15/RX16, MQTT, dan blok baca 102..110
 semuanya masih belum terbukti.
 
 Proyek FUXA sudah jadi dan sudah diuji import ke FUXA 1.3.5 — lihat `fuxa/README.md`.

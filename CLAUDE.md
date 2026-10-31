@@ -24,7 +24,12 @@ Percakapan Claude tidak ikut pindah komputer; file ini adalah catatan serah-teri
 KhursLabs "ESP32-S3 IoT Acquisition RS485 Modbus-Ethernet" (ESP32-S3-WROOM-1 + modul W5500 Lite).
 Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada dokumentasi online):
 - W5500: CS 5, MOSI 11, SCK 12, MISO 13, RST 21, INT 47 (SPI sama dengan slot TF card).
-- RS485 "SERIAL 1": pin 17 dan 18 -> dipakai TX 17 / RX 18 (urutan belum terbukti; tukar di `config.h` bila tak ada balasan). Tanpa label DE/RE -> dianggap auto-direction (`RS485_DE_PIN = -1`).
+- RS485 transceiver: **TX 15 / RX 16** di UART1, dari contoh resmi KhursLabs `Test_sht20_RS485.ino`
+  (`rxPin = 16 // RX2`, `txPin = 15 // TX2`, `HardwareSerial modul(1)`, 9600 8N1).
+  Terminal sekrup "SERIAL 1" (17/18) di casing adalah breakout UART TTL yang TERPISAH, bukan jalur RS485 —
+  asumsi lama yang memakai 17/18 untuk RS485 itu keliru dan tidak akan pernah dapat balasan.
+  Contoh vendor tidak menggerakkan DE/RE sama sekali -> transceiver auto-direction (`RS485_DE_PIN = -1`), terkonfirmasi.
+  Hati-hati: komentar header di file contoh itu salah (menulis RX 18 / TX 19 / RTS 14); percayai kodenya, bukan komentarnya.
 - Terminal lain: I2C SDA/SCL, ADC A0–A3, digital 14/38.
 
 ## Firmware (`firmware/`, PlatformIO, platform pioarduino = arduino-esp32 3.x)
@@ -78,7 +83,7 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
 - [x] Proyek FUXA dibuat dan diuji import ke FUXA 1.3.5.
 - [ ] Tes tulis setpoint via 40002 (1103 = 8, 1104 = 0, 1105 = 250 saat tes terakhir) — kode siap,
       aktifkan `ALLOW_SETPOINT_WRITE 1` saat mau dites.
-- [ ] Belum diuji di hardware sama sekali: W5500, RS485 pin 17/18, MQTT, dan blok baca 102..110.
+- [ ] Belum diuji di hardware sama sekali: W5500, RS485 TX15/RX16, MQTT, dan blok baca 102..110.
 - [ ] Program PLC M221 belum dibuat (ladder contoh SET/RESET ada di README.md).
 - [ ] FUXA: tombol momentary baru terverifikasi sampai sisi server (`setValue` 1 lalu 0);
       frame di kabel belum dicek dengan alat yang bisa dipercaya.

@@ -19,10 +19,18 @@
 #define STATIC_DNS         8, 8, 8, 8
 
 // ---------- RS485 / Modbus RTU ----------
-// Silkscreen "SERIAL 1": 17 dan 18. Urutan TX/RX belum terkonfirmasi; kalau tidak ada balasan, tukar.
-// Tidak ada label DE/RE di board -> dianggap auto-direction (-1).
-#define RS485_TX_PIN       17
-#define RS485_RX_PIN       18
+// Pin diambil dari contoh resmi KhursLabs (Test_sht20_RS485.ino):
+//   const byte rxPin = 16; // RX2
+//   const byte txPin = 15; // TX2
+//   HardwareSerial modul(1);  ->  UART1, sama dengan Serial1 di sini
+// CATATAN: komentar header di file contoh itu SALAH (menulis RX 18 / TX 19 / RTS 14);
+// yang benar adalah angka di kodenya. Terminal sekrup berlabel "SERIAL 1" (17/18) di
+// casing adalah breakout UART TTL yang TERPISAH, bukan jalur ke transceiver RS485 --
+// itulah sebabnya konfigurasi 17/18 yang lama tidak pernah dapat balasan.
+// Kalau tetap tidak ada balasan, coba TX 17 (pernah disebut 16/17 saat tes di toko).
+#define RS485_TX_PIN       15
+#define RS485_RX_PIN       16
+// Contoh vendor tidak pernah menggerakkan pin DE/RE -> transceiver auto-direction.
 #define RS485_DE_PIN       -1
 #define MB_BAUD            9600        // samakan dengan par 5303 drive (default pabrik 9.6 kbit/s)
 #define MB_FORMAT          SERIAL_8N1  // samakan dengan par 5304 = 0 (8 NONE 1); default pabrik ACS550 = 8N2
