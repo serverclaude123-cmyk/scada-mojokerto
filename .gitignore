@@ -1,0 +1,10 @@
+# rahasia (MQTT) -- buat manual di tiap komputer dari secrets.example.h
+firmware/include/secrets.h
+
+# build PlatformIO
+firmware/.pio/
+firmware/.vscode/
+
+# manual vendor (besar, simpan terpisah)
+docs/manual/
+*.log
