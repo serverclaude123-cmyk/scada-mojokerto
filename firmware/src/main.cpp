@@ -390,6 +390,14 @@ void loop() {
   static uint32_t lastLog = 0;
   if (millis() - lastLog > 5000) {
     lastLog = millis();
+    // Status jaringan tiap siklus log. Tanpa ini, "MQTT gagal" tidak bisa
+    // dibedakan antara kabel LAN lepas dan broker yang menolak.
+    Serial.printf("[NET] eth=%s link=%s ip=%s mqtt=%s rc=%d\n",
+                  ethUp ? "UP" : "DOWN",
+                  ETH.linkUp() ? "yes" : "no",
+                  ETH.localIP().toString().c_str(),
+                  mqtt.connected() ? "ok" : "no",
+                  mqtt.state());
     for (int i = 0; i < VSD_COUNT; i++) {
       const Vsd& v = vsd[i];
       Serial.printf("[%s] %s eta=0x%04X out=%.1fHz set=%.1fHz I=%.1fA Vdc=%.0f Vout=%.0f run=%d flt=%d err=%lu\n",

@@ -32,7 +32,7 @@
 #define RS485_RX_PIN       16
 // Contoh vendor tidak pernah menggerakkan pin DE/RE -> transceiver auto-direction.
 #define RS485_DE_PIN       -1
-#define MB_BAUD            9600        // samakan dengan par 5303 drive (default pabrik 9.6 kbit/s)
+#define MB_BAUD            19200       // par 5303 drive = 19.2 kbps (dikonfirmasi di lapangan, bukan default pabrik 9.6k)
 #define MB_FORMAT          SERIAL_8N1  // samakan dengan par 5304 = 0 (8 NONE 1); default pabrik ACS550 = 8N2
 #define MB_TIMEOUT_MS      300
 #define MB_FRAME_GAP_MS    5

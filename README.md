@@ -67,7 +67,7 @@ ESP32 modul RS485        ACS550 #1 (X1)      ACS550 #2 (X1)
 |---|---|
 | 9802 COMM PROT SEL | 1 (STD MODBUS) |
 | 5302 EFB STATION ID | **1** (VSD1), **2** (VSD2) |
-| 5303 EFB BAUD RATE | 9.6 kbps — **harus sama dengan `MB_BAUD` di `config.h`** |
+| 5303 EFB BAUD RATE | **19.2 kbps** — dikonfirmasi di lapangan; harus sama dengan `MB_BAUD` di `config.h` |
 | 5304 EFB PARITY | 0 = 8 NONE 1 (default pabrik 1 = 8N2, harus diubah) |
 | 5305 EFB CTRL PROFILE | **0** = ABB DRV LIM (profil ABB Drives; 1 = DCU, jangan dipakai) |
 
