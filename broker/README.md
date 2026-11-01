@@ -81,6 +81,33 @@ jadi Tailscale bisa dipakai. Tailscale **bukan** broker cloud: data tetap mengal
 langsung antara HP dan PC ini, Tailscale hanya menyatukan keduanya dalam satu
 jaringan privat.
 
+**Sudah terpasang dan terbukti jalan** (1 Nov 2026):
+
+| | |
+|---|---|
+| Alamat Tailscale PC site | **`100.93.24.7`** |
+| Nama host | `desktop-3n6b83h` |
+| Tailnet | `scadapdammojokerto@` |
+| Versi | Tailscale 1.104.4 |
+
+Diuji dengan subscribe ke `100.93.24.7:1883` dan topik mengalir normal
+(`gw/status online`, `vsd2/volt_dc 288`). Adapter Tailscale ternyata dikenali Windows
+sebagai profil **Private**, jadi aturan 1883 yang lama sudah berlaku untuknya —
+aturan khusus rentang Tailscale tetap dipasang sebagai pengaman kalau profilnya berubah.
+
+### Setelan di HP
+1. Pasang aplikasi **Tailscale**, login dengan akun tailnet yang sama
+2. Pasang aplikasi MQTT apa pun, lalu isi:
+
+| Kolom | Nilai |
+|---|---|
+| Host | `100.93.24.7` |
+| Port | `1883` |
+| Username | `hp1` (atau `hp2`, `pc2`) |
+| Password | lihat `KREDENSIAL-LOKAL.txt` |
+| Client ID | **harus unik per perangkat** |
+| Topik | `scada/mojokerto/#` |
+
 Setelah Tailscale terpasang dan login di PC ini dan di HP:
 - HP memakai **alamat Tailscale PC ini** (`100.x.y.z`) sebagai host MQTT, port 1883
 - user `fuxa`, password sama seperti di `KREDENSIAL-LOKAL.txt`
