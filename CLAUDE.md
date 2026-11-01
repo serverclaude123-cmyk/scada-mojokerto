@@ -89,9 +89,11 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
       ternyata cocok dengan API 3.x — hanya terbukti meng-compile, belum pernah jalan di board.
 - [x] Baca par 0103..0111 dalam satu FC03 + fallback otomatis; jalur tulis REFERENCE 1 ditulis (default MATI).
 - [x] Proyek FUXA dibuat dan diuji import ke FUXA 1.3.5.
-- [ ] Tes tulis setpoint via 40002 BELUM dilakukan. `ALLOW_SETPOINT_WRITE 1` sudah aktif dan
-      ESP32 sudah subscribe `scada/mojokerto/vsdN/cmd/freq_set`, tapi drive perlu par 1103 = 8
-      (COMM) dan panel di mode REM dulu. Status Word menunjukkan bit9 REMOTE = 0 (masih LOCAL).
+- [x] **TULIS SETPOINT TERBUKTI** (1 Nov 2026). Dari kotak isian di FUXA -> MQTT
+      `vsd2/cmd/freq_set` -> ESP32 -> Modbus FC06 ke 40002 -> drive ACK.
+      Buktinya `vsd2/cmd_ok` berubah 0 -> 1 tepat setelah perintah masuk.
+      Diuji dengan nilai 0 Hz supaya tidak meninggalkan setpoint tersembunyi.
+      Belum diuji dengan nilai bukan nol dan motor berputar; untuk itu par 1103 harus = 8 (COMM).
 - [x] **TERBUKTI DI HARDWARE (1 Nov 2026, baca serial COM3):**
       W5500 jalan (`eth=UP ip=192.168.1.11`, DHCP — bukan statis .50);
       RS485 ke VSD2 jalan (`[vsd2] ON eta=0x1030 err=0`);

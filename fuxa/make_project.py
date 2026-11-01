@@ -253,6 +253,35 @@ ACT_SETVALUE = "onSetValue"
 ACT_OPTIONS = {"variablesMapping": []}
 
 
+def input_item(item_id, x, y, w, h, variable_id):
+    """Kotak isian setpoint. Strukturnya mengikuti proyek demo FUXA:
+    <g> berisi <rect> + <foreignObject> dengan <INPUT id="I-<gid>">.
+    Tanpa INPUT ber-prefiks 'I-' itu, FUXA hanya menggambar kotak mati."""
+    items[item_id] = {
+        "id": item_id,
+        "type": "svg-ext-html_input",
+        "name": variable_id,
+        "property": {
+            "events": [],
+            "variable": variable_id,
+            "variableId": variable_id,
+            "variableSrc": devices[MQTT_DEV]["id"],
+            "alarmId": "", "alarmSrc": "", "alarm": "", "alarmColor": "",
+        },
+        "label": "HtmlInput",
+    }
+    svg.append(
+        f'<g id="{item_id}" stroke="#000000" text-anchor="right" font-family="sans-serif" '
+        f'font-size="14" fill="#f1f1f1ff" type="svg-ext-html_input">'
+        f'<rect id="svg_{item_id}" stroke="null" fill="#ffffff" height="{h}" width="{w}" '
+        f'y="{y}" x="{x}" stroke-width="0"/>'
+        f'<foreignObject id="H-{item_id}" width="{w}" height="{h}" y="{y}" x="{x}">'
+        f'<INPUT id="I-{item_id}" style="width: calc(100% - 7px); height: calc(100% - 7px); '
+        f'text-align: right; border: unset; background-color: rgb(255, 255, 255); '
+        f'color: rgb(0, 0, 0); vector-effect: non-scaling-stroke;" type="text"/>'
+        f'</foreignObject></g>')
+
+
 def button_item(item_id, x, y, w, h, variable_id, text, fill):
     # Momentary: tekan -> tulis 1, lepas -> tulis 0.
     # FUXA 1.3.5 belum punya buttonAction (mode press/release) -- itu baru ada di master --
@@ -323,6 +352,11 @@ for idx, v in enumerate(VSDS):
         y = y0 + 110 + k * 46
         static_text(x0 + 24, y, label, size=15, color="#37474f")
         value_item(f"VAL_{v}_{tag}", x0 + 430, y + 4, f"{v}_{tag}", unit)
+
+    # kotak isian setpoint -> MQTT cmd/freq_set -> ESP32 tulis REFERENCE 1
+    static_text(x0 + 24, y0 + 326, "Set frekuensi (Hz)", size=15, color="#37474f")
+    input_item(f"HXI_{v}_cmd", x0 + 352, y0 + 308, 78, 26, f"{v}_cmd_freq_set")
+    static_text(x0 + 440, y0 + 326, "Enter untuk kirim", size=11, color="#90a4ae")
 
     # tombol menulis 1; PLC yang mengembalikan bit ke 0 (lihat fuxa/README.md)
     by = y0 + 355

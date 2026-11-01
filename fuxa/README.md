@@ -9,7 +9,7 @@
 |---|---|---|
 | Device `MQTT Broker` | 31 tag | monitoring, subscribe ke `scada/mojokerto/#` |
 | Device `PLC M221` | 5 tag | Modbus TCP, 4 bit perintah pulse + heartbeat |
-| View `Overview` | 26 gauge | 2 panel VSD: lampu RUN/FAULT/COMM, 5 nilai, tombol START/STOP |
+| View `Overview` | 28 gauge | 2 panel VSD: lampu RUN/FAULT/COMM, 5 nilai, tombol START/STOP |
 | Alarm | 4 | fault & comm-lost per VSD |
 
 ## Menjalankan FUXA
@@ -118,6 +118,17 @@ Yang **belum** diuji dan masih jadi tugas di lapangan:
 - **Dialog konfirmasi START/STOP belum ada.** Tombol ini menjalankan motor lewat PLC.
   Tambahkan konfirmasi di editor FUXA (property tombol) **sebelum dipakai di lapangan**.
 - Posisi/ukuran elemen: koordinat tetap 1200×800, rapikan di editor kalau perlu.
+
+### Kotak isian setpoint
+Tiap panel punya kotak isian yang terhubung ke tag publish `vsdN_cmd_freq_set`.
+Ketik angka lalu tekan **Enter** untuk mengirim.
+
+Strukturnya sama polanya dengan tombol: `<g id="HXI_...">` berisi `<rect>` dan
+`<foreignObject>` dengan `<INPUT id="I-HXI_...">`. Tanpa INPUT ber-prefiks `I-` itu,
+FUXA hanya menggambar kotak putih yang tidak bisa diketik.
+
+Terbukti ujung ke ujung: isian di FUXA -> `vsd2/cmd/freq_set` -> ESP32 -> Modbus FC06
+ke 40002 -> drive ACK, terlihat dari `vsd2/cmd_ok` yang berubah 0 menjadi 1.
 
 ### Catatan bentuk tombol
 Gauge `svg-ext-html_button` tidak cukup `<rect>`. FUXA mencari anak ber-id awalan `B-HXB_`
