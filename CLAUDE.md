@@ -92,8 +92,18 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
 - [x] **TULIS SETPOINT TERBUKTI** (1 Nov 2026). Dari kotak isian di FUXA -> MQTT
       `vsd2/cmd/freq_set` -> ESP32 -> Modbus FC06 ke 40002 -> drive ACK.
       Buktinya `vsd2/cmd_ok` berubah 0 -> 1 tepat setelah perintah masuk.
-      Diuji dengan nilai 0 Hz supaya tidak meninggalkan setpoint tersembunyi.
-      Belum diuji dengan nilai bukan nol dan motor berputar; untuk itu par 1103 harus = 8 (COMM).
+      Diuji dengan 25 Hz (motor belum tersambung): `freq_set` membaca balik 25.0 -> skala benar.
+      Setpoint dikembalikan ke 0 setelah tes.
+- **Jebakan skala yang sudah ketemu dan sudah diperbaiki:** tes pertama 25 Hz diterima drive
+  sebagai **12,5 Hz** -- tepat setengahnya. Sebabnya par **1105 REF1 MAX masih 25,0 Hz**,
+  sisa percobaan lama (catatan: "pernah 1105 tertulis 250" = 25,0 Hz pada resolusi 0,1 Hz),
+  sementara `REF1_MAX_HZ` di config memakai 50,0. Rumusnya `raw = Hz / REF1_MAX_HZ * 20000`,
+  jadi ketidakcocokan ini menggeser kecepatan secara diam-diam: `cmd_ok` tetap 1 dan tidak ada
+  error sama sekali, motor hanya berputar separuh permintaan. Diperbaiki dengan menyetel
+  par 1105 = 50,0 Hz di panel drive; setelah itu 25 Hz terbaca balik 25,0.
+  **Kalau par 1105 diubah lagi, `REF1_MAX_HZ` di `config.h` WAJIB ikut diubah.**
+  Alternatif yang lebih aman kalau ini terulang: firmware membaca par 1105 saat boot
+  (register 41105, PDU 1104) dan menghitung skalanya sendiri.
 - [x] **TERBUKTI DI HARDWARE (1 Nov 2026, baca serial COM3):**
       W5500 jalan (`eth=UP ip=192.168.1.11`, DHCP — bukan statis .50);
       RS485 ke VSD2 jalan (`[vsd2] ON eta=0x1030 err=0`);

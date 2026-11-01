@@ -94,7 +94,10 @@ Par 0103–0111 diambil dalam **satu** FC03 (alamat 102, 9 register) supaya lalu
 
 - Yang ditulis hanya nilai referensi, **bukan Control Word** (`40001`) — jadi ESP32 tetap tidak bisa start/stop motor. Ada pagar `#error` di `config.h` kalau `REG_REF1` sampai diisi 0.
 - Prasyarat di drive: par **1103 REF1 SELECT = 8 (COMM)** dan panel pada mode **REM**. Tanpa itu nilainya ditulis tapi diabaikan drive.
-- Skala: `20000` = par **1105 REF1 MAX**. Isi `REF1_MAX_HZ` sesuai nilai 1105 di drive (resolusi 0,1 Hz: 500 = 50,0 Hz).
+- Skala: `20000` = par **1105 REF1 MAX**. **`REF1_MAX_HZ` di `config.h` harus sama dengan
+  nilai par 1105 di drive.** Kalau berbeda, kecepatan bergeser diam-diam tanpa error apa pun --
+  pernah terjadi di sini: 1105 masih 25,0 Hz sementara config 50,0, sehingga permintaan 25 Hz
+  diterima drive sebagai 12,5 Hz dengan `cmd_ok` tetap 1. Isi `REF1_MAX_HZ` sesuai nilai 1105 di drive (resolusi 0,1 Hz: 500 = 50,0 Hz).
 - Nilai dari MQTT di-clamp ke `REF_CLAMP_MIN_HZ`…`REF_CLAMP_MAX_HZ`.
 - Publish perintah **tanpa retained** — perintah retained akan dipakai ulang tiap kali ESP32 reconnect.
 - Echo: `vsd1/freq_cmd` (Hz yang benar-benar dikirim) dan `vsd1/cmd_ok` (1 = drive mengakui tulisan).
