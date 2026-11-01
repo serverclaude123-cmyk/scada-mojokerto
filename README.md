@@ -195,6 +195,33 @@ R     %Q0.1
 
 Blok 3 dan 4 harus berada **di bawah** blok 1, supaya interlock selalu menang atas perintah START.
 
+### Cara menambahkannya di EcoStruxure Machine Expert - Basic
+Proyek `m221 plc.smbp` saat ini berisi **1 POU dengan 4 rung** (8 instruksi di atas).
+Yang perlu ditambahkan adalah rung ke-5 dan seterusnya, **di bawah rung 4**.
+
+Kalau lebih nyaman menggambar daripada mengetik IL, tiap rung baru isinya sederhana —
+satu kontak dan satu coil Reset:
+
+| Rung | Kontak | Coil |
+|---|---|---|
+| 5 | `%M0` normally open | **Reset** `%M0` |
+| 6 | `%M1` normally open | **Reset** `%M1` |
+| 7 | `%M2` normally open | **Reset** `%M2` |
+| 8 | `%M3` normally open | **Reset** `%M3` |
+| 9 | `%I0.0` normally **closed**, diparalel dengan `%I0.1` normally **closed** | **Reset** `%Q0.0` |
+| 10 | sama seperti rung 9 | **Reset** `%Q0.1` |
+| 11 | `%I0.2` normally open | **Reset** `%Q0.0` |
+| 12 | `%I0.3` normally open | **Reset** `%Q0.1` |
+
+Rung 5–8 membersihkan bit perintah. Rung 9–12 interlock, dan harus berada di bawah rung 1–4
+supaya selalu menang atas perintah START.
+
+Catatan soal rung 9 dan 10: kontaknya **normally closed** dan **diparalel**, karena artinya
+"selector TIDAK di Remote **atau** e-stop TIDAK sehat". `%I0.0` = 1 saat selector di REMOTE,
+`%I0.1` = 1 saat e-stop sehat (kontak NC tertutup).
+
+Rung 11 dan 12 hanya dipasang kalau relay fault drive memang dikabel ke input itu.
+
 ### Membersihkan bit yang sudah terlanjur nyangkut
 Sebelum program baru di-download, cek dulu kondisi sekarang lewat animation table
 SoMachine Basic: `%M0`–`%M3` harus semuanya 0. Per 1 Nov 2026 pembacaan Modbus menunjukkan
