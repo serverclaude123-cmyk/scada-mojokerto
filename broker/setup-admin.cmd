@@ -52,6 +52,14 @@ netsh advfirewall firewall delete rule name="Mosquitto 1883" >nul 2>&1
 netsh advfirewall firewall add rule name="Mosquitto 1883" dir=in action=allow protocol=TCP localport=1883 profile=private 2>&1
 
 echo.
+echo [6b] Izinkan 1883 dari peer Tailscale (100.64.0.0/10), profil apa pun...
+REM Adapter Tailscale biasanya dikenali Windows sebagai jaringan Public, jadi
+REM aturan profile=private di atas TIDAK berlaku untuknya. Aturan ini dibatasi
+REM ke rentang alamat Tailscale saja -- 1883 tetap tertutup untuk jaringan lain.
+netsh advfirewall firewall delete rule name="Mosquitto 1883 Tailscale" >nul 2>&1
+netsh advfirewall firewall add rule name="Mosquitto 1883 Tailscale" dir=in action=allow protocol=TCP localport=1883 remoteip=100.64.0.0/10 2>&1
+
+echo.
 echo ===================== HASIL =====================
 sc query mosquitto | findstr /i state
 echo Listener (harus 0.0.0.0:1883):
