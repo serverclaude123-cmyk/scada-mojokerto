@@ -21,3 +21,4 @@ broker/setup-admin.log
 # Dump flash board. JANGAN pernah di-commit: berisi secrets.h lama yang
 # ter-compile (host/user/password broker cloud) sebagai teks biasa.
 backup-firmware/
+deploy/setup-fuxa-autostart.log

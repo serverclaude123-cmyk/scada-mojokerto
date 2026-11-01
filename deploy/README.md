@@ -46,6 +46,28 @@ Skrip itu akan:
 Parameter lain: `-BrokerPort` (default 1883), `-PlcAddress` (default `192.168.1.113:502`),
 `-Root` (default `C:\Tools`), `-NodeVersion`.
 
+## Auto-start FUXA
+
+FUXA yang dipasang lewat npm hanyalah proses node biasa — kalau PC restart atau prosesnya
+berhenti, dia tidak hidup lagi sendiri. Mosquitto selamat karena terpasang sebagai Windows
+service; FUXA tidak.
+
+Jalankan **`setup-fuxa-autostart.cmd` sebagai Administrator** (klik kanan → Run as administrator).
+Skrip itu membuat scheduled task bernama `FUXA` dengan pemicu **ONSTART** dan akun **SYSTEM**,
+jadi FUXA hidup begitu PC menyala walau belum ada yang login — penting untuk PC site yang bisa
+restart sendiri setelah listrik padam.
+
+Melepasnya kembali:
+```
+schtasks /delete /tn FUXA /f
+```
+
+### Jangan campur dengan menjalankan FUXA manual
+Setelah task ini aktif, FUXA berjalan sebagai **SYSTEM**. Jangan lagi menjalankannya manual
+sebagai user biasa: selain berebut port 1881, berkas yang dibuat SYSTEM bisa ber-ACL yang
+menolak akun biasa. Masalah persis seperti itu sudah pernah terjadi di sini dengan
+`mosquitto.log` dan sempat membuat Mosquitto gagal start — lihat `../broker/README.md`.
+
 ## Yang TIDAK dikerjakan skrip, dan kenapa
 
 - **Plugin `modbus-serial`.** Paket npm FUXA tidak menyertakan driver Modbus. Pasang lewat
