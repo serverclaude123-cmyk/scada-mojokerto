@@ -102,8 +102,10 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
       -> MQTT -> broker lokal. Topik yang terbit: `gw/status online`, `gw/ip 192.168.1.50`,
       `vsd2/comm_ok 1`, `vsd2/volt_dc 288`, `vsd2/status_word 4144` (0x1030).
       Blok baca 102..110 diterima drive (tidak ada pesan fallback).
-- [ ] **VSD1 tidak menjawab** (`[vsd1] OFF`, err naik terus 14→19→23). Cek par 5302 = 1,
-      kabel A/B ke drive itu, terminasi, dan apakah drive-nya hidup.
+- **VSD1 BELUM DIPASANG** — bukan kerusakan. `[vsd1] OFF` dengan err yang terus naik dan
+  `vsd1/comm_ok 0` di MQTT adalah perilaku yang benar untuk slave yang memang tidak ada.
+  Jangan dikejar sebagai bug. Kalau mau tampilan FUXA bersih dulu sampai VSD1 terpasang,
+  set `VSD_COUNT 1` di `config.h`; kembalikan ke 2 saat drive-nya datang.
 - [x] **Broker MQTT lokal JALAN** (1 Nov 2026): Mosquitto 2.1.2 sebagai Windows service,
       listener `0.0.0.0:1883` saja, firewall dibuka untuk profil privat. Terverifikasi:
       anonim dan password salah DITOLAK (`not authorised`), kredensial benar sukses baik
