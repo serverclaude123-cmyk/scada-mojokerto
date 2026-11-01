@@ -75,14 +75,39 @@ Ini sudah menggigit sekali di sini: FUXA yang dijalankan dengan CWD `C:\` menyim
 FUXA membuat `_appdata` baru yang kosong di sana dan **proyeknya tampak hilang** — padahal
 datanya masih utuh di tempat lama.
 
-Karena itu task selalu dibuat dengan `--userDir "C:\ProgramDatauxa"`. Dengan itu folder
+Karena itu task selalu dibuat dengan `--userDir "C:\ProgramData\fuxa"`. Dengan itu folder
 datanya pasti, tidak peduli siapa yang menjalankan dan dari mana. Skrip juga memeriksa
 keberadaan `project.fuxap.db` di sana dan memperingatkan kalau belum ada.
 
 Kalau proyek pernah tersimpan di tempat lain, salin dulu isinya:
 ```
-xcopy /E /I /Y C:\_appdata C:\ProgramDatauxa\_appdata
+xcopy /E /I /Y C:\_appdata C:\ProgramData\fuxa\_appdata
 ```
+
+### `--userDir` memindahkan SEMUA folder data, bukan hanya `_appdata`
+Ini bagian yang mudah terlewat. Setelah `--userDir` dipakai, `main.js` juga menggeser
+`rootDir`, dan folder-folder ini di-resolve relatif ke sana:
+
+```js
+rootDir = parsedArgs.userDir;
+settings.packageDir     = path.resolve(rootDir, '_pkg');
+settings.imagesFileDir  = path.resolve(rootDir, '_images');
+settings.widgetsFileDir = path.resolve(rootDir, '_widgets');
+settings.dbDir          = path.resolve(rootDir, settings.dbDir || '_db');
+```
+
+Tanpa `--userDir`, `rootDir = __dirname`, jadi semuanya ada di dalam folder paket npm.
+`_pkg` itulah tempat plugin terpasang — di PC ini plugin Modbus ada di
+`<paket>/_pkg/runtime/node_modules/modbus-serial`. Kalau `_pkg` tidak ikut dipindah,
+device PLC M221 gagal dimuat dengan `plugin is missing!` padahal plugin-nya jelas
+sudah terpasang. Begitu juga `_db` (data trend/DAQ) akan mulai dari kosong.
+
+Karena itu skrip menyalin `_pkg`, `_db`, `_images`, dan `_widgets` dari folder paket ke
+`--userDir` pada langkah [3/5] — **hanya kalau belum ada**, supaya menjalankan ulang skrip
+tidak menimpa data yang sudah terkumpul. Penyalinan sengaja ditaruh **setelah**
+`taskkill node.exe` agar berkas SQLite di `_db` tidak tersalin dalam keadaan setengah
+tertulis. Sisi baiknya: seluruh data yang bisa berubah jadi terkumpul di satu folder,
+sehingga memindahkan FUXA ke PC site hanya perlu menyalin satu folder itu.
 
 ### Jangan campur dengan menjalankan FUXA manual
 Setelah task ini aktif, FUXA berjalan sebagai **SYSTEM**. Jangan lagi menjalankannya manual
@@ -92,8 +117,11 @@ menolak akun biasa. Masalah persis seperti itu sudah pernah terjadi di sini deng
 
 ## Yang TIDAK dikerjakan skrip, dan kenapa
 
-- **Plugin `modbus-serial`.** Paket npm FUXA tidak menyertakan driver Modbus. Pasang lewat
-  Settings → Plugins. Tanpa itu device PLC hanya menulis `plugin is missing` di log dan diam.
+- **Memasang plugin `modbus-serial`.** Paket npm FUXA tidak menyertakan driver Modbus.
+  Pasang lewat Settings → Plugins. Tanpa itu device PLC hanya menulis `plugin is missing`
+  di log dan diam. Skrip hanya **menyalin** plugin yang sudah terpasang ke `--userDir`
+  (lihat di atas); kalau belum pernah dipasang, tidak ada yang bisa disalin dan skrip
+  akan memperingatkan.
 - **Mosquitto.** Kalau PC ini yang jadi broker, pasang terpisah — lihat `../broker/README.md`.
   Installer-nya memasang Windows service, dan konfigurasinya butuh langkah admin satu kali.
 - **Kredensial.** Tidak ada password di repo. Skrip menanyakannya saat jalan dan
