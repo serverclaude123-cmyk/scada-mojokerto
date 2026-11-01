@@ -106,15 +106,21 @@ Sudah di-import ke **FUXA 1.3.5** (Node 22.23.4) dan diperiksa:
 - View ter-render: 2 panel, lampu RUN/FAULT/COMM, 5 nilai per VSD dengan placeholder `##.#`,
   tombol START/STOP berlabel, blok diagnosa.
 - Alarm dan semua tag masuk.
-- Koneksi memang gagal di PC uji — broker masih `GANTI-HOST` (`Not authorized`) dan PLC tidak
-  ada di jaringan (`ETIMEDOUT 192.168.1.20:502`). Itu yang diharapkan.
+- Di PC lapangan (1 Nov 2026) keduanya tersambung: `'MQTT Broker' start` ke
+  `mqtt://localhost:1883` dan `'PLC M221' connected!` ke `192.168.1.113:502`.
+  Nilai live masuk: `gw/status online`, `vsd2/comm_ok 1`, `vsd2/volt_dc 279`.
+  `vsd1/comm_ok 0` dengan `err_count` terus naik itu wajar — VSD1 belum dipasang.
+- Delapan `'PLC M221' _readMemory error!` di awal start adalah gejolak koneksi pertama
+  (`ERR_STREAM_WRITE_AFTER_END` di `tcpport.js`), bukan tanda PLC bermasalah. Setelah
+  `connected!` log bersih. Jangan buang waktu mengejarnya.
 
 - Tombol momentary diuji dengan menekan 400 ms: FUXA memanggil `setValue` dua kali dan
   driver Modbus menghitung `val: 1` lalu `val: 0` untuk coil offset yang benar.
 
 Yang **belum** diuji dan masih jadi tugas di lapangan:
-- Nilai live dari broker sungguhan dan tulis coil ke M221 sungguhan (frame di kabel belum
-  diverifikasi dengan alat yang bisa dipercaya — listener uji coba saya sendiri salah baca).
+- **Tulis coil ke M221 sungguhan.** Nilai live dari broker sudah terbukti, tapi menekan
+  START/STOP ke PLC lapangan belum pernah dicoba. Perlu hati-hati: `%M1` dan `%M2` di PLC
+  masih tersangkut ON, dan drive sekarang sudah di mode REMOTE.
 - **Dialog konfirmasi START/STOP belum ada.** Tombol ini menjalankan motor lewat PLC.
   Tambahkan konfirmasi di editor FUXA (property tombol) **sebelum dipakai di lapangan**.
 - Posisi/ukuran elemen: koordinat tetap 1200×800, rapikan di editor kalau perlu.
@@ -129,6 +135,44 @@ FUXA hanya menggambar kotak putih yang tidak bisa diketik.
 
 Terbukti ujung ke ujung: isian di FUXA -> `vsd2/cmd/freq_set` -> ESP32 -> Modbus FC06
 ke 40002 -> drive ACK, terlihat dari `vsd2/cmd_ok` yang berubah 0 menjadi 1.
+
+Diuji ulang 1 Nov 2026 lewat UI sungguhan di browser: ketik `15` lalu Enter pada kotak VSD2,
+broker langsung melaporkan `vsd2/freq_set 15.0`, `vsd2/freq_cmd 15.0`, `vsd2/cmd_ok 1`.
+Angkanya 15.0 dan bukan 7.5 — itu bukti par 1105 (REF1 MAX) di drive benar-benar 50 Hz dan
+cocok dengan `REF1_MAX_HZ` di firmware. Setelah itu dikembalikan ke 0.
+
+### JEBAKAN: proyek yang jalan bisa menyimpang dari file `.fuxap` di repo
+Proyek yang aktif disimpan FUXA di `_appdata/project.fuxap.db`, bukan dibaca dari
+`scada-mojokerto.fuxap`. File `.fuxap` hanya dipakai saat import. Begitu ada yang menyunting
+lewat editor FUXA, keduanya bisa berbeda tanpa ada peringatan apa pun.
+
+Itu sudah terjadi: proyek yang jalan sempat hanya punya 26 item sedangkan file repo punya 28 —
+dua `svg-ext-html_input` setpoint hilang, sementara empat tombol START/STOP tetap utuh.
+Cara memeriksanya cepat, bandingkan jumlah item per tipe:
+
+```bash
+curl -s http://127.0.0.1:1881/api/project
+```
+
+**Jangan memulihkannya dengan mengimpor ulang `.fuxap`.** File di repo masih berisi
+`GANTI-USER` / `GANTI-PASSWORD`, jadi mengimpornya akan menghapus kredensial broker di
+proyek yang jalan dan FUXA langsung putus dari Mosquitto.
+
+Cara yang aman adalah mengganti **view saja**, karena device sama sekali tidak disentuh:
+
+```
+POST /api/projectData   body: {"cmd": "set-view", "data": <objek view>}
+```
+
+`set-view` mencocokkan berdasarkan `view.id` (`runtime/project/index.js`, fungsi `setView`),
+jadi view lama diganti di tempat, bukan ditambah sebagai view baru. Langkahnya: ambil proyek
+yang jalan lewat `GET /api/project`, sisipkan item yang hilang ke `items` dan potongan `<g>`-nya
+ke `svgcontent`, lalu kirim balik view itu.
+
+Satu hal yang mudah salah: di file `.fuxap` hasil `make_project.py` semua `<g>` adalah anak
+langsung `<svg>`, tapi setelah FUXA menyimpannya sendiri semua item pindah ke dalam satu grup
+`<g><title>Layer 1</title>`. Potongan yang disisipkan harus masuk ke dalam grup Layer 1 itu,
+bukan sebelum `</svg>`, kalau tidak item tidak akan tampil.
 
 ### Catatan bentuk tombol
 Gauge `svg-ext-html_button` tidak cukup `<rect>`. FUXA mencari anak ber-id awalan `B-HXB_`
