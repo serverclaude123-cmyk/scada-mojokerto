@@ -62,6 +62,28 @@ Melepasnya kembali:
 schtasks /delete /tn FUXA /f
 ```
 
+### JEBAKAN: folder data FUXA ditentukan oleh current directory
+`main.js` menentukan folder datanya begini:
+
+```js
+var workDir = path.resolve(process.cwd(), '_appdata');
+```
+
+Jadi **lokasi data mengikuti dari mana FUXA dijalankan**, bukan dari mana dia terpasang.
+Ini sudah menggigit sekali di sini: FUXA yang dijalankan dengan CWD `C:\` menyimpan proyek di
+`C:\_appdata`, lalu begitu scheduled task menjalankannya dengan CWD `C:\Windows\System32`,
+FUXA membuat `_appdata` baru yang kosong di sana dan **proyeknya tampak hilang** — padahal
+datanya masih utuh di tempat lama.
+
+Karena itu task selalu dibuat dengan `--userDir "C:\ProgramDatauxa"`. Dengan itu folder
+datanya pasti, tidak peduli siapa yang menjalankan dan dari mana. Skrip juga memeriksa
+keberadaan `project.fuxap.db` di sana dan memperingatkan kalau belum ada.
+
+Kalau proyek pernah tersimpan di tempat lain, salin dulu isinya:
+```
+xcopy /E /I /Y C:\_appdata C:\ProgramDatauxa\_appdata
+```
+
 ### Jangan campur dengan menjalankan FUXA manual
 Setelah task ini aktif, FUXA berjalan sebagai **SYSTEM**. Jangan lagi menjalankannya manual
 sebagai user biasa: selain berebut port 1881, berkas yang dibuat SYSTEM bisa ber-ACL yang

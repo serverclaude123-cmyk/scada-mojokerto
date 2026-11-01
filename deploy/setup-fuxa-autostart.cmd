@@ -4,6 +4,7 @@ set LOG=%~dp0setup-fuxa-autostart.log
 set NODE=C:\Users\AIOPC\Tools\node-v22.23.4-win-x64\node.exe
 set MAIN=C:\Users\AIOPC\Tools\npm-global\node_modules\@frangoteam\fuxa\main.js
 set TASK=FUXA
+set DATA=C:\ProgramData\fuxa
 
 REM ============================================================
 REM  Pasang FUXA supaya hidup otomatis saat PC menyala.
@@ -37,6 +38,13 @@ echo [1/4] Periksa berkas...
 if not exist "%NODE%" ( echo   [X] node.exe tidak ada: %NODE% & exit /b 1 )
 if not exist "%MAIN%" ( echo   [X] FUXA main.js tidak ada: %MAIN% & exit /b 1 )
 echo   node dan FUXA ditemukan
+if not exist "%DATA%\_appdata\project.fuxap.db" (
+  echo   [!] %DATA%\_appdata\project.fuxap.db tidak ada.
+  echo       FUXA akan mulai dengan proyek KOSONG. Salin dulu _appdata yang berisi
+  echo       proyekmu ke %DATA%, atau import ulang setelah ini.
+) else (
+  echo   data proyek ditemukan di %DATA%\_appdata
+)
 
 echo.
 echo [2/4] Hentikan FUXA yang sedang jalan supaya tidak rebutan port 1881...
@@ -45,7 +53,11 @@ taskkill /IM node.exe /F 2>&1
 echo.
 echo [3/4] Buat scheduled task "%TASK%" (ONSTART, akun SYSTEM)...
 schtasks /delete /tn "%TASK%" /f >nul 2>&1
-schtasks /create /tn "%TASK%" /tr "\"%NODE%\" \"%MAIN%\"" /sc onstart /ru SYSTEM /rl HIGHEST /f
+REM --userDir WAJIB. Tanpa itu FUXA menentukan folder datanya dari current
+REM working directory (main.js: workDir = path.resolve(process.cwd(), '_appdata')).
+REM Scheduled task berjalan dengan CWD C:\Windows\System32, sehingga FUXA akan
+REM membuat _appdata baru yang KOSONG di sana dan proyeknya tampak hilang.
+schtasks /create /tn "%TASK%" /tr "\"%NODE%\" \"%MAIN%\" --userDir \"%DATA%\"" /sc onstart /ru SYSTEM /rl HIGHEST /f
 if errorlevel 1 ( echo   [X] gagal membuat task & exit /b 1 )
 
 echo.
