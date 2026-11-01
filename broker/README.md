@@ -10,6 +10,20 @@ mosquitto_passwd passwd fuxa
 ```
 `-c` membuat file baru — **jangan** pakai `-c` untuk user kedua, nanti file lama tertimpa.
 
+Setelah menambah user, **salin `passwd` ke folder instalasi** (`C:\Users\AIOPC\Tools\mosquitto\passwd`)
+karena itu yang dibaca service, lalu **restart service**. Mosquitto menyimpan daftar user di
+memori: sudah diuji di sini, user baru ditolak `not authorised` sampai service di-restart,
+walau file passwd-nya sudah benar. `setup-admin.cmd` menyalin dan me-restart sekaligus.
+
+### Satu user per perangkat
+Supaya akses satu perangkat bisa dicabut tanpa mengganggu yang lain, beri user sendiri untuk
+tiap klien, jangan berbagi satu akun. Yang sudah ada: `esp32` (firmware), `fuxa` (HMI),
+lalu `hp1`, `hp2`, `pc2` untuk perangkat remote.
+
+**Client ID juga harus unik per klien.** Kalau dua klien memakai client ID yang sama, broker
+memutus yang pertama -- gejalanya dua perangkat saling menendang, connect-putus berulang tanpa
+pesan error yang jelas. ESP32 memakai `esp32-vsd-mojokerto`; jangan dipakai ulang.
+
 Isi user/password yang sama di:
 - `firmware/include/secrets.h` → `MQTT_USER`, `MQTT_PASS`
 - FUXA → Connections → `MQTT Broker`
