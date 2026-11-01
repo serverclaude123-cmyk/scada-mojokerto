@@ -127,8 +127,9 @@ Publish tiap 2 detik dan langsung saat status run/fault/comm berubah.
 - TLS: broker lokal dipakai tanpa TLS (`MQTT_USE_TLS 0`, port 1883) — lalu lintasnya tidak keluar LAN. Kalau broker nanti diberi TLS, set `MQTT_USE_TLS 1` dan port 8883.
 
 ## 2. PLC M221 (SoMachine Basic)
-1. Ethernet: IP 192.168.1.20, gateway 192.168.1.1. Modbus TCP server aktif (port 502, default).
-2. Program (contoh):
+1. Ethernet: **IP 192.168.1.113** (terbaca di lapangan; rencana awal .20), gateway 192.168.1.1.
+   Modbus TCP server aktif di port 502, menjawab unit id berapa pun.
+2. Program:
 
 | Alamat | Nama | Arah | Keterangan |
 |---|---|---|---|
@@ -147,32 +148,73 @@ Perintah dari FUXA bersifat **pulse**: START dan STOP adalah bit terpisah. Tombo
 menulis `1` saat ditekan (mousedown) dan `0` saat dilepas (mouseup), jadi bit-nya naik
 selama tombol ditahan lalu turun sendiri.
 
-PLC memakai SET/RESET langsung ke output:
+PLC memakai SET/RESET langsung ke output. Berikut program lengkapnya dalam **Instruction List**
+(SoMachine Basic / EcoStruxure Machine Expert - Basic). Empat baris pertama adalah yang sudah ada
+di `m221 plc.smbp`; sisanya yang perlu ditambahkan.
 
 ```
-(* STOP ditaruh SESUDAH START supaya menang dalam satu scan *)
-IF %M0 THEN SET   %Q0.0        (* START VSD1 *)
-IF %M1 THEN RESET %Q0.0        (* STOP VSD1  *)
-IF %M2 THEN SET   %Q0.1        (* START VSD2 *)
-IF %M3 THEN RESET %Q0.1        (* STOP VSD2  *)
+(* ============ 1. SET/RESET output. STOP ditaruh SESUDAH START ============ *)
+(* Urutan ini penting: kalau START dan STOP sama-sama aktif dalam satu scan, *)
+(* RESET yang dieksekusi belakangan akan menang -- itu yang kita mau.        *)
+LD    %M0
+S     %Q0.0
+LD    %M1
+R     %Q0.0
+LD    %M2
+S     %Q0.1
+LD    %M3
+R     %Q0.1
 
-(* PENGAMAN: bersihkan bit perintah sendiri, jangan bergantung pada HMI *)
-RESET %M0 ; RESET %M1 ; RESET %M2 ; RESET %M3
+(* ============ 2. Bersihkan bit perintah -- INI YANG BELUM ADA ============ *)
+(* Tanpa ini, satu bit yang tertinggal 1 akan di-SET/RESET ulang tiap scan   *)
+(* dan tombol lawannya tidak akan pernah mempan.                            *)
+LD    %M0
+R     %M0
+LD    %M1
+R     %M1
+LD    %M2
+R     %M2
+LD    %M3
+R     %M3
 
-(* interlock *)
-IF NOT %I0.0 OR NOT %I0.1 THEN RESET %Q0.0 ; RESET %Q0.1   (* Local / e-stop *)
-IF %I0.2 THEN RESET %Q0.0                                   (* fault VSD1 *)
-IF %I0.3 THEN RESET %Q0.1                                   (* fault VSD2 *)
+(* ============ 3. Interlock: Local/Remote dan E-stop ============ *)
+(* %I0.0 = 1 saat selector di REMOTE; %I0.1 = 1 saat e-stop SEHAT (kontak NC) *)
+LDN   %I0.0
+ORN   %I0.1
+R     %Q0.0
+LDN   %I0.0
+ORN   %I0.1
+R     %Q0.1
+
+(* ============ 4. Interlock fault drive (kalau relay fault dikabel) ======= *)
+LD    %I0.2
+R     %Q0.0
+LD    %I0.3
+R     %Q0.1
 ```
 
-> **Baris `RESET %M0..%M3` itu wajib, bukan hiasan.** Kalau browser, PC, atau jaringan mati
-> di antara mousedown dan mouseup, bit perintah akan tertinggal `1`. Dengan pola SET/RESET,
-> `%M0` yang terus `1` akan me-SET ulang `%Q0.0` tiap scan sehingga **STOP tidak pernah bisa
-> mematikan motor**. PLC yang membersihkan bitnya sendiri menghilangkan kegagalan itu
-> secara struktural — jangan menggantungkannya pada HMI.
+Blok 3 dan 4 harus berada **di bawah** blok 1, supaya interlock selalu menang atas perintah START.
 
-Watchdog komunikasi: FUXA menulis `%MW10` tiap 1 s; kalau nilainya tidak berubah selama 5 s,
-PLC me-reset `%Q0.0`/`%Q0.1` supaya motor berhenti saat PC atau jaringan putus.
+### Membersihkan bit yang sudah terlanjur nyangkut
+Sebelum program baru di-download, cek dulu kondisi sekarang lewat animation table
+SoMachine Basic: `%M0`–`%M3` harus semuanya 0. Per 1 Nov 2026 pembacaan Modbus menunjukkan
+`%M1` dan `%M2` masih **1** — sisa percobaan tombol sebelum blok 2 ada. Paksa keduanya ke 0,
+atau cukup download program baru lalu power-cycle PLC.
+
+### Watchdog komunikasi (nanti, jangan dulu)
+Rencananya: FUXA menaikkan `%MW10` tiap 1 detik; kalau nilainya diam 5 detik, PLC me-reset
+`%Q0.0`/`%Q0.1` supaya motor berhenti saat PC atau jaringan putus.
+
+Implementasinya butuh timer `%TM0` (TON, 5 s) dan satu word salinan untuk mendeteksi perubahan:
+bandingkan `%MW10` dengan `%MW11`, reset timer kalau berbeda, lalu simpan `%MW11 := %MW10`.
+**Buat ini di editor ladder, bukan disalin sebagai IL** — sintaks blok timer berbeda antar versi
+SoMachine Basic dan mudah salah kalau ditulis buta.
+
+> **Jangan aktifkan watchdog sebelum heartbeat-nya jalan.** FUXA tidak menulis `%MW10` dengan
+> sendirinya — tag-nya sudah ada di proyek, tapi nilainya harus dinaikkan oleh *script* FUXA
+> (Scripts → jadwal 1 detik, `$setTag('plc_heartbeat', ($getTag('plc_heartbeat') + 1) % 32767)`).
+> Kalau watchdog dinyalakan di PLC tapi script-nya belum ada, motor tidak akan pernah bisa run.
+
 Mode Local (selector) tetap mengutamakan operator di panel.
 
 > **Jangan aktifkan watchdog sebelum heartbeat-nya jalan.** FUXA tidak menulis `%MW10` dengan
