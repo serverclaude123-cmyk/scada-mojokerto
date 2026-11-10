@@ -151,6 +151,39 @@ devices = {
     },
 }
 
+# --- Device bawaan "Fuxa Server" dan tag status koneksi -------------------------------
+# FUXA mengisi tag ber-sysType 1 ini sendiri lewat setDeviceConnectionStatus
+# (runtime/devices/device.js). Nilainya ConnectionStatusEnum: 0 = OFF, 3 = WARNING
+# (tidak menjawab 2x interval polling), 5 = ON. memaddress HARUS = id device yang dipantau.
+# Tag ini normalnya dibuat oleh frontend FUXA saat device ditambah lewat editor, jadi
+# generator harus menuliskannya sendiri supaya proyek hasil import juga punya.
+SERVER_ID = "0"
+CONN_STATUS_SYSTYPE = 1
+CONN_OFF, CONN_WARNING, CONN_ON = 0, 3, 5
+
+def conn_tag_id(device_key):
+    return "t_conn_" + devices[device_key]["id"]
+
+server_tags = {}
+for _dev in (MQTT_DEV, PLC_DEV):
+    _tid = conn_tag_id(_dev)
+    server_tags[_tid] = {
+        "id": _tid,
+        "name": f"{_dev} Connection Status",
+        "label": f"{_dev} Connection Status",
+        "value": "",
+        "type": "number",
+        "memaddress": devices[_dev]["id"],
+        "daq": {"enabled": False, "interval": 60, "changed": False, "restored": False},
+        "init": "",
+        "sysType": CONN_STATUS_SYSTYPE,
+    }
+
+server_device = {
+    "name": "Fuxa Server", "id": SERVER_ID, "type": "FuxaServer",
+    "property": {}, "polling": 1000, "enabled": True, "tags": server_tags,
+}
+
 # ------------------------------------------------------------------- alarms
 def alarm(name, variable_id, text, level="high", lo=1, hi=1, color="#ffffff", bk="#d32f2f"):
     empty = {"enabled": False, "text": "", "group": "", "ackmode": "alarm.ack-float",
@@ -225,9 +258,12 @@ def value_item(item_id, x, y, variable_id, unit, fmt_text="##.#", size=26):
 
 
 def lamp_item(item_id, cx, cy, variable_id, on_color, off_color="#bdbdbd", r=13, src_dev=None,
-              zero_color=None):
-    # zero_color: warna untuk nilai 0; default off_color. Lampu "PLC tersambung" memberi
-    # on_color supaya 0 dan 1 sama-sama hijau, dan hanya nilai kosong (putus) yang merah.
+              src_id=None, ranges=None):
+    # ranges: kalau diisi, dipakai apa adanya (mis. lampu status koneksi yang bernilai 0/3/5).
+    # Kalau tidak, pola biasa: 0 -> off_color, 1 -> on_color.
+    # off_color juga jadi warna bawaan di SVG, yaitu yang tampil kalau nilai tag KOSONG atau
+    # tidak cocok rentang mana pun. Untuk lampu koneksi, isi off_color dengan merah supaya
+    # keadaan "tidak diketahui" terbaca sebagai putus, bukan tersambung.
     items[item_id] = {
         "id": item_id,
         "type": "svg-ext-gauge_semaphore",
@@ -236,10 +272,10 @@ def lamp_item(item_id, cx, cy, variable_id, on_color, off_color="#bdbdbd", r=13,
             "events": [],
             "variable": variable_id,
             "variableId": variable_id,
-            "variableSrc": devices[src_dev or MQTT_DEV]["id"],
+            "variableSrc": src_id or devices[src_dev or MQTT_DEV]["id"],
             "alarmId": "", "alarmSrc": "", "alarm": "", "alarmColor": "",
-            "ranges": [
-                {"type": "range", "min": "0", "max": "0", "color": zero_color or off_color},
+            "ranges": ranges or [
+                {"type": "range", "min": "0", "max": "0", "color": off_color},
                 {"type": "range", "min": "1", "max": "1", "color": on_color},
             ],
         },
@@ -334,11 +370,26 @@ static_text(40, 76, "Gateway", size=14, color="#546e7a")
 value_item("VAL_gw_status", 420, 76, "gw_status", "", fmt_text="--", size=16)
 static_text(440, 76, "IP", size=14, color="#546e7a")
 value_item("VAL_gw_ip", 640, 76, "gw_ip", "", fmt_text="---.---.---.---", size=16)
-# Status PLC: koil %M0 terbaca (0 atau 1) selama Modbus TCP tersambung; FUXA mengosongkan
-# nilai tag saat device putus, jadi tidak cocok dengan rentang apa pun -> lampu kembali merah.
+# Lampu status koneksi, dari tag sistem device "Fuxa Server" (bukan ditebak dari nilai koil).
+#
+# JANGAN diikat ke tag data biasa seperti koil %M0. Versi lama lampu PLC melakukan itu dengan
+# rentang 0 dan 1 sama-sama hijau, dengan anggapan FUXA mengosongkan nilai tag saat device
+# putus sehingga tidak ada rentang yang cocok dan lampu jatuh ke merah. Anggapan itu SALAH:
+# nilainya bertahan 0, cocok rentang 0, dan lampu tetap HIJAU walau PLC mati sama sekali.
+# Terbukti di lapangan 10 Nov 2026 -- FUXA dinyalakan dengan PLC mati, lampu tetap hijau.
+CONN_RANGES = [
+    {"type": "range", "min": str(CONN_OFF), "max": str(CONN_OFF), "color": "#c62828"},
+    {"type": "range", "min": str(CONN_WARNING), "max": str(CONN_WARNING), "color": "#f9a825"},
+    {"type": "range", "min": str(CONN_ON), "max": str(CONN_ON), "color": "#2e7d32"},
+]
+
+static_text(664, 76, "Broker", size=14, color="#546e7a")
+lamp_item("LMP_mqtt_online", 730, 71, conn_tag_id(MQTT_DEV), "#2e7d32",
+          off_color="#c62828", r=9, src_id=SERVER_ID, ranges=CONN_RANGES)
 static_text(760, 76, "PLC M221", size=14, color="#546e7a")
-lamp_item("LMP_plc_online", 860, 71, "plc_start_vsd1", "#2e7d32", off_color="#c62828", r=9, src_dev=PLC_DEV, zero_color="#2e7d32")
-static_text(878, 76, "hijau = ON, merah = OFF", size=12, color="#90a4ae")
+lamp_item("LMP_plc_online", 848, 71, conn_tag_id(PLC_DEV), "#2e7d32",
+          off_color="#c62828", r=9, src_id=SERVER_ID, ranges=CONN_RANGES)
+static_text(868, 76, "hijau = tersambung, kuning = lambat, merah = putus", size=12, color="#90a4ae")
 
 ROWS = [("freq_out", "Frek. output", " Hz"), ("freq_set", "Setpoint", " Hz"),
         ("current", "Arus", " A"), ("volt_dc", "DC bus", " V"),
@@ -407,7 +458,7 @@ view = {
 project = {
     "version": "1.01",
     "name": "SCADA Mojokerto",
-    "server": {"name": "Fuxa Server", "id": "0", "type": "FuxaServer", "property": {}},
+    "server": server_device,
     "hmi": {
         "layout": {
             "start": view["id"],

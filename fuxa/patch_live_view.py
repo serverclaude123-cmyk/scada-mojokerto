@@ -41,6 +41,23 @@ if added:
     call("/api/projectData", {"cmd": "set-device", "data": live_plc}, token)
 print("tag PLC ditambah/diperbaiki:", ", ".join(added) or "(tidak ada)")
 
+# device "Fuxa Server": tag status koneksi (sysType 1) yang dipakai lampu di header.
+# HARUS diganti, bukan ditambah. FUXA mengisi status lewat
+#   connectionTags.find(tag => tag.memaddress === deviceId)
+# yang hanya mengenai tag PERTAMA dengan memaddress itu. Kalau tag lama dibiarkan dan
+# tag baru hanya ditambahkan, tag baru tidak pernah terisi dan lampunya merah selamanya.
+repo_srv = repo.get("server") or {}
+if repo_srv.get("tags"):
+    live_srv = next((d for d in live["devices"].values() if d["id"] == repo_srv["id"]), None)
+    if live_srv is None:
+        live_srv = dict(repo_srv)
+    else:
+        lama = {k: v for k, v in (live_srv.get("tags") or {}).items() if v.get("sysType") != 1}
+        lama.update(repo_srv["tags"])
+        live_srv["tags"] = lama
+    call("/api/projectData", {"cmd": "set-device", "data": live_srv}, token)
+    print("tag status koneksi dipasang:", ", ".join(sorted(repo_srv["tags"])))
+
 view = repo["hmi"]["views"][0]
 view["id"] = live["hmi"]["views"][0]["id"]  # set-view mencocokkan berdasarkan id -> timpa di tempat
 call("/api/projectData", {"cmd": "set-view", "data": view}, token)
