@@ -194,6 +194,14 @@ LD    %I0.2
 R     %Q0.0
 LD    %I0.3
 R     %Q0.1
+
+(* ============ 5. Salin status output RUN untuk FUXA ============ *)
+(* FUXA membaca %M4/%M5 sebagai coil (tag plc_run_vsd1/2, address 5/6).    *)
+(* Taruh PALING BAWAH supaya yang tersalin adalah hasil akhir scan.         *)
+LD    %Q0.0
+ST    %M4
+LD    %Q0.1
+ST    %M5
 ```
 
 Blok 3 dan 4 harus berada **di bawah** blok 1, supaya interlock selalu menang atas perintah START.
@@ -215,6 +223,8 @@ satu kontak dan satu coil Reset:
 | 10 | sama seperti rung 9 | **Reset** `%Q0.1` |
 | 11 | `%I0.2` normally open | **Reset** `%Q0.0` |
 | 12 | `%I0.3` normally open | **Reset** `%Q0.1` |
+| 13 | `%Q0.0` normally open | coil biasa `%M4` |
+| 14 | `%Q0.1` normally open | coil biasa `%M5` |
 
 Rung 5–8 membersihkan bit perintah. Rung 9–12 interlock, dan harus berada di bawah rung 1–4
 supaya selalu menang atas perintah START.

@@ -118,6 +118,10 @@ plc_tags = {
     "plc_start_vsd2": modbus_tag("plc_start_vsd2", COIL, 3, "Bool"),
     "plc_stop_vsd2": modbus_tag("plc_stop_vsd2", COIL, 4, "Bool"),
     "plc_heartbeat": modbus_tag("plc_heartbeat", HOLDING, 11, "UInt16"),
+    # Status output RUN. %Q tidak dibaca langsung lewat Modbus; program PLC menyalinnya ke
+    # %M4/%M5 (Q0.0 -> %M4, Q0.1 -> %M5, terbukti dengan baca FC01 9 Nov 2026) dan FUXA membaca coil itu.
+    "plc_run_vsd1": modbus_tag("plc_run_vsd1", COIL, 5, "Bool"),
+    "plc_run_vsd2": modbus_tag("plc_run_vsd2", COIL, 6, "Bool"),
 }
 
 devices = {
@@ -181,7 +185,7 @@ for i, v in enumerate(VSDS, start=1):
     alarms.append(alarm(f"AL_{v.upper()}_FAULT", f"{v}_fault",
                         f"VSD{i} TRIPPED (fault)", level="highhigh"))
     alarms.append(alarm(f"AL_{v.upper()}_COMM", f"{v}_comm_ok",
-                        f"VSD{i} tidak terbaca ESP32 (comm lost)", level="high",
+                        f"VSD{i} tidak terbaca Gateway (comm lost)", level="high",
                         lo=0, hi=0, bk="#f57c00"))
 
 # ------------------------------------------------------------------- view
@@ -220,7 +224,10 @@ def value_item(item_id, x, y, variable_id, unit, fmt_text="##.#", size=26):
         f'</g>')
 
 
-def lamp_item(item_id, cx, cy, variable_id, on_color, off_color="#bdbdbd", r=13):
+def lamp_item(item_id, cx, cy, variable_id, on_color, off_color="#bdbdbd", r=13, src_dev=None,
+              zero_color=None):
+    # zero_color: warna untuk nilai 0; default off_color. Lampu "PLC tersambung" memberi
+    # on_color supaya 0 dan 1 sama-sama hijau, dan hanya nilai kosong (putus) yang merah.
     items[item_id] = {
         "id": item_id,
         "type": "svg-ext-gauge_semaphore",
@@ -229,10 +236,10 @@ def lamp_item(item_id, cx, cy, variable_id, on_color, off_color="#bdbdbd", r=13)
             "events": [],
             "variable": variable_id,
             "variableId": variable_id,
-            "variableSrc": devices[MQTT_DEV]["id"],
+            "variableSrc": devices[src_dev or MQTT_DEV]["id"],
             "alarmId": "", "alarmSrc": "", "alarm": "", "alarmColor": "",
             "ranges": [
-                {"type": "range", "min": "0", "max": "0", "color": off_color},
+                {"type": "range", "min": "0", "max": "0", "color": zero_color or off_color},
                 {"type": "range", "min": "1", "max": "1", "color": on_color},
             ],
         },
@@ -323,10 +330,15 @@ def button_item(item_id, x, y, w, h, variable_id, text, fill):
 
 # header
 static_text(40, 48, "SCADA Mojokerto - 2 VSD ABB", size=26, weight="bold")
-static_text(40, 76, "Gateway ESP32", size=14, color="#546e7a")
+static_text(40, 76, "Gateway", size=14, color="#546e7a")
 value_item("VAL_gw_status", 420, 76, "gw_status", "", fmt_text="--", size=16)
 static_text(440, 76, "IP", size=14, color="#546e7a")
 value_item("VAL_gw_ip", 640, 76, "gw_ip", "", fmt_text="---.---.---.---", size=16)
+# Status PLC: koil %M0 terbaca (0 atau 1) selama Modbus TCP tersambung; FUXA mengosongkan
+# nilai tag saat device putus, jadi tidak cocok dengan rentang apa pun -> lampu kembali merah.
+static_text(760, 76, "PLC M221", size=14, color="#546e7a")
+lamp_item("LMP_plc_online", 860, 71, "plc_start_vsd1", "#2e7d32", off_color="#c62828", r=9, src_dev=PLC_DEV, zero_color="#2e7d32")
+static_text(878, 76, "hijau = ON, merah = OFF", size=12, color="#90a4ae")
 
 ROWS = [("freq_out", "Frek. output", " Hz"), ("freq_set", "Setpoint", " Hz"),
         ("current", "Arus", " A"), ("volt_dc", "DC bus", " V"),
@@ -343,9 +355,14 @@ for idx, v in enumerate(VSDS):
     for j, (tag, label, on_col) in enumerate([("running", "RUN", "#2e7d32"),
                                               ("fault", "FAULT", "#c62828"),
                                               ("comm_ok", "COMM", "#2e7d32")]):
-        cx = x0 + 150 + j * 130
+        cx = x0 + 150 + j * 100
         lamp_item(f"GSE_{v}_{tag}", cx, y0 + 33, f"{v}_{tag}", on_col)
         static_text(cx, y0 + 60, label, size=12, color="#546e7a", anchor="middle")
+    # output RUN dari PLC (%Q0.0 / %Q0.1 lewat salinan %M4 / %M5)
+    cx = x0 + 450
+    lamp_item(f"GSE_{v}_plc_run", cx, y0 + 33, f"plc_run_vsd{idx + 1}", "#2e7d32",
+              off_color="#c62828", src_dev=PLC_DEV)
+    static_text(cx, y0 + 60, f"PLC Q0.{idx}", size=12, color="#546e7a", anchor="middle")
 
     # nilai
     for k, (tag, label, unit) in enumerate(ROWS):
@@ -353,7 +370,7 @@ for idx, v in enumerate(VSDS):
         static_text(x0 + 24, y, label, size=15, color="#37474f")
         value_item(f"VAL_{v}_{tag}", x0 + 430, y + 4, f"{v}_{tag}", unit)
 
-    # kotak isian setpoint -> MQTT cmd/freq_set -> ESP32 tulis REFERENCE 1
+    # kotak isian setpoint -> MQTT cmd/freq_set -> Gateway tulis REFERENCE 1
     static_text(x0 + 24, y0 + 326, "Set frekuensi (Hz)", size=15, color="#37474f")
     input_item(f"HXI_{v}_cmd", x0 + 352, y0 + 308, 78, 26, f"{v}_cmd_freq_set")
     static_text(x0 + 440, y0 + 326, "Enter untuk kirim", size=11, color="#90a4ae")

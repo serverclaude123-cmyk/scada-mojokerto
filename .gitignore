@@ -22,3 +22,7 @@ broker/setup-admin.log
 # ter-compile (host/user/password broker cloud) sebagai teks biasa.
 backup-firmware/
 deploy/setup-fuxa-autostart.log
+
+# bytecode Python
+__pycache__/
+*.pyc
