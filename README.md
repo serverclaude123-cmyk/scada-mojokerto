@@ -70,9 +70,19 @@ ESP32 modul RS485        ACS550 #1 (X1)      ACS550 #2 (X1)
 | 5303 EFB BAUD RATE | **19.2 kbps** — dikonfirmasi di lapangan; harus sama dengan `MB_BAUD` di `config.h` |
 | 5304 EFB PARITY | 0 = 8 NONE 1 (default pabrik 1 = 8N2, harus diubah) |
 | 5305 EFB CTRL PROFILE | **0** = ABB DRV LIM (profil ABB Drives; 1 = DCU, jangan dipakai) |
+| 1001 EXT1 COMMANDS | **9** — terbaca di drive terpasang (10 Nov 2026). Sumber **start/stop**, dari digital input yaitu PLC. **9 bukan COMM**: manual ACS550 menyebut COMM = **10** (lihat deskripsi fault 1007). Jangan diubah ke 10, start/stop memang bukan lewat Modbus. |
+| 1103 REF1 SELECT | **8 = COMM** — sumber **referensi frekuensi**, dari Modbus (ESP32). Wajib 8 supaya tulis setpoint ke 40002 dipakai drive. |
+| 1105 REF1 MAX | **50,0 Hz** — harus sama dengan `REF1_MAX_HZ` di `config.h`, lihat bagian setpoint. |
 
 - Setelah ganti 9802, power-cycle / tunggu EFB restart. Cek par 5306–5309 (EFB OK/ERR frames) naik saat polling jalan.
-- Start/stop dan referensi tetap lewat terminal/PLC (par 1001 dll), Modbus hanya dibaca.
+- **1001 dan 1103 mengatur dua hal yang BERBEDA dan berdiri sendiri.** 1001 = sumber start/stop
+  (di sini 9 = digital input dari PLC); 1103 = sumber referensi frekuensi (di sini 8 = COMM lewat
+  Modbus). Jadi wajar start/stop lewat PLC sementara setpoint lewat ESP32 -- keduanya tidak saling
+  meniadakan. Dulu bagian ini tertulis "Modbus hanya dibaca"; itu sudah tidak berlaku sejak tulis
+  setpoint diaktifkan.
+- Kalau benar 9 = `DI1F,2R` (sumber sekunder, **belum dikonfirmasi dari manual ABB**), maka
+  **DI2 berarti perintah jalan MUNDUR**. Pastikan tidak ada kabel PLC yang tersambung ke DI2
+  tanpa sengaja sebelum motor disambung.
 
 Register yang dibaca (`config.h`). Alamat PDU = nomor register − 40001:
 
