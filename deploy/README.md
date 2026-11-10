@@ -53,9 +53,11 @@ berhenti, dia tidak hidup lagi sendiri. Mosquitto selamat karena terpasang sebag
 service; FUXA tidak.
 
 Jalankan **`setup-fuxa-autostart.cmd` sebagai Administrator** (klik kanan → Run as administrator).
-Skrip itu membuat scheduled task bernama `FUXA` dengan pemicu **ONSTART** dan akun **SYSTEM**,
-jadi FUXA hidup begitu PC menyala walau belum ada yang login — penting untuk PC site yang bisa
-restart sendiri setelah listrik padam.
+Skrip itu membuat scheduled task bernama `FUXA` dengan akun **SYSTEM**, jadi FUXA hidup walau
+belum ada yang login — penting untuk PC site yang bisa restart sendiri setelah listrik padam.
+Pemicunya **dua**, bukan satu: *At startup* **dan** pemicu berulang (watchdog) tiap 2 menit.
+Alasannya ada di bagian Fast Startup di bawah. Kerja sebenarnya dilakukan
+`register-fuxa-task.ps1`; `setup-fuxa-autostart.cmd` hanya memeriksa Administrator dan berkas.
 
 Melepasnya kembali:
 ```
@@ -103,17 +105,61 @@ device PLC M221 gagal dimuat dengan `plugin is missing!` padahal plugin-nya jela
 sudah terpasang. Begitu juga `_db` (data trend/DAQ) akan mulai dari kosong.
 
 Karena itu skrip menyalin `_pkg`, `_db`, `_images`, dan `_widgets` dari folder paket ke
-`--userDir` pada langkah [3/5] — **hanya kalau belum ada**, supaya menjalankan ulang skrip
-tidak menimpa data yang sudah terkumpul. Penyalinan sengaja ditaruh **setelah**
-`taskkill node.exe` agar berkas SQLite di `_db` tidak tersalin dalam keadaan setengah
-tertulis. Sisi baiknya: seluruh data yang bisa berubah jadi terkumpul di satu folder,
+`--userDir` (langkah [b] di `register-fuxa-task.ps1`) — **hanya kalau belum ada**, supaya
+menjalankan ulang skrip tidak menimpa data yang sudah terkumpul. Penyalinan sengaja ditaruh
+**setelah** FUXA dihentikan agar berkas SQLite di `_db` tidak tersalin dalam keadaan setengah
+tertulis. FUXA dihentikan dengan mencocokkan command line (`fuxa` + `main.js`), bukan
+`taskkill /IM node.exe`, supaya proses node lain di PC ini tidak ikut mati. Sisi baiknya: seluruh data yang bisa berubah jadi terkumpul di satu folder,
 sehingga memindahkan FUXA ke PC site hanya perlu menyalin satu folder itu.
 
-### Jangan campur dengan menjalankan FUXA manual
-Setelah task ini aktif, FUXA berjalan sebagai **SYSTEM**. Jangan lagi menjalankannya manual
-sebagai user biasa: selain berebut port 1881, berkas yang dibuat SYSTEM bisa ber-ACL yang
-menolak akun biasa. Masalah persis seperti itu sudah pernah terjadi di sini dengan
-`mosquitto.log` dan sempat membuat Mosquitto gagal start — lihat `../broker/README.md`.
+### JEBAKAN: Fast Startup membuat "At startup" tidak pernah menyala
+Windows 10 menyalakan **Fast Startup** secara bawaan (`HiberbootEnabled=1`). Dengan itu
+"Shut down" bukan mati sungguhan: sesi user ditutup, lalu *kernel* di-hibernate. Menyalakan PC
+berikutnya hanya memulihkan image itu. Di PC ini terbukti dari log sistem:
+
+- `Kernel-Boot` event 27 mencatat jenis boot. Semua "boot" sejak 6 Nov bertipe `0x1`
+  (fast startup), bukan `0x0` (boot penuh).
+- Event `6005` (*Event log service started*) hanya muncul di boot penuh. Di keempat fast startup
+  (6 Nov, 9 Nov dua kali, 10 Nov) tidak ada — artinya **layanan Windows tidak di-restart**,
+  termasuk Task Scheduler, sehingga pemicu *At startup* tidak pernah menyala.
+- Proses milik **SYSTEM** (task FUXA, Mosquitto, Tailscale) ikut tersimpan di hibernate dan
+  muncul lagi. Log FUXA membuktikannya: celahnya persis sama dengan PC mati, lalu lanjut tanpa
+  baris `FUXA started!` baru.
+- Proses milik **user biasa** ikut mati di tiap shutdown karena sesinya ditutup.
+
+Akibatnya: selama FUXA SYSTEM tidak pernah mati, semuanya tampak baik-baik saja. Begitu
+prosesnya mati sekali saja, tidak ada yang menghidupkannya — sampai ada boot penuh.
+
+Kejadian nyata 9 Nov ~12:30: FUXA SYSTEM dihentikan untuk mereset login, lalu diganti
+`Start-Process node.exe` dari sesi user. Sejak itu setiap PC dimatikan lalu dinyalakan, FUXA
+hilang: prosesnya mati bersama sesi user dan tidak ada yang menyalakannya lagi.
+Gejala sampingan yang menyesatkan: `fuxa.log` **berhenti** padahal FUXA hidup, karena berkas
+log milik SYSTEM dan `BUILTIN\Users` hanya punya hak baca.
+
+Obatnya ada di task: pemicu berulang tiap 2 menit memulai FUXA lagi kapan pun ia tidak jalan,
+termasuk setelah Fast Startup. Peluncurnya (`C:\ProgramData\fuxa\start-fuxa.cmd`, dibuat
+installer) tidak berbuat apa-apa kalau port 1881 sudah dipakai, jadi tidak ada instance ganda.
+Opsi tambahan, tidak dipasang otomatis karena mengubah pengaturan daya Windows: mematikan Fast
+Startup (Control Panel → Power Options → *Choose what the power buttons do* → hilangkan centang
+*Turn on fast startup*) supaya setiap menyalakan PC adalah boot penuh.
+
+### JEBAKAN: batas waktu 72 jam
+Task yang dibuat `schtasks /create` mendapat batas waktu jalan bawaan 72 jam, jadi di PC yang
+menyala terus node FUXA akan dibunuh scheduler tiap 3 hari. Versi lama skrip ini terkena itu.
+Sekarang task dibuat lewat `Register-ScheduledTask` dengan `ExecutionTimeLimit = 0` (tanpa batas).
+
+### Jangan menjalankan FUXA manual
+Setelah task ini aktif, FUXA berjalan sebagai **SYSTEM**. Jangan menjalankannya manual sebagai
+user biasa:
+
+- prosesnya mati di shutdown berikutnya dan task tidak tahu ia pernah ada (lihat Fast Startup);
+- selain berebut port 1881, berkas yang dibuat SYSTEM ber-ACL yang menolak akun biasa, jadi
+  log berhenti tertulis tanpa pesan galat. Masalah serupa pernah terjadi dengan `mosquitto.log`
+  dan sempat membuat Mosquitto gagal start — lihat `../broker/README.md`.
+
+Kalau FUXA perlu dihentikan (mis. mereset `users.fuxap.db`), dari PowerShell Administrator:
+`Stop-ScheduledTask -TaskName FUXA`, kerjakan perubahannya, lalu `Start-ScheduledTask -TaskName FUXA`.
+Watchdog akan menyalakannya sendiri dalam 2 menit kalau lupa.
 
 ## Yang TIDAK dikerjakan skrip, dan kenapa
 
