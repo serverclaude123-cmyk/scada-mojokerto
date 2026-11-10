@@ -11,6 +11,7 @@ server/runtime/devices/{mqtt,modbus}/index.js:
                 (FUXA mengurangi 1 sebelum mengirim ke bus -> %M0 = address "1").
   - Gauge      : `property.variableId` HARUS sama dengan id tag.
 """
+import hashlib
 import json
 import os
 
@@ -442,6 +443,27 @@ for idx, v in enumerate(VSDS):
     value_item(f"VAL_{v}_status_word", x0 + 300, 612, f"{v}_status_word", "", fmt_text="0", size=18)
     static_text(x0, 644, f"VSD{idx + 1} error frames", size=14, color="#546e7a")
     value_item(f"VAL_{v}_err_count", x0 + 300, 644, f"{v}_err_count", "", fmt_text="0", size=18)
+# --- Penanda revisi di sudut kanan atas ------------------------------------------------
+# Dari layar FUXA harus bisa langsung terlihat versi proyek mana yang sedang jalan.
+# Ini menjawab masalah yang sudah dua kali terjadi di proyek ini: proyek yang hidup di
+# _appdata bisa menyimpang dari .fuxap di repo tanpa tanda apa pun, dan perubahan bisa
+# tampak "tidak masuk" padahal masuk ke view yang salah. Bandingkan angka di layar
+# dengan keluaran skrip ini; kalau beda, berarti yang jalan bukan versi repo.
+#
+# Hash dihitung dari isi yang menentukan tampilan dan data, SEBELUM stempel ditambahkan,
+# jadi nilainya stabil: berubah hanya kalau proyeknya memang berubah, bukan tiap generate.
+_rev_src = json.dumps(
+    {
+        "items": items,
+        "svg": "".join(svg),
+        "device_tags": {k: sorted(v.get("tags") or {}) for k, v in devices.items()},
+        "server_tags": sorted(server_tags),
+        "alarms": [a.get("name") for a in alarms],
+    },
+    sort_keys=True, ensure_ascii=False)
+REV = hashlib.sha1(_rev_src.encode("utf-8")).hexdigest()[:8]
+static_text(W - 16, 26, f"rev {REV}", size=11, color="#b0bec5", anchor="end")
+
 svg.append("</svg>")
 
 view = {
@@ -494,3 +516,4 @@ print(f"  devices : {len(devices)}")
 print(f"  tags    : MQTT {len(mqtt_tags)}, Modbus {len(plc_tags)}")
 print(f"  alarms  : {len(alarms)}")
 print(f"  gauges  : {len(items)}")
+print(f"  rev     : {REV}   <- harus sama dengan yang tampil di pojok kanan atas FUXA")

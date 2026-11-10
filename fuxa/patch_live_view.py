@@ -58,7 +58,39 @@ if repo_srv.get("tags"):
     call("/api/projectData", {"cmd": "set-device", "data": live_srv}, token)
     print("tag status koneksi dipasang:", ", ".join(sorted(repo_srv["tags"])))
 
+# set-view mencocokkan berdasarkan view.id (runtime/project/index.js, setView), jadi id
+# yang dikirim menentukan view MANA yang ditimpa.
+#
+# JANGAN memakai live["hmi"]["views"][0]. Proyek bisa punya lebih dari satu view dan
+# urutannya bukan urutan yang terlihat: di PC ini views[0] ternyata "MainView" bawaan
+# FUXA, bukan "Overview". Versi lama baris ini menimpa id view repo dengan id views[0],
+# sehingga isi baru masuk ke MainView, Overview asli tidak tersentuh, dan layarnya tetap
+# menampilkan view lama -- tampak seperti "perubahan tidak masuk" padahal masuk ke
+# tempat yang salah, dan menyisakan dua view bernama sama.
 view = repo["hmi"]["views"][0]
-view["id"] = live["hmi"]["views"][0]["id"]  # set-view mencocokkan berdasarkan id -> timpa di tempat
+live_views = live["hmi"]["views"]
+cocok_id = next((v for v in live_views if v["id"] == view["id"]), None)
+if cocok_id is None:
+    cocok_nama = [v for v in live_views if v.get("name") == view.get("name")]
+    if len(cocok_nama) == 1:
+        view["id"] = cocok_nama[0]["id"]
+        print("view dicocokkan lewat nama ->", view["id"])
+    elif len(cocok_nama) > 1:
+        sys.exit("ada %d view bernama %r di FUXA; rapikan dulu lewat editor supaya tidak salah timpa"
+                 % (len(cocok_nama), view.get("name")))
+    else:
+        print("view belum ada di FUXA, akan dibuat baru:", view["id"])
 call("/api/projectData", {"cmd": "set-view", "data": view}, token)
-print("view diganti:", view["name"])
+print("view diganti:", view["name"], "id:", view["id"])
+
+# Peringatkan kalau tersisa view lain bernama sama (mis. korban bug di atas).
+kembar = [v for v in live_views if v.get("name") == view.get("name") and v["id"] != view["id"]]
+for v in kembar:
+    print("  [!] masih ada view lain bernama %r dengan id %s (%d item)."
+          % (v.get("name"), v["id"], len(v.get("items") or {})))
+    print("      Hapus lewat editor FUXA supaya tidak membingungkan. Tidak saya hapus otomatis.")
+
+mulai = (live["hmi"].get("layout") or {}).get("start")
+if mulai and mulai != view["id"]:
+    print("  [!] layout.start menunjuk ke view %s, bukan %s." % (mulai, view["id"]))
+    print("      Layar awal FUXA akan menampilkan view itu, bukan yang baru saja dikirim.")

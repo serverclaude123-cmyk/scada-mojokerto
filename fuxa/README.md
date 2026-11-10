@@ -141,6 +141,37 @@ broker langsung melaporkan `vsd2/freq_set 15.0`, `vsd2/freq_cmd 15.0`, `vsd2/cmd
 Angkanya 15.0 dan bukan 7.5 — itu bukti par 1105 (REF1 MAX) di drive benar-benar 50 Hz dan
 cocok dengan `REF1_MAX_HZ` di firmware. Setelah itu dikembalikan ke 0.
 
+### Penanda revisi di pojok kanan atas
+Tiap view memuat teks kecil `rev xxxxxxxx` di sudut kanan atas. Itu hash dari isi proyek
+(items, svgcontent, daftar tag, nama alarm) yang dihitung `make_project.py` sebelum stempelnya
+sendiri ditambahkan, jadi nilainya stabil antar-generate dan berubah hanya kalau proyeknya
+memang berubah -- sudah diuji: mengubah satu teks atau satu rentang warna mengubah hash.
+
+Gunanya: **bandingkan angka di layar FUXA dengan keluaran skrip.**
+
+```bash
+python fuxa/make_project.py
+```
+
+Baris terakhirnya mencetak `rev`. Kalau angka itu berbeda dengan yang tampil di FUXA, yang
+sedang jalan BUKAN versi repo -- apa pun yang tertulis di catatan mana pun. Tanpa penanda ini
+dua kali sudah terjadi perubahan yang tampak "tidak masuk" padahal masuk ke tempat yang salah.
+
+### JEBAKAN: `views[0]` belum tentu view yang kamu lihat
+`set-view` mencocokkan berdasarkan `view.id`, jadi id yang dikirim menentukan view MANA yang
+ditimpa. Proyek bisa punya lebih dari satu view, dan urutannya bukan urutan yang terlihat:
+di PC ini `views[0]` ternyata `MainView` bawaan FUXA (`v_b1131044812-111273`), bukan `Overview`
+(`v_scada_mojokerto`).
+
+Versi lama `patch_live_view.py` menimpa id view repo dengan `live["hmi"]["views"][0]["id"]`.
+Akibatnya isi baru masuk ke `MainView`, `Overview` asli tidak tersentuh, dan karena
+`hmi.layout.start` menunjuk `Overview`, layarnya tetap menampilkan versi lama. Gejalanya
+menyesatkan: perubahan tampak gagal diterapkan, padahal berhasil -- ke view yang salah -- dan
+menyisakan dua view bernama sama.
+
+Sekarang skrip mencocokkan lewat `id` dulu, baru lewat `name`, berhenti kalau ada lebih dari
+satu view bernama sama, dan memperingatkan kalau `layout.start` menunjuk ke view lain.
+
 ### JEBAKAN: proyek yang jalan bisa menyimpang dari file `.fuxap` di repo
 Proyek yang aktif disimpan FUXA di `_appdata/project.fuxap.db`, bukan dibaca dari
 `scada-mojokerto.fuxap`. File `.fuxap` hanya dipakai saat import. Begitu ada yang menyunting
