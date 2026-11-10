@@ -172,6 +172,25 @@ menyisakan dua view bernama sama.
 Sekarang skrip mencocokkan lewat `id` dulu, baru lewat `name`, berhenti kalau ada lebih dari
 satu view bernama sama, dan memperingatkan kalau `layout.start` menunjuk ke view lain.
 
+#### Membersihkan view kembar
+Dua view bernama sama membuat daftar Views di editor FUXA **tidak bisa diklik**, jadi
+kembarannya tidak bisa dihapus lewat editor. Pakai:
+
+```
+fuxa\hapus-view-kembar.cmd
+```
+
+Skrip itu menampilkan dulu semua view apa adanya tanpa mengubah apa pun, baru bertanya.
+Pagar pengamannya: view yang ditunjuk `hmi.layout.start` dan view yang dipakai menu navigasi
+tidak pernah jadi calon, hanya view yang namanya kembar yang dipertimbangkan, view terakhir
+tidak dihapus, dan id-nya harus diketik ulang untuk mengonfirmasi tiap penghapusan.
+
+Untuk sekadar melihat tanpa login:
+
+```bash
+python fuxa/hapus_view_kembar.py --dry-run
+```
+
 ### JEBAKAN: proyek yang jalan bisa menyimpang dari file `.fuxap` di repo
 Proyek yang aktif disimpan FUXA di `_appdata/project.fuxap.db`, bukan dibaca dari
 `scada-mojokerto.fuxap`. File `.fuxap` hanya dipakai saat import. Begitu ada yang menyunting
