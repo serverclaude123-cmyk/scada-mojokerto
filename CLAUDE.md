@@ -5,7 +5,15 @@ Percakapan Claude tidak ikut pindah komputer; file ini adalah catatan serah-teri
 
 ## Arsitektur
 - VSD ×2 (target ABB ACS550; untuk tes dipakai ACS310) –Modbus RTU RS485– ESP32. ESP32 MEMBACA freq/arus/status **dan MENULIS setpoint** (REFERENCE 1, 40002). ESP32 tidak pernah menulis Control Word, jadi tidak bisa start/stop motor.
-- **Broker MQTT ada di PC lokal** (PC FUXA, 192.168.1.10, plain 1883), BUKAN lagi cloud free tier. ESP32 publish ke situ; FUXA dan klien remote (PC lain / HP) subscribe ke broker yang sama.
+- **Revisi 23 Nov 2026 — server pindah ke PC#2.** PC#2 = `DESKTOP-3HEVBT2` (user `Admin`) di ruang
+  pompa menjalankan Mosquitto + FUXA dan mengambil alih IP 192.168.1.10. PC#1 = `desktop-3n6b83h`
+  (user `AIOPC`, dulu server, Tailscale 100.93.24.7) sekarang HANYA browser lewat Tailscale ke
+  `http://<ip-tailscale-pc2>:1881`. Panduan + skrip: `deploy/MIGRASI-PC2.md`,
+  `deploy/backup-server-pc1.ps1`, `deploy/pc1-jadi-viewer.cmd`, `deploy/setup-server-pc2.ps1`.
+  Path di PC#2: Node/FUXA `C:\Tools`, data FUXA `C:\ProgramData\fuxa`, Mosquitto
+  `C:\Program Files\mosquitto` + data `C:\ProgramData\mosquitto`. Path `C:\Users\AIOPC\...` di
+  bawah ini milik PC#1 (riwayat).
+- **Broker MQTT ada di PC lokal** (PC server = PC#2, 192.168.1.10, plain 1883), BUKAN lagi cloud free tier. ESP32 publish ke situ; FUXA dan klien remote (PC lain / HP) subscribe ke broker yang sama.
 - PLC M221 (LAN, Modbus TCP server) mengirim ON/OFF ke VSD lewat output hardwired. FUXA (PC lokal) subscribe MQTT untuk monitoring dan menulis coil ke PLC untuk perintah remote.
 - Detail wiring, parameter drive, topik MQTT, program PLC, setup FUXA: lihat `README.md`. PDF seting drive: `docs/Setting_VSD_ACS550_Modbus.pdf`, `docs/Setting_VSD_ACS310_Modbus_TEST.pdf`.
 - Gambar arsitektur + wiring RS485 + jalur perintah PLC: `docs/arsitektur-wiring.html` (buka di browser, bisa di-print A3).
@@ -82,6 +90,26 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
 - Modbus Poll (Windows) alamat zero-based; jangan centang "PLC Addresses (Base 1)".
 
 ## Status (ubah tiap sesi)
+- [x] **Migrasi server PC#1 → PC#2 SELESAI** (23 Nov 2026). PC#2 statis 192.168.1.10, Mosquitto 2.1.4
+      service listen 0.0.0.0:1883, FUXA 1.3.5 (Node v22.23.4) task SYSTEM listen 0.0.0.0:1881.
+      Terverifikasi: ESP32 192.168.1.50 connect ke broker, FUXA connect ke broker (localhost) dan
+      ke PLC 192.168.1.113:502, layar FUXA menampilkan Gateway online + data live.
+      PC#1: broker & FUXA dimatikan (pc1-jadi-viewer.cmd), data lama di PC#1 tetap untuk rollback.
+      Catatan: non-admin tidak bisa melihat task FUXA (`Access is denied`) — itu wajar, task milik SYSTEM.
+- [ ] Uji reboot PC#2 tanpa login; matikan Fast Startup + sleep di PC#2.
+- **Arsitektur baru (23 Nov 2026, BELUM dipasang):** ESP32 dipensiunkan. PLC TM221CE24R = master
+  Modbus RTU di SL1 (IOScanner) untuk 4× ACS580 + ISOIL MV145 flow meter + ACS550, 19200 8N1,
+  start/stop hardwired, fault via status word, comm loss = Last speed.
+  Rencana: `docs/rs485-bus-plc-master.md`. Program + commissioning: `docs/plc-program-m221.md`.
+  Urutan slave mengikuti proyek user: ID1 VSD1 ACS550, ID2 VSD2, ID3 VSD3 (belum terpasang,
+  `%M90`), ID4 flow MV145, ID5 VSD4, ID6 VSD5. Proyek PLC `plc/mojokerto-rev4.smbp` dibuat oleh
+  `plc/build_mojokerto_rev1.ps1` (di PC#2: `C:\Users\Admin\claude\`) — **compile tanpa error** (23 Nov 2026), belum
+  di-download / diuji. Selector LOCAL/REMOTE + PB ON/OFF panel ada di `%I0.0`–`%I0.11`.
+- **FUXA untuk arsitektur PLC** (23 Nov 2026): `fuxa/scada-mojokerto-plc.fuxap` dari `fuxa/make_project_plc.js`
+  (Node). Diuji di FUXA sementara port 1891: termuat tanpa error, layar ter-render; data live belum
+  (PLC .113 tidak menjawab saat uji). BELUM dipasang di FUXA produksi — pasang saat cut-over, lihat `fuxa/README.md`.
+      Tailscale PC#2 SUDAH terpasang: **100.122.186.109**, run unattended, key expiry dimatikan.
+      PC#1 buka FUXA di `http://100.122.186.109:1881`; HP pakai host MQTT `100.122.186.109`.
 - [x] Firmware ditulis untuk board KhursLabs, ditambah tegangan DC/output.
 - [x] Komunikasi Modbus RTU ACS310 ↔ Modbus Poll terbukti jalan (Status Word terbaca).
 - [x] **Firmware KOMPILASI BERSIH** (31 Okt 2026, PC Windows): espressif32@55.3.312 / arduino-esp32 3.3.12,

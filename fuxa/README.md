@@ -1,5 +1,49 @@
 # Proyek FUXA – SCADA Mojokerto
 
+## ⚠ Arsitektur baru (23 Nov 2026): proyek PLC — `scada-mojokerto-plc.fuxap`
+
+ESP32 + MQTT dipensiunkan. Semua data (5 VSD + flow meter) dibaca **PLC M221** lewat RS485 dan
+FUXA cukup bicara ke PLC (Modbus TCP 192.168.1.113). Proyek baru:
+
+| | |
+|---|---|
+| File | `fuxa/scada-mojokerto-plc.fuxap` |
+| Generator | `fuxa/make_project_plc.js` (Node; Python tidak ada di PC#2) |
+| Jalankan | `C:\Tools\node-v22.23.4-win-x64\node.exe fuxa\make_project_plc.js` |
+| Isi | 1 device `PLC M221` (107 tag), 85 elemen, 14 alarm, rev `ff677152` |
+| Peta alamat | `docs/plc-program-m221.md` §3 — dicek otomatis: 107/107 tag = simbol/word di PLC rev4 |
+
+Device MQTT **tidak ada** lagi → tidak ada kredensial broker yang bisa terhapus saat import.
+Id device tetap `plc-m221`. Panel: VSD1 (ACS550, ID1), VSD2, VSD3 (belum terpasang), VSD4, VSD5,
+FLOW. Tiap VSD: lampu RUN/FAULT/WARN/COMM/REM/PLC Q, frekuensi, setpoint di drive, arus, DC bus,
+Vout, isian setpoint (**diketik dalam Hz**, tag `divisor` 10 → PLC menerima Hz×10), START/STOP
+momentary. Header: koneksi PLC, mode panel (`%M30` hijau REMOTE / kuning LOCAL), e-stop.
+
+**Diuji 23 Nov 2026** di FUXA 1.3.5 sementara (port 1891, folder data terpisah — FUXA produksi
+tidak disentuh): import 200, `'PLC M221' created/start` tanpa load error, 107 tag + 85 item + 14
+alarm termuat, layar ter-render. **Data live belum terlihat**: saat uji, PLC 192.168.1.113 tidak
+menjawab ping/502 sama sekali (FUXA produksi juga tidak tersambung) — lampu PLC merah = benar.
+
+Yang belum pasti, dicek saat commissioning:
+- **Urutan word 32-bit** (`WORD_ORDER` di generator, sekarang `MLE` = word rendah dulu).
+  Kalau `%MF1100` di animation table PLC benar tapi FUXA menampilkan angka ngawur → ganti `''`, generate ulang.
+- **Pembagi totalizer** (`TOT_DIVISOR`): baca jumlah desimal di LSB `%MW1112`.
+- Konfirmasi tombol START/STOP belum ada (sama seperti proyek lama).
+
+### Cara pasang (SAAT CUT-OVER, setelah PLC rev4 terbukti)
+1. **Backup proyek yang jalan:** FUXA → ☰ → *Save project* (simpan `.fuxap` ke Desktop).
+2. ☰ → *Open project* → pilih `scada-mojokerto-plc.fuxap`.
+3. Pojok kanan atas harus `rev ff677152 (PLC)`.
+4. PC#1 (viewer) tidak perlu diubah: pembungkus `/_widgets/scada-viewer.html` tetap memuat FUXA.
+5. Broker Mosquitto boleh tetap jalan; tidak dipakai FUXA lagi. HP lihat FUXA lewat browser/Tailscale.
+
+Jangan pasang sebelum PLC menjalankan program rev4: program PLC lama tidak mengisi `%MW1000+`,
+jadi layar akan kosong.
+
+---
+
+## (Lama) Proyek ESP32/MQTT — `scada-mojokerto.fuxap`
+
 `scada-mojokerto.fuxap` = file proyek FUXA siap import. Dibuat oleh `make_project.py`
 (jalankan `python fuxa/make_project.py` kalau daftar tag berubah; jangan edit `.fuxap` manual).
 

@@ -10,12 +10,19 @@ VSD2 ─┴──────────────── ESP32-ETH ───�
                                              │
 PLC M221 ────────────────────────────────────┤   ON/OFF hardwired ke DI VSD
                                              │
-PC ini ──────────────────────────────────────┘
+PC#2 SERVER (ruang pompa, 192.168.1.10) ─────┘
   ├─ broker MQTT   ◄── ESP32 publish, FUXA subscribe
   └─ FUXA HMI      ──► Modbus TCP ke M221 (tombol START/STOP)
         ▲
-        └── PC remote / HP: subscribe ke broker yang sama
+        │  Tailscale (VPN privat)
+        ├── PC#1 desktop-3n6b83h: HANYA browser → http://<ip-tailscale-pc2>:1881
+        └── HP: klien MQTT / browser ke IP Tailscale PC#2
 ```
+
+> **Revisi 23 Nov 2026:** semua server (Mosquitto + FUXA) dipindah dari PC#1 ke **PC#2
+> (DESKTOP-3HEVBT2) di ruang pompa**. PC#1 sekarang hanya monitor lewat browser via Tailscale.
+> Langkah migrasi dan rollback: **[`deploy/MIGRASI-PC2.md`](deploy/MIGRASI-PC2.md)**.
+> Di bagian bawah README ini, "PC ini" = PC server = **PC#2**.
 
 | Fungsi | Jalur |
 |---|---|
@@ -35,7 +42,8 @@ Proyek FUXA siap import: **[`fuxa/`](fuxa/)**.
 | Perangkat | IP |
 |---|---|
 | Router | 192.168.1.1 |
-| PC ini — broker MQTT + FUXA | 192.168.1.10 |
+| **PC#2** (ruang pompa) — broker MQTT + FUXA | 192.168.1.10 (statis, diambil alih dari PC#1) |
+| PC#1 desktop-3n6b83h — viewer browser | DHCP; akses lewat Tailscale |
 | PLC M221 | 192.168.1.113 (terbaca di lapangan; rencana awal .20) |
 | ESP32 | 192.168.1.11 (DHCP; `config.h` masih menyetel statis .50 — belum dipakai board) |
 

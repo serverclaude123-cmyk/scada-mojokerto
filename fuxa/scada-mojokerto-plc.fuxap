@@ -1,0 +1,5203 @@
+{
+ "version": "1.01",
+ "name": "SCADA Mojokerto (PLC)",
+ "server": {
+  "name": "Fuxa Server",
+  "id": "0",
+  "type": "FuxaServer",
+  "property": {},
+  "polling": 1000,
+  "enabled": true,
+  "tags": {
+   "t_conn_plc-m221": {
+    "id": "t_conn_plc-m221",
+    "name": "PLC M221 Connection Status",
+    "label": "PLC M221 Connection Status",
+    "value": "",
+    "type": "number",
+    "memaddress": "plc-m221",
+    "daq": {
+     "enabled": false,
+     "interval": 60,
+     "changed": false,
+     "restored": false
+    },
+    "init": "",
+    "sysType": 1
+   }
+  }
+ },
+ "hmi": {
+  "layout": {
+   "start": "v_scada_mojokerto",
+   "navigation": {
+    "mode": "fix",
+    "type": "inline",
+    "items": [
+     {
+      "icon": "dashboard",
+      "view": "v_scada_mojokerto",
+      "link": "",
+      "text": "Overview"
+     }
+    ]
+   },
+   "header": {
+    "title": "SCADA Mojokerto",
+    "alarms": "modeNone",
+    "infos": "modeNone"
+   },
+   "showdev": true,
+   "inputdialog": "false",
+   "hidenavigation": false,
+   "theme": ""
+  },
+  "views": [
+   {
+    "id": "v_scada_mojokerto",
+    "name": "Overview",
+    "type": "svg",
+    "profile": {
+     "width": 1400,
+     "height": 820,
+     "bkcolor": "#f4f6f8ff"
+    },
+    "items": {
+     "LMP_plc_conn": {
+      "id": "LMP_plc_conn",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "t_conn_plc-m221",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "t_conn_plc-m221",
+       "variableId": "t_conn_plc-m221",
+       "variableSrc": "0",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "3",
+         "max": "3",
+         "color": "#f9a825"
+        },
+        {
+         "type": "range",
+         "min": "5",
+         "max": "5",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "LMP_mode": {
+      "id": "LMP_mode",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "mode_remote",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "mode_remote",
+       "variableId": "mode_remote",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#f9a825"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "LMP_estop": {
+      "id": "LMP_estop",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "mode_estop_ok",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "mode_estop_ok",
+       "variableId": "mode_estop_ok",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd1_running": {
+      "id": "GSE_vsd1_running",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_running",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd1_running",
+       "variableId": "vsd1_running",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd1_fault": {
+      "id": "GSE_vsd1_fault",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_fault",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd1_fault",
+       "variableId": "vsd1_fault",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      }
+     },
+     "GSE_vsd1_warning": {
+      "id": "GSE_vsd1_warning",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_warning",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd1_warning",
+       "variableId": "vsd1_warning",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "GSE_vsd1_comm_ok": {
+      "id": "GSE_vsd1_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_comm_ok",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd1_comm_ok",
+       "variableId": "vsd1_comm_ok",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd1_remote": {
+      "id": "GSE_vsd1_remote",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_remote",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd1_remote",
+       "variableId": "vsd1_remote",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#1565c0"
+        }
+       ]
+      }
+     },
+     "GSE_vsd1_run_cmd": {
+      "id": "GSE_vsd1_run_cmd",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd1_run_cmd",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd1_run_cmd",
+       "variableId": "vsd1_run_cmd",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "VAL_vsd1_freq": {
+      "id": "VAL_vsd1_freq",
+      "type": "svg-ext-value",
+      "name": "vsd1_freq",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd1_freq",
+       "variableId": "vsd1_freq",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd1_ref_rb": {
+      "id": "VAL_vsd1_ref_rb",
+      "type": "svg-ext-value",
+      "name": "vsd1_ref_rb",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd1_ref_rb",
+       "variableId": "vsd1_ref_rb",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd1_current": {
+      "id": "VAL_vsd1_current",
+      "type": "svg-ext-value",
+      "name": "vsd1_current",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd1_current",
+       "variableId": "vsd1_current",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " A"
+        }
+       ]
+      }
+     },
+     "VAL_vsd1_dc_bus": {
+      "id": "VAL_vsd1_dc_bus",
+      "type": "svg-ext-value",
+      "name": "vsd1_dc_bus",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd1_dc_bus",
+       "variableId": "vsd1_dc_bus",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "VAL_vsd1_vout": {
+      "id": "VAL_vsd1_vout",
+      "type": "svg-ext-value",
+      "name": "vsd1_vout",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd1_vout",
+       "variableId": "vsd1_vout",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "HXI_vsd1_sp": {
+      "id": "HXI_vsd1_sp",
+      "type": "svg-ext-html_input",
+      "name": "vsd1_setpoint",
+      "label": "HtmlInput",
+      "property": {
+       "events": [],
+       "variable": "vsd1_setpoint",
+       "variableId": "vsd1_setpoint",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": ""
+      }
+     },
+     "HXB_vsd1_start": {
+      "id": "HXB_vsd1_start",
+      "type": "svg-ext-html_button",
+      "name": "START",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd1_start",
+       "variableId": "vsd1_start",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "START"
+      }
+     },
+     "HXB_vsd1_stop": {
+      "id": "HXB_vsd1_stop",
+      "type": "svg-ext-html_button",
+      "name": "STOP",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd1_stop",
+       "variableId": "vsd1_stop",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "STOP"
+      }
+     },
+     "GSE_vsd2_running": {
+      "id": "GSE_vsd2_running",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_running",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd2_running",
+       "variableId": "vsd2_running",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd2_fault": {
+      "id": "GSE_vsd2_fault",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_fault",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd2_fault",
+       "variableId": "vsd2_fault",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      }
+     },
+     "GSE_vsd2_warning": {
+      "id": "GSE_vsd2_warning",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_warning",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd2_warning",
+       "variableId": "vsd2_warning",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "GSE_vsd2_comm_ok": {
+      "id": "GSE_vsd2_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_comm_ok",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd2_comm_ok",
+       "variableId": "vsd2_comm_ok",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd2_remote": {
+      "id": "GSE_vsd2_remote",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_remote",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd2_remote",
+       "variableId": "vsd2_remote",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#1565c0"
+        }
+       ]
+      }
+     },
+     "GSE_vsd2_run_cmd": {
+      "id": "GSE_vsd2_run_cmd",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd2_run_cmd",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd2_run_cmd",
+       "variableId": "vsd2_run_cmd",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "VAL_vsd2_freq": {
+      "id": "VAL_vsd2_freq",
+      "type": "svg-ext-value",
+      "name": "vsd2_freq",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd2_freq",
+       "variableId": "vsd2_freq",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd2_ref_rb": {
+      "id": "VAL_vsd2_ref_rb",
+      "type": "svg-ext-value",
+      "name": "vsd2_ref_rb",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd2_ref_rb",
+       "variableId": "vsd2_ref_rb",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd2_current": {
+      "id": "VAL_vsd2_current",
+      "type": "svg-ext-value",
+      "name": "vsd2_current",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd2_current",
+       "variableId": "vsd2_current",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " A"
+        }
+       ]
+      }
+     },
+     "VAL_vsd2_dc_bus": {
+      "id": "VAL_vsd2_dc_bus",
+      "type": "svg-ext-value",
+      "name": "vsd2_dc_bus",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd2_dc_bus",
+       "variableId": "vsd2_dc_bus",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "VAL_vsd2_vout": {
+      "id": "VAL_vsd2_vout",
+      "type": "svg-ext-value",
+      "name": "vsd2_vout",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd2_vout",
+       "variableId": "vsd2_vout",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "HXI_vsd2_sp": {
+      "id": "HXI_vsd2_sp",
+      "type": "svg-ext-html_input",
+      "name": "vsd2_setpoint",
+      "label": "HtmlInput",
+      "property": {
+       "events": [],
+       "variable": "vsd2_setpoint",
+       "variableId": "vsd2_setpoint",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": ""
+      }
+     },
+     "HXB_vsd2_start": {
+      "id": "HXB_vsd2_start",
+      "type": "svg-ext-html_button",
+      "name": "START",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd2_start",
+       "variableId": "vsd2_start",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "START"
+      }
+     },
+     "HXB_vsd2_stop": {
+      "id": "HXB_vsd2_stop",
+      "type": "svg-ext-html_button",
+      "name": "STOP",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd2_stop",
+       "variableId": "vsd2_stop",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "STOP"
+      }
+     },
+     "GSE_vsd3_running": {
+      "id": "GSE_vsd3_running",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd3_running",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd3_running",
+       "variableId": "vsd3_running",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd3_fault": {
+      "id": "GSE_vsd3_fault",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd3_fault",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd3_fault",
+       "variableId": "vsd3_fault",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      }
+     },
+     "GSE_vsd3_warning": {
+      "id": "GSE_vsd3_warning",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd3_warning",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd3_warning",
+       "variableId": "vsd3_warning",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "GSE_vsd3_comm_ok": {
+      "id": "GSE_vsd3_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd3_comm_ok",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd3_comm_ok",
+       "variableId": "vsd3_comm_ok",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd3_remote": {
+      "id": "GSE_vsd3_remote",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd3_remote",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd3_remote",
+       "variableId": "vsd3_remote",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#1565c0"
+        }
+       ]
+      }
+     },
+     "GSE_vsd3_run_cmd": {
+      "id": "GSE_vsd3_run_cmd",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd3_run_cmd",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd3_run_cmd",
+       "variableId": "vsd3_run_cmd",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "VAL_vsd3_freq": {
+      "id": "VAL_vsd3_freq",
+      "type": "svg-ext-value",
+      "name": "vsd3_freq",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd3_freq",
+       "variableId": "vsd3_freq",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd3_ref_rb": {
+      "id": "VAL_vsd3_ref_rb",
+      "type": "svg-ext-value",
+      "name": "vsd3_ref_rb",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd3_ref_rb",
+       "variableId": "vsd3_ref_rb",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd3_current": {
+      "id": "VAL_vsd3_current",
+      "type": "svg-ext-value",
+      "name": "vsd3_current",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd3_current",
+       "variableId": "vsd3_current",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " A"
+        }
+       ]
+      }
+     },
+     "VAL_vsd3_dc_bus": {
+      "id": "VAL_vsd3_dc_bus",
+      "type": "svg-ext-value",
+      "name": "vsd3_dc_bus",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd3_dc_bus",
+       "variableId": "vsd3_dc_bus",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "VAL_vsd3_vout": {
+      "id": "VAL_vsd3_vout",
+      "type": "svg-ext-value",
+      "name": "vsd3_vout",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd3_vout",
+       "variableId": "vsd3_vout",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "HXI_vsd3_sp": {
+      "id": "HXI_vsd3_sp",
+      "type": "svg-ext-html_input",
+      "name": "vsd3_setpoint",
+      "label": "HtmlInput",
+      "property": {
+       "events": [],
+       "variable": "vsd3_setpoint",
+       "variableId": "vsd3_setpoint",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": ""
+      }
+     },
+     "HXB_vsd3_start": {
+      "id": "HXB_vsd3_start",
+      "type": "svg-ext-html_button",
+      "name": "START",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd3_start",
+       "variableId": "vsd3_start",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "START"
+      }
+     },
+     "HXB_vsd3_stop": {
+      "id": "HXB_vsd3_stop",
+      "type": "svg-ext-html_button",
+      "name": "STOP",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd3_stop",
+       "variableId": "vsd3_stop",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "STOP"
+      }
+     },
+     "GSE_vsd4_running": {
+      "id": "GSE_vsd4_running",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd4_running",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd4_running",
+       "variableId": "vsd4_running",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd4_fault": {
+      "id": "GSE_vsd4_fault",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd4_fault",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd4_fault",
+       "variableId": "vsd4_fault",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      }
+     },
+     "GSE_vsd4_warning": {
+      "id": "GSE_vsd4_warning",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd4_warning",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd4_warning",
+       "variableId": "vsd4_warning",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "GSE_vsd4_comm_ok": {
+      "id": "GSE_vsd4_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd4_comm_ok",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd4_comm_ok",
+       "variableId": "vsd4_comm_ok",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd4_remote": {
+      "id": "GSE_vsd4_remote",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd4_remote",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd4_remote",
+       "variableId": "vsd4_remote",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#1565c0"
+        }
+       ]
+      }
+     },
+     "GSE_vsd4_run_cmd": {
+      "id": "GSE_vsd4_run_cmd",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd4_run_cmd",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd4_run_cmd",
+       "variableId": "vsd4_run_cmd",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "VAL_vsd4_freq": {
+      "id": "VAL_vsd4_freq",
+      "type": "svg-ext-value",
+      "name": "vsd4_freq",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd4_freq",
+       "variableId": "vsd4_freq",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd4_ref_rb": {
+      "id": "VAL_vsd4_ref_rb",
+      "type": "svg-ext-value",
+      "name": "vsd4_ref_rb",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd4_ref_rb",
+       "variableId": "vsd4_ref_rb",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd4_current": {
+      "id": "VAL_vsd4_current",
+      "type": "svg-ext-value",
+      "name": "vsd4_current",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd4_current",
+       "variableId": "vsd4_current",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " A"
+        }
+       ]
+      }
+     },
+     "VAL_vsd4_dc_bus": {
+      "id": "VAL_vsd4_dc_bus",
+      "type": "svg-ext-value",
+      "name": "vsd4_dc_bus",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd4_dc_bus",
+       "variableId": "vsd4_dc_bus",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "VAL_vsd4_vout": {
+      "id": "VAL_vsd4_vout",
+      "type": "svg-ext-value",
+      "name": "vsd4_vout",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd4_vout",
+       "variableId": "vsd4_vout",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "HXI_vsd4_sp": {
+      "id": "HXI_vsd4_sp",
+      "type": "svg-ext-html_input",
+      "name": "vsd4_setpoint",
+      "label": "HtmlInput",
+      "property": {
+       "events": [],
+       "variable": "vsd4_setpoint",
+       "variableId": "vsd4_setpoint",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": ""
+      }
+     },
+     "HXB_vsd4_start": {
+      "id": "HXB_vsd4_start",
+      "type": "svg-ext-html_button",
+      "name": "START",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd4_start",
+       "variableId": "vsd4_start",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "START"
+      }
+     },
+     "HXB_vsd4_stop": {
+      "id": "HXB_vsd4_stop",
+      "type": "svg-ext-html_button",
+      "name": "STOP",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd4_stop",
+       "variableId": "vsd4_stop",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "STOP"
+      }
+     },
+     "GSE_vsd5_running": {
+      "id": "GSE_vsd5_running",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd5_running",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd5_running",
+       "variableId": "vsd5_running",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd5_fault": {
+      "id": "GSE_vsd5_fault",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd5_fault",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd5_fault",
+       "variableId": "vsd5_fault",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      }
+     },
+     "GSE_vsd5_warning": {
+      "id": "GSE_vsd5_warning",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd5_warning",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd5_warning",
+       "variableId": "vsd5_warning",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "GSE_vsd5_comm_ok": {
+      "id": "GSE_vsd5_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd5_comm_ok",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd5_comm_ok",
+       "variableId": "vsd5_comm_ok",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_vsd5_remote": {
+      "id": "GSE_vsd5_remote",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd5_remote",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd5_remote",
+       "variableId": "vsd5_remote",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#1565c0"
+        }
+       ]
+      }
+     },
+     "GSE_vsd5_run_cmd": {
+      "id": "GSE_vsd5_run_cmd",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "vsd5_run_cmd",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "vsd5_run_cmd",
+       "variableId": "vsd5_run_cmd",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "VAL_vsd5_freq": {
+      "id": "VAL_vsd5_freq",
+      "type": "svg-ext-value",
+      "name": "vsd5_freq",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd5_freq",
+       "variableId": "vsd5_freq",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd5_ref_rb": {
+      "id": "VAL_vsd5_ref_rb",
+      "type": "svg-ext-value",
+      "name": "vsd5_ref_rb",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd5_ref_rb",
+       "variableId": "vsd5_ref_rb",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " Hz"
+        }
+       ]
+      }
+     },
+     "VAL_vsd5_current": {
+      "id": "VAL_vsd5_current",
+      "type": "svg-ext-value",
+      "name": "vsd5_current",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd5_current",
+       "variableId": "vsd5_current",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " A"
+        }
+       ]
+      }
+     },
+     "VAL_vsd5_dc_bus": {
+      "id": "VAL_vsd5_dc_bus",
+      "type": "svg-ext-value",
+      "name": "vsd5_dc_bus",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd5_dc_bus",
+       "variableId": "vsd5_dc_bus",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "VAL_vsd5_vout": {
+      "id": "VAL_vsd5_vout",
+      "type": "svg-ext-value",
+      "name": "vsd5_vout",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "vsd5_vout",
+       "variableId": "vsd5_vout",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " V"
+        }
+       ]
+      }
+     },
+     "HXI_vsd5_sp": {
+      "id": "HXI_vsd5_sp",
+      "type": "svg-ext-html_input",
+      "name": "vsd5_setpoint",
+      "label": "HtmlInput",
+      "property": {
+       "events": [],
+       "variable": "vsd5_setpoint",
+       "variableId": "vsd5_setpoint",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": ""
+      }
+     },
+     "HXB_vsd5_start": {
+      "id": "HXB_vsd5_start",
+      "type": "svg-ext-html_button",
+      "name": "START",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd5_start",
+       "variableId": "vsd5_start",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "START"
+      }
+     },
+     "HXB_vsd5_stop": {
+      "id": "HXB_vsd5_stop",
+      "type": "svg-ext-html_button",
+      "name": "STOP",
+      "label": "HtmlButton",
+      "property": {
+       "events": [
+        {
+         "type": "mousedown",
+         "action": "onSetValue",
+         "actparam": "1",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        },
+        {
+         "type": "mouseup",
+         "action": "onSetValue",
+         "actparam": "0",
+         "actoptions": {
+          "variablesMapping": []
+         }
+        }
+       ],
+       "variable": "vsd5_stop",
+       "variableId": "vsd5_stop",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "text": "STOP"
+      }
+     },
+     "GSE_flow_comm_ok": {
+      "id": "GSE_flow_comm_ok",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "flow_comm_ok",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "flow_comm_ok",
+       "variableId": "flow_comm_ok",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#c62828"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#2e7d32"
+        }
+       ]
+      }
+     },
+     "GSE_flow_pipe_empty": {
+      "id": "GSE_flow_pipe_empty",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "flow_pipe_empty",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "flow_pipe_empty",
+       "variableId": "flow_pipe_empty",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "GSE_flow_coil_err": {
+      "id": "GSE_flow_coil_err",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "flow_coil_err",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "flow_coil_err",
+       "variableId": "flow_coil_err",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#c62828"
+        }
+       ]
+      }
+     },
+     "GSE_flow_min": {
+      "id": "GSE_flow_min",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "flow_min",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "flow_min",
+       "variableId": "flow_min",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "GSE_flow_max": {
+      "id": "GSE_flow_max",
+      "type": "svg-ext-gauge_semaphore",
+      "name": "flow_max",
+      "label": "HtmlSemaphore",
+      "property": {
+       "events": [],
+       "variable": "flow_max",
+       "variableId": "flow_max",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "range",
+         "min": "0",
+         "max": "0",
+         "color": "#bdbdbd"
+        },
+        {
+         "type": "range",
+         "min": "1",
+         "max": "1",
+         "color": "#f9a825"
+        }
+       ]
+      }
+     },
+     "VAL_flow": {
+      "id": "VAL_flow",
+      "type": "svg-ext-value",
+      "name": "flow",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "flow",
+       "variableId": "flow",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      }
+     },
+     "VAL_flow_lps": {
+      "id": "VAL_flow_lps",
+      "type": "svg-ext-value",
+      "name": "flow_lps",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "flow_lps",
+       "variableId": "flow_lps",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " l/s"
+        }
+       ]
+      }
+     },
+     "VAL_flow_pct": {
+      "id": "VAL_flow_pct",
+      "type": "svg-ext-value",
+      "name": "flow_pct",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "flow_pct",
+       "variableId": "flow_pct",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " %"
+        }
+       ]
+      }
+     },
+     "VAL_flow_vel": {
+      "id": "VAL_flow_vel",
+      "type": "svg-ext-value",
+      "name": "flow_vel",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "flow_vel",
+       "variableId": "flow_vel",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " m/s"
+        }
+       ]
+      }
+     },
+     "VAL_flow_tot_pos": {
+      "id": "VAL_flow_tot_pos",
+      "type": "svg-ext-value",
+      "name": "flow_tot_pos",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "flow_tot_pos",
+       "variableId": "flow_tot_pos",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      }
+     },
+     "VAL_flow_tot_neg": {
+      "id": "VAL_flow_tot_neg",
+      "type": "svg-ext-value",
+      "name": "flow_tot_neg",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "flow_tot_neg",
+       "variableId": "flow_tot_neg",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": ""
+        }
+       ]
+      }
+     },
+     "VAL_flow_batt": {
+      "id": "VAL_flow_batt",
+      "type": "svg-ext-value",
+      "name": "flow_batt",
+      "label": "Value",
+      "property": {
+       "events": [],
+       "variable": "flow_batt",
+       "variableId": "flow_batt",
+       "variableSrc": "plc-m221",
+       "alarmId": "",
+       "alarmSrc": "",
+       "alarm": "",
+       "alarmColor": "",
+       "ranges": [
+        {
+         "type": "unit",
+         "min": 0,
+         "max": 100,
+         "text": " %"
+        }
+       ]
+      }
+     }
+    },
+    "variables": {},
+    "svgcontent": "<svg width=\"1400\" height=\"820\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"0\" width=\"1400\" height=\"820\" fill=\"#f4f6f8\" stroke-width=\"0\" id=\"bg\"/><text x=\"40\" y=\"44\" font-family=\"sans-serif\" font-size=\"26\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">SCADA Mojokerto - 5 VSD + Flow</text><text x=\"40\" y=\"72\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">PLC M221</text><g id=\"LMP_plc_conn\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"120\" cy=\"67\" rx=\"9\" ry=\"9\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"LMP_plc_conn_e\"/></g><text x=\"150\" y=\"72\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Mode panel</text><g id=\"LMP_mode\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"245\" cy=\"67\" rx=\"9\" ry=\"9\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"LMP_mode_e\"/></g><text x=\"265\" y=\"72\" font-family=\"sans-serif\" font-size=\"12\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">hijau = REMOTE (SCADA), kuning = LOCAL (tombol panel; START/STOP di sini diabaikan PLC)</text><text x=\"900\" y=\"72\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#546e7a\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">E-stop</text><g id=\"LMP_estop\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"960\" cy=\"67\" rx=\"9\" ry=\"9\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"LMP_estop_e\"/></g><rect x=\"40\" y=\"95\" width=\"440\" height=\"350\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_vsd1\"/><text x=\"58\" y=\"127\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">VSD1</text><text x=\"140\" y=\"127\" font-family=\"sans-serif\" font-size=\"13\" fill=\"#78909c\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">ACS550 - ID 1</text><g id=\"GSE_vsd1_running\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"80\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_running_e\"/></g><text x=\"80\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">RUN</text><g id=\"GSE_vsd1_fault\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"150\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_fault_e\"/></g><text x=\"150\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">FAULT</text><g id=\"GSE_vsd1_warning\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"220\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_warning_e\"/></g><text x=\"220\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">WARN</text><g id=\"GSE_vsd1_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"290\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_comm_ok_e\"/></g><text x=\"290\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><g id=\"GSE_vsd1_remote\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"360\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_remote_e\"/></g><text x=\"360\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">REM</text><g id=\"GSE_vsd1_run_cmd\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"430\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd1_run_cmd_e\"/></g><text x=\"430\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">PLC Q</text><text x=\"58\" y=\"217\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Frekuensi</text><g id=\"VAL_vsd1_freq\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_freq_t\" x=\"370\" y=\"220\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"58\" y=\"249\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Setpoint di drive</text><g id=\"VAL_vsd1_ref_rb\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_ref_rb_t\" x=\"370\" y=\"252\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"58\" y=\"281\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Arus</text><g id=\"VAL_vsd1_current\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_current_t\" x=\"370\" y=\"284\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"58\" y=\"313\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">DC bus</text><g id=\"VAL_vsd1_dc_bus\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_dc_bus_t\" x=\"370\" y=\"316\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"58\" y=\"345\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Tegangan output</text><g id=\"VAL_vsd1_vout\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd1_vout_t\" x=\"370\" y=\"348\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"58\" y=\"387\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Set frekuensi (Hz)</text><g id=\"HXI_vsd1_sp\" stroke=\"#000000\" text-anchor=\"right\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#f1f1f1ff\" type=\"svg-ext-html_input\"><rect id=\"svg_HXI_vsd1_sp\" stroke=\"null\" fill=\"#ffffff\" height=\"26\" width=\"78\" y=\"369\" x=\"292\" stroke-width=\"0\"/><foreignObject id=\"H-HXI_vsd1_sp\" width=\"78\" height=\"26\" y=\"369\" x=\"292\"><INPUT id=\"I-HXI_vsd1_sp\" style=\"width: calc(100% - 7px); height: calc(100% - 7px); text-align: right; border: unset; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); vector-effect: non-scaling-stroke;\" type=\"text\"/></foreignObject></g><text x=\"378\" y=\"387\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Enter</text><g id=\"HXB_vsd1_start\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"58\" y=\"401\" width=\"110\" height=\"34\" fill=\"#2e7d32\" id=\"svg_HXB_vsd1_start\" stroke=\"#ffffff\"/><foreignObject x=\"58\" y=\"401\" height=\"34\" width=\"110\" id=\"H-HXB_vsd1_start\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #2e7d32; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd1_start\">START</BUTTON></foreignObject></g><g id=\"HXB_vsd1_stop\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"180\" y=\"401\" width=\"110\" height=\"34\" fill=\"#c62828\" id=\"svg_HXB_vsd1_stop\" stroke=\"#ffffff\"/><foreignObject x=\"180\" y=\"401\" height=\"34\" width=\"110\" id=\"H-HXB_vsd1_stop\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #c62828; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd1_stop\">STOP</BUTTON></foreignObject></g><text x=\"302\" y=\"423\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">hanya di mode REMOTE</text><rect x=\"490\" y=\"95\" width=\"440\" height=\"350\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_vsd2\"/><text x=\"508\" y=\"127\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">VSD2</text><text x=\"590\" y=\"127\" font-family=\"sans-serif\" font-size=\"13\" fill=\"#78909c\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">ACS580 - ID 2</text><g id=\"GSE_vsd2_running\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"530\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_running_e\"/></g><text x=\"530\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">RUN</text><g id=\"GSE_vsd2_fault\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"600\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_fault_e\"/></g><text x=\"600\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">FAULT</text><g id=\"GSE_vsd2_warning\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"670\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_warning_e\"/></g><text x=\"670\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">WARN</text><g id=\"GSE_vsd2_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"740\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_comm_ok_e\"/></g><text x=\"740\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><g id=\"GSE_vsd2_remote\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"810\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_remote_e\"/></g><text x=\"810\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">REM</text><g id=\"GSE_vsd2_run_cmd\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"880\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd2_run_cmd_e\"/></g><text x=\"880\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">PLC Q</text><text x=\"508\" y=\"217\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Frekuensi</text><g id=\"VAL_vsd2_freq\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_freq_t\" x=\"820\" y=\"220\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"508\" y=\"249\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Setpoint di drive</text><g id=\"VAL_vsd2_ref_rb\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_ref_rb_t\" x=\"820\" y=\"252\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"508\" y=\"281\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Arus</text><g id=\"VAL_vsd2_current\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_current_t\" x=\"820\" y=\"284\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"508\" y=\"313\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">DC bus</text><g id=\"VAL_vsd2_dc_bus\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_dc_bus_t\" x=\"820\" y=\"316\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"508\" y=\"345\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Tegangan output</text><g id=\"VAL_vsd2_vout\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd2_vout_t\" x=\"820\" y=\"348\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"508\" y=\"387\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Set frekuensi (Hz)</text><g id=\"HXI_vsd2_sp\" stroke=\"#000000\" text-anchor=\"right\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#f1f1f1ff\" type=\"svg-ext-html_input\"><rect id=\"svg_HXI_vsd2_sp\" stroke=\"null\" fill=\"#ffffff\" height=\"26\" width=\"78\" y=\"369\" x=\"742\" stroke-width=\"0\"/><foreignObject id=\"H-HXI_vsd2_sp\" width=\"78\" height=\"26\" y=\"369\" x=\"742\"><INPUT id=\"I-HXI_vsd2_sp\" style=\"width: calc(100% - 7px); height: calc(100% - 7px); text-align: right; border: unset; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); vector-effect: non-scaling-stroke;\" type=\"text\"/></foreignObject></g><text x=\"828\" y=\"387\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Enter</text><g id=\"HXB_vsd2_start\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"508\" y=\"401\" width=\"110\" height=\"34\" fill=\"#2e7d32\" id=\"svg_HXB_vsd2_start\" stroke=\"#ffffff\"/><foreignObject x=\"508\" y=\"401\" height=\"34\" width=\"110\" id=\"H-HXB_vsd2_start\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #2e7d32; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd2_start\">START</BUTTON></foreignObject></g><g id=\"HXB_vsd2_stop\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"630\" y=\"401\" width=\"110\" height=\"34\" fill=\"#c62828\" id=\"svg_HXB_vsd2_stop\" stroke=\"#ffffff\"/><foreignObject x=\"630\" y=\"401\" height=\"34\" width=\"110\" id=\"H-HXB_vsd2_stop\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #c62828; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd2_stop\">STOP</BUTTON></foreignObject></g><text x=\"752\" y=\"423\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">hanya di mode REMOTE</text><rect x=\"940\" y=\"95\" width=\"440\" height=\"350\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_vsd3\"/><text x=\"958\" y=\"127\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">VSD3</text><text x=\"1040\" y=\"127\" font-family=\"sans-serif\" font-size=\"13\" fill=\"#78909c\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">ACS580 - ID 3 (belum terpasang)</text><g id=\"GSE_vsd3_running\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"980\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd3_running_e\"/></g><text x=\"980\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">RUN</text><g id=\"GSE_vsd3_fault\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1050\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd3_fault_e\"/></g><text x=\"1050\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">FAULT</text><g id=\"GSE_vsd3_warning\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1120\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd3_warning_e\"/></g><text x=\"1120\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">WARN</text><g id=\"GSE_vsd3_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1190\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd3_comm_ok_e\"/></g><text x=\"1190\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><g id=\"GSE_vsd3_remote\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1260\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd3_remote_e\"/></g><text x=\"1260\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">REM</text><g id=\"GSE_vsd3_run_cmd\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1330\" cy=\"157\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd3_run_cmd_e\"/></g><text x=\"1330\" y=\"183\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">PLC Q</text><text x=\"958\" y=\"217\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Frekuensi</text><g id=\"VAL_vsd3_freq\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd3_freq_t\" x=\"1270\" y=\"220\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"958\" y=\"249\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Setpoint di drive</text><g id=\"VAL_vsd3_ref_rb\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd3_ref_rb_t\" x=\"1270\" y=\"252\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"958\" y=\"281\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Arus</text><g id=\"VAL_vsd3_current\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd3_current_t\" x=\"1270\" y=\"284\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"958\" y=\"313\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">DC bus</text><g id=\"VAL_vsd3_dc_bus\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd3_dc_bus_t\" x=\"1270\" y=\"316\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"958\" y=\"345\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Tegangan output</text><g id=\"VAL_vsd3_vout\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd3_vout_t\" x=\"1270\" y=\"348\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"958\" y=\"387\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Set frekuensi (Hz)</text><g id=\"HXI_vsd3_sp\" stroke=\"#000000\" text-anchor=\"right\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#f1f1f1ff\" type=\"svg-ext-html_input\"><rect id=\"svg_HXI_vsd3_sp\" stroke=\"null\" fill=\"#ffffff\" height=\"26\" width=\"78\" y=\"369\" x=\"1192\" stroke-width=\"0\"/><foreignObject id=\"H-HXI_vsd3_sp\" width=\"78\" height=\"26\" y=\"369\" x=\"1192\"><INPUT id=\"I-HXI_vsd3_sp\" style=\"width: calc(100% - 7px); height: calc(100% - 7px); text-align: right; border: unset; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); vector-effect: non-scaling-stroke;\" type=\"text\"/></foreignObject></g><text x=\"1278\" y=\"387\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Enter</text><g id=\"HXB_vsd3_start\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"958\" y=\"401\" width=\"110\" height=\"34\" fill=\"#2e7d32\" id=\"svg_HXB_vsd3_start\" stroke=\"#ffffff\"/><foreignObject x=\"958\" y=\"401\" height=\"34\" width=\"110\" id=\"H-HXB_vsd3_start\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #2e7d32; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd3_start\">START</BUTTON></foreignObject></g><g id=\"HXB_vsd3_stop\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"1080\" y=\"401\" width=\"110\" height=\"34\" fill=\"#c62828\" id=\"svg_HXB_vsd3_stop\" stroke=\"#ffffff\"/><foreignObject x=\"1080\" y=\"401\" height=\"34\" width=\"110\" id=\"H-HXB_vsd3_stop\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #c62828; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd3_stop\">STOP</BUTTON></foreignObject></g><text x=\"1202\" y=\"423\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">hanya di mode REMOTE</text><rect x=\"40\" y=\"460\" width=\"440\" height=\"350\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_vsd4\"/><text x=\"58\" y=\"492\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">VSD4</text><text x=\"140\" y=\"492\" font-family=\"sans-serif\" font-size=\"13\" fill=\"#78909c\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">ACS580 - ID 5</text><g id=\"GSE_vsd4_running\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"80\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd4_running_e\"/></g><text x=\"80\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">RUN</text><g id=\"GSE_vsd4_fault\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"150\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd4_fault_e\"/></g><text x=\"150\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">FAULT</text><g id=\"GSE_vsd4_warning\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"220\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd4_warning_e\"/></g><text x=\"220\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">WARN</text><g id=\"GSE_vsd4_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"290\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd4_comm_ok_e\"/></g><text x=\"290\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><g id=\"GSE_vsd4_remote\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"360\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd4_remote_e\"/></g><text x=\"360\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">REM</text><g id=\"GSE_vsd4_run_cmd\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"430\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd4_run_cmd_e\"/></g><text x=\"430\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">PLC Q</text><text x=\"58\" y=\"582\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Frekuensi</text><g id=\"VAL_vsd4_freq\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd4_freq_t\" x=\"370\" y=\"585\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"58\" y=\"614\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Setpoint di drive</text><g id=\"VAL_vsd4_ref_rb\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd4_ref_rb_t\" x=\"370\" y=\"617\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"58\" y=\"646\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Arus</text><g id=\"VAL_vsd4_current\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd4_current_t\" x=\"370\" y=\"649\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"58\" y=\"678\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">DC bus</text><g id=\"VAL_vsd4_dc_bus\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd4_dc_bus_t\" x=\"370\" y=\"681\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"58\" y=\"710\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Tegangan output</text><g id=\"VAL_vsd4_vout\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd4_vout_t\" x=\"370\" y=\"713\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"58\" y=\"752\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Set frekuensi (Hz)</text><g id=\"HXI_vsd4_sp\" stroke=\"#000000\" text-anchor=\"right\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#f1f1f1ff\" type=\"svg-ext-html_input\"><rect id=\"svg_HXI_vsd4_sp\" stroke=\"null\" fill=\"#ffffff\" height=\"26\" width=\"78\" y=\"734\" x=\"292\" stroke-width=\"0\"/><foreignObject id=\"H-HXI_vsd4_sp\" width=\"78\" height=\"26\" y=\"734\" x=\"292\"><INPUT id=\"I-HXI_vsd4_sp\" style=\"width: calc(100% - 7px); height: calc(100% - 7px); text-align: right; border: unset; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); vector-effect: non-scaling-stroke;\" type=\"text\"/></foreignObject></g><text x=\"378\" y=\"752\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Enter</text><g id=\"HXB_vsd4_start\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"58\" y=\"766\" width=\"110\" height=\"34\" fill=\"#2e7d32\" id=\"svg_HXB_vsd4_start\" stroke=\"#ffffff\"/><foreignObject x=\"58\" y=\"766\" height=\"34\" width=\"110\" id=\"H-HXB_vsd4_start\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #2e7d32; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd4_start\">START</BUTTON></foreignObject></g><g id=\"HXB_vsd4_stop\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"180\" y=\"766\" width=\"110\" height=\"34\" fill=\"#c62828\" id=\"svg_HXB_vsd4_stop\" stroke=\"#ffffff\"/><foreignObject x=\"180\" y=\"766\" height=\"34\" width=\"110\" id=\"H-HXB_vsd4_stop\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #c62828; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd4_stop\">STOP</BUTTON></foreignObject></g><text x=\"302\" y=\"788\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">hanya di mode REMOTE</text><rect x=\"490\" y=\"460\" width=\"440\" height=\"350\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_vsd5\"/><text x=\"508\" y=\"492\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">VSD5</text><text x=\"590\" y=\"492\" font-family=\"sans-serif\" font-size=\"13\" fill=\"#78909c\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">ACS580 - ID 6</text><g id=\"GSE_vsd5_running\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"530\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd5_running_e\"/></g><text x=\"530\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">RUN</text><g id=\"GSE_vsd5_fault\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"600\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd5_fault_e\"/></g><text x=\"600\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">FAULT</text><g id=\"GSE_vsd5_warning\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"670\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd5_warning_e\"/></g><text x=\"670\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">WARN</text><g id=\"GSE_vsd5_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"740\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd5_comm_ok_e\"/></g><text x=\"740\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><g id=\"GSE_vsd5_remote\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"810\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd5_remote_e\"/></g><text x=\"810\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">REM</text><g id=\"GSE_vsd5_run_cmd\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"880\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_vsd5_run_cmd_e\"/></g><text x=\"880\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">PLC Q</text><text x=\"508\" y=\"582\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Frekuensi</text><g id=\"VAL_vsd5_freq\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd5_freq_t\" x=\"820\" y=\"585\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"508\" y=\"614\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Setpoint di drive</text><g id=\"VAL_vsd5_ref_rb\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd5_ref_rb_t\" x=\"820\" y=\"617\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"508\" y=\"646\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Arus</text><g id=\"VAL_vsd5_current\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd5_current_t\" x=\"820\" y=\"649\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"508\" y=\"678\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">DC bus</text><g id=\"VAL_vsd5_dc_bus\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd5_dc_bus_t\" x=\"820\" y=\"681\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"508\" y=\"710\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Tegangan output</text><g id=\"VAL_vsd5_vout\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_vsd5_vout_t\" x=\"820\" y=\"713\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"20\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"508\" y=\"752\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Set frekuensi (Hz)</text><g id=\"HXI_vsd5_sp\" stroke=\"#000000\" text-anchor=\"right\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#f1f1f1ff\" type=\"svg-ext-html_input\"><rect id=\"svg_HXI_vsd5_sp\" stroke=\"null\" fill=\"#ffffff\" height=\"26\" width=\"78\" y=\"734\" x=\"742\" stroke-width=\"0\"/><foreignObject id=\"H-HXI_vsd5_sp\" width=\"78\" height=\"26\" y=\"734\" x=\"742\"><INPUT id=\"I-HXI_vsd5_sp\" style=\"width: calc(100% - 7px); height: calc(100% - 7px); text-align: right; border: unset; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); vector-effect: non-scaling-stroke;\" type=\"text\"/></foreignObject></g><text x=\"828\" y=\"752\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Enter</text><g id=\"HXB_vsd5_start\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"508\" y=\"766\" width=\"110\" height=\"34\" fill=\"#2e7d32\" id=\"svg_HXB_vsd5_start\" stroke=\"#ffffff\"/><foreignObject x=\"508\" y=\"766\" height=\"34\" width=\"110\" id=\"H-HXB_vsd5_start\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #2e7d32; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd5_start\">START</BUTTON></foreignObject></g><g id=\"HXB_vsd5_stop\" type=\"svg-ext-html_button\" fill=\"#FFFFFF\" font-size=\"15\" font-family=\"sans-serif\" text-anchor=\"right\" stroke=\"#000000\"><rect stroke-width=\"0\" x=\"630\" y=\"766\" width=\"110\" height=\"34\" fill=\"#c62828\" id=\"svg_HXB_vsd5_stop\" stroke=\"#ffffff\"/><foreignObject x=\"630\" y=\"766\" height=\"34\" width=\"110\" id=\"H-HXB_vsd5_stop\"><BUTTON style=\"width: 100%; height: 100%; vector-effect: non-scaling-stroke; background-color: #c62828; color: rgb(255, 255, 255);\" class=\"md-btn  md-btn-raised\" id=\"B-HXB_vsd5_stop\">STOP</BUTTON></foreignObject></g><text x=\"752\" y=\"788\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#90a4ae\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">hanya di mode REMOTE</text><rect x=\"940\" y=\"460\" width=\"440\" height=\"350\" rx=\"8\" fill=\"#ffffff\" stroke=\"#cfd8dc\" stroke-width=\"1\" id=\"panel_flow\"/><text x=\"958\" y=\"492\" font-family=\"sans-serif\" font-size=\"22\" fill=\"#263238\" text-anchor=\"start\" font-weight=\"bold\" stroke-width=\"0\">FLOW</text><text x=\"1040\" y=\"492\" font-family=\"sans-serif\" font-size=\"13\" fill=\"#78909c\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">ISOIL MV145 - ID 4</text><g id=\"GSE_flow_comm_ok\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"980\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#c62828\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_flow_comm_ok_e\"/></g><text x=\"980\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COMM</text><g id=\"GSE_flow_pipe_empty\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1060\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_flow_pipe_empty_e\"/></g><text x=\"1060\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">KOSONG</text><g id=\"GSE_flow_coil_err\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1140\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_flow_coil_err_e\"/></g><text x=\"1140\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">COIL ERR</text><g id=\"GSE_flow_min\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1220\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_flow_min_e\"/></g><text x=\"1220\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">MIN</text><g id=\"GSE_flow_max\" type=\"svg-ext-gauge_semaphore\" font-family=\"sans-serif\" font-size=\"14\"><ellipse cx=\"1300\" cy=\"522\" rx=\"11\" ry=\"11\" fill=\"#bdbdbd\" stroke=\"#607d8b\" stroke-width=\"1\" id=\"GSE_flow_max_e\"/></g><text x=\"1300\" y=\"548\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#546e7a\" text-anchor=\"middle\" font-weight=\"normal\" stroke-width=\"0\">MAX</text><text x=\"958\" y=\"582\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Flow (unit di alat)</text><g id=\"VAL_flow\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_flow_t\" x=\"1340\" y=\"585\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.##</text></g><text x=\"958\" y=\"612\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Flow</text><g id=\"VAL_flow_lps\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_flow_lps_t\" x=\"1340\" y=\"615\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.##</text></g><text x=\"958\" y=\"642\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Flow % skala</text><g id=\"VAL_flow_pct\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_flow_pct_t\" x=\"1340\" y=\"645\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">##.#</text></g><text x=\"958\" y=\"672\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Kecepatan</text><g id=\"VAL_flow_vel\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_flow_vel_t\" x=\"1340\" y=\"675\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">#.##</text></g><text x=\"958\" y=\"702\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Totalizer T+</text><g id=\"VAL_flow_tot_pos\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_flow_tot_pos_t\" x=\"1340\" y=\"705\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">########</text></g><text x=\"958\" y=\"732\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Totalizer T-</text><g id=\"VAL_flow_tot_neg\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_flow_tot_neg_t\" x=\"1340\" y=\"735\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">########</text></g><text x=\"958\" y=\"762\" font-family=\"sans-serif\" font-size=\"14\" fill=\"#37474f\" text-anchor=\"start\" font-weight=\"normal\" stroke-width=\"0\">Baterai</text><g id=\"VAL_flow_batt\" type=\"svg-ext-value\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"none\" stroke-width=\"0\"><text id=\"VAL_flow_batt_t\" x=\"1340\" y=\"765\" text-anchor=\"end\" font-family=\"sans-serif\" font-size=\"18\" fill=\"#0d47a1\" stroke-width=\"0\" xml:space=\"preserve\">###</text></g><text x=\"1384\" y=\"24\" font-family=\"sans-serif\" font-size=\"11\" fill=\"#b0bec5\" text-anchor=\"end\" font-weight=\"normal\" stroke-width=\"0\">rev ff677152 (PLC)</text></svg>",
+    "property": {
+     "events": []
+    }
+   }
+  ]
+ },
+ "devices": {
+  "PLC M221": {
+   "id": "plc-m221",
+   "name": "PLC M221",
+   "enabled": true,
+   "type": "ModbusTCP",
+   "polling": 1000,
+   "property": {
+    "address": "192.168.1.113:502",
+    "slaveid": "1",
+    "connectionOption": "TcpPort",
+    "options": "",
+    "delay": 20
+   },
+   "tags": {
+    "vsd1_start": {
+     "id": "vsd1_start",
+     "name": "vsd1_start",
+     "label": "vsd1_start",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "11",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_stop": {
+     "id": "vsd1_stop",
+     "name": "vsd1_stop",
+     "label": "vsd1_stop",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "12",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_run_cmd": {
+     "id": "vsd1_run_cmd",
+     "name": "vsd1_run_cmd",
+     "label": "vsd1_run_cmd",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "21",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_running": {
+     "id": "vsd1_running",
+     "name": "vsd1_running",
+     "label": "vsd1_running",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "26",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_fault": {
+     "id": "vsd1_fault",
+     "name": "vsd1_fault",
+     "label": "vsd1_fault",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "41",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_warning": {
+     "id": "vsd1_warning",
+     "name": "vsd1_warning",
+     "label": "vsd1_warning",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "46",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_remote": {
+     "id": "vsd1_remote",
+     "name": "vsd1_remote",
+     "label": "vsd1_remote",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "51",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_comm_ok": {
+     "id": "vsd1_comm_ok",
+     "name": "vsd1_comm_ok",
+     "label": "vsd1_comm_ok",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "61",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_comm_lost": {
+     "id": "vsd1_comm_lost",
+     "name": "vsd1_comm_lost",
+     "label": "vsd1_comm_lost",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "71",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_status_word": {
+     "id": "vsd1_status_word",
+     "name": "vsd1_status_word",
+     "label": "vsd1_status_word",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1001",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_freq": {
+     "id": "vsd1_freq",
+     "name": "vsd1_freq",
+     "label": "vsd1_freq",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1002",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_current": {
+     "id": "vsd1_current",
+     "name": "vsd1_current",
+     "label": "vsd1_current",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1003",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_dc_bus": {
+     "id": "vsd1_dc_bus",
+     "name": "vsd1_dc_bus",
+     "label": "vsd1_dc_bus",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1004",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_vout": {
+     "id": "vsd1_vout",
+     "name": "vsd1_vout",
+     "label": "vsd1_vout",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1005",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_ref_rb": {
+     "id": "vsd1_ref_rb",
+     "name": "vsd1_ref_rb",
+     "label": "vsd1_ref_rb",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1006",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_setpoint": {
+     "id": "vsd1_setpoint",
+     "name": "vsd1_setpoint",
+     "label": "vsd1_setpoint",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1007",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd1_ios_stat": {
+     "id": "vsd1_ios_stat",
+     "name": "vsd1_ios_stat",
+     "label": "vsd1_ios_stat",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1601",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_start": {
+     "id": "vsd2_start",
+     "name": "vsd2_start",
+     "label": "vsd2_start",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "13",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_stop": {
+     "id": "vsd2_stop",
+     "name": "vsd2_stop",
+     "label": "vsd2_stop",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "14",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_run_cmd": {
+     "id": "vsd2_run_cmd",
+     "name": "vsd2_run_cmd",
+     "label": "vsd2_run_cmd",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "22",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_running": {
+     "id": "vsd2_running",
+     "name": "vsd2_running",
+     "label": "vsd2_running",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "27",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_fault": {
+     "id": "vsd2_fault",
+     "name": "vsd2_fault",
+     "label": "vsd2_fault",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "42",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_warning": {
+     "id": "vsd2_warning",
+     "name": "vsd2_warning",
+     "label": "vsd2_warning",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "47",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_remote": {
+     "id": "vsd2_remote",
+     "name": "vsd2_remote",
+     "label": "vsd2_remote",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "52",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_comm_ok": {
+     "id": "vsd2_comm_ok",
+     "name": "vsd2_comm_ok",
+     "label": "vsd2_comm_ok",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "62",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_comm_lost": {
+     "id": "vsd2_comm_lost",
+     "name": "vsd2_comm_lost",
+     "label": "vsd2_comm_lost",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "72",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_status_word": {
+     "id": "vsd2_status_word",
+     "name": "vsd2_status_word",
+     "label": "vsd2_status_word",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1021",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_freq": {
+     "id": "vsd2_freq",
+     "name": "vsd2_freq",
+     "label": "vsd2_freq",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1022",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_current": {
+     "id": "vsd2_current",
+     "name": "vsd2_current",
+     "label": "vsd2_current",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1023",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_dc_bus": {
+     "id": "vsd2_dc_bus",
+     "name": "vsd2_dc_bus",
+     "label": "vsd2_dc_bus",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1024",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_vout": {
+     "id": "vsd2_vout",
+     "name": "vsd2_vout",
+     "label": "vsd2_vout",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1025",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_ref_rb": {
+     "id": "vsd2_ref_rb",
+     "name": "vsd2_ref_rb",
+     "label": "vsd2_ref_rb",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1026",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_setpoint": {
+     "id": "vsd2_setpoint",
+     "name": "vsd2_setpoint",
+     "label": "vsd2_setpoint",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1027",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd2_ios_stat": {
+     "id": "vsd2_ios_stat",
+     "name": "vsd2_ios_stat",
+     "label": "vsd2_ios_stat",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1602",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_start": {
+     "id": "vsd3_start",
+     "name": "vsd3_start",
+     "label": "vsd3_start",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "15",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_stop": {
+     "id": "vsd3_stop",
+     "name": "vsd3_stop",
+     "label": "vsd3_stop",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "16",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_run_cmd": {
+     "id": "vsd3_run_cmd",
+     "name": "vsd3_run_cmd",
+     "label": "vsd3_run_cmd",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "23",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_running": {
+     "id": "vsd3_running",
+     "name": "vsd3_running",
+     "label": "vsd3_running",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "28",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_fault": {
+     "id": "vsd3_fault",
+     "name": "vsd3_fault",
+     "label": "vsd3_fault",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "43",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_warning": {
+     "id": "vsd3_warning",
+     "name": "vsd3_warning",
+     "label": "vsd3_warning",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "48",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_remote": {
+     "id": "vsd3_remote",
+     "name": "vsd3_remote",
+     "label": "vsd3_remote",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "53",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_comm_ok": {
+     "id": "vsd3_comm_ok",
+     "name": "vsd3_comm_ok",
+     "label": "vsd3_comm_ok",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "63",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_comm_lost": {
+     "id": "vsd3_comm_lost",
+     "name": "vsd3_comm_lost",
+     "label": "vsd3_comm_lost",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "73",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_status_word": {
+     "id": "vsd3_status_word",
+     "name": "vsd3_status_word",
+     "label": "vsd3_status_word",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1041",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_freq": {
+     "id": "vsd3_freq",
+     "name": "vsd3_freq",
+     "label": "vsd3_freq",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1042",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_current": {
+     "id": "vsd3_current",
+     "name": "vsd3_current",
+     "label": "vsd3_current",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1043",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_dc_bus": {
+     "id": "vsd3_dc_bus",
+     "name": "vsd3_dc_bus",
+     "label": "vsd3_dc_bus",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1044",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_vout": {
+     "id": "vsd3_vout",
+     "name": "vsd3_vout",
+     "label": "vsd3_vout",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1045",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_ref_rb": {
+     "id": "vsd3_ref_rb",
+     "name": "vsd3_ref_rb",
+     "label": "vsd3_ref_rb",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1046",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_setpoint": {
+     "id": "vsd3_setpoint",
+     "name": "vsd3_setpoint",
+     "label": "vsd3_setpoint",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1047",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_ios_stat": {
+     "id": "vsd3_ios_stat",
+     "name": "vsd3_ios_stat",
+     "label": "vsd3_ios_stat",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1603",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_start": {
+     "id": "vsd4_start",
+     "name": "vsd4_start",
+     "label": "vsd4_start",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "17",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_stop": {
+     "id": "vsd4_stop",
+     "name": "vsd4_stop",
+     "label": "vsd4_stop",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "18",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_run_cmd": {
+     "id": "vsd4_run_cmd",
+     "name": "vsd4_run_cmd",
+     "label": "vsd4_run_cmd",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "24",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_running": {
+     "id": "vsd4_running",
+     "name": "vsd4_running",
+     "label": "vsd4_running",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "29",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_fault": {
+     "id": "vsd4_fault",
+     "name": "vsd4_fault",
+     "label": "vsd4_fault",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "44",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_warning": {
+     "id": "vsd4_warning",
+     "name": "vsd4_warning",
+     "label": "vsd4_warning",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "49",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_remote": {
+     "id": "vsd4_remote",
+     "name": "vsd4_remote",
+     "label": "vsd4_remote",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "54",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_comm_ok": {
+     "id": "vsd4_comm_ok",
+     "name": "vsd4_comm_ok",
+     "label": "vsd4_comm_ok",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "64",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_comm_lost": {
+     "id": "vsd4_comm_lost",
+     "name": "vsd4_comm_lost",
+     "label": "vsd4_comm_lost",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "74",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_status_word": {
+     "id": "vsd4_status_word",
+     "name": "vsd4_status_word",
+     "label": "vsd4_status_word",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1061",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_freq": {
+     "id": "vsd4_freq",
+     "name": "vsd4_freq",
+     "label": "vsd4_freq",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1062",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_current": {
+     "id": "vsd4_current",
+     "name": "vsd4_current",
+     "label": "vsd4_current",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1063",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_dc_bus": {
+     "id": "vsd4_dc_bus",
+     "name": "vsd4_dc_bus",
+     "label": "vsd4_dc_bus",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1064",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_vout": {
+     "id": "vsd4_vout",
+     "name": "vsd4_vout",
+     "label": "vsd4_vout",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1065",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_ref_rb": {
+     "id": "vsd4_ref_rb",
+     "name": "vsd4_ref_rb",
+     "label": "vsd4_ref_rb",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1066",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_setpoint": {
+     "id": "vsd4_setpoint",
+     "name": "vsd4_setpoint",
+     "label": "vsd4_setpoint",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1067",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd4_ios_stat": {
+     "id": "vsd4_ios_stat",
+     "name": "vsd4_ios_stat",
+     "label": "vsd4_ios_stat",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1605",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_start": {
+     "id": "vsd5_start",
+     "name": "vsd5_start",
+     "label": "vsd5_start",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "19",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_stop": {
+     "id": "vsd5_stop",
+     "name": "vsd5_stop",
+     "label": "vsd5_stop",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "20",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_run_cmd": {
+     "id": "vsd5_run_cmd",
+     "name": "vsd5_run_cmd",
+     "label": "vsd5_run_cmd",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "25",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_running": {
+     "id": "vsd5_running",
+     "name": "vsd5_running",
+     "label": "vsd5_running",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "30",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_fault": {
+     "id": "vsd5_fault",
+     "name": "vsd5_fault",
+     "label": "vsd5_fault",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "45",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_warning": {
+     "id": "vsd5_warning",
+     "name": "vsd5_warning",
+     "label": "vsd5_warning",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "50",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_remote": {
+     "id": "vsd5_remote",
+     "name": "vsd5_remote",
+     "label": "vsd5_remote",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "55",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_comm_ok": {
+     "id": "vsd5_comm_ok",
+     "name": "vsd5_comm_ok",
+     "label": "vsd5_comm_ok",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "65",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_comm_lost": {
+     "id": "vsd5_comm_lost",
+     "name": "vsd5_comm_lost",
+     "label": "vsd5_comm_lost",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "75",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_status_word": {
+     "id": "vsd5_status_word",
+     "name": "vsd5_status_word",
+     "label": "vsd5_status_word",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1081",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_freq": {
+     "id": "vsd5_freq",
+     "name": "vsd5_freq",
+     "label": "vsd5_freq",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1082",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_current": {
+     "id": "vsd5_current",
+     "name": "vsd5_current",
+     "label": "vsd5_current",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1083",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_dc_bus": {
+     "id": "vsd5_dc_bus",
+     "name": "vsd5_dc_bus",
+     "label": "vsd5_dc_bus",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1084",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_vout": {
+     "id": "vsd5_vout",
+     "name": "vsd5_vout",
+     "label": "vsd5_vout",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1085",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_ref_rb": {
+     "id": "vsd5_ref_rb",
+     "name": "vsd5_ref_rb",
+     "label": "vsd5_ref_rb",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1086",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_setpoint": {
+     "id": "vsd5_setpoint",
+     "name": "vsd5_setpoint",
+     "label": "vsd5_setpoint",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1087",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd5_ios_stat": {
+     "id": "vsd5_ios_stat",
+     "name": "vsd5_ios_stat",
+     "label": "vsd5_ios_stat",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1606",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "mode_remote": {
+     "id": "mode_remote",
+     "name": "mode_remote",
+     "label": "mode_remote",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "31",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "mode_estop_ok": {
+     "id": "mode_estop_ok",
+     "name": "mode_estop_ok",
+     "label": "mode_estop_ok",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "32",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_comm_ok": {
+     "id": "flow_comm_ok",
+     "name": "flow_comm_ok",
+     "label": "flow_comm_ok",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "66",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_comm_lost": {
+     "id": "flow_comm_lost",
+     "name": "flow_comm_lost",
+     "label": "flow_comm_lost",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "76",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_pipe_empty": {
+     "id": "flow_pipe_empty",
+     "name": "flow_pipe_empty",
+     "label": "flow_pipe_empty",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "81",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_coil_err": {
+     "id": "flow_coil_err",
+     "name": "flow_coil_err",
+     "label": "flow_coil_err",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "82",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_min": {
+     "id": "flow_min",
+     "name": "flow_min",
+     "label": "flow_min",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "83",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_max": {
+     "id": "flow_max",
+     "name": "flow_max",
+     "label": "flow_max",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "84",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "vsd3_installed": {
+     "id": "vsd3_installed",
+     "name": "vsd3_installed",
+     "label": "vsd3_installed",
+     "type": "Bool",
+     "memaddress": "000000",
+     "address": "91",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "sp_min": {
+     "id": "sp_min",
+     "name": "sp_min",
+     "label": "sp_min",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "991",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "sp_max": {
+     "id": "sp_max",
+     "name": "sp_max",
+     "label": "sp_max",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "992",
+     "divisor": 10,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow": {
+     "id": "flow",
+     "name": "flow",
+     "label": "flow",
+     "type": "Float32MLE",
+     "memaddress": "400000",
+     "address": "1101",
+     "divisor": 1,
+     "format": 2,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_lps": {
+     "id": "flow_lps",
+     "name": "flow_lps",
+     "label": "flow_lps",
+     "type": "Float32MLE",
+     "memaddress": "400000",
+     "address": "1103",
+     "divisor": 1,
+     "format": 2,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_pct": {
+     "id": "flow_pct",
+     "name": "flow_pct",
+     "label": "flow_pct",
+     "type": "Float32MLE",
+     "memaddress": "400000",
+     "address": "1105",
+     "divisor": 1,
+     "format": 1,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_vel": {
+     "id": "flow_vel",
+     "name": "flow_vel",
+     "label": "flow_vel",
+     "type": "Float32MLE",
+     "memaddress": "400000",
+     "address": "1107",
+     "divisor": 1,
+     "format": 2,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_tot_pos": {
+     "id": "flow_tot_pos",
+     "name": "flow_tot_pos",
+     "label": "flow_tot_pos",
+     "type": "UInt32MLE",
+     "memaddress": "400000",
+     "address": "1109",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": true,
+      "changed": true,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_tot_neg": {
+     "id": "flow_tot_neg",
+     "name": "flow_tot_neg",
+     "label": "flow_tot_neg",
+     "type": "UInt32MLE",
+     "memaddress": "400000",
+     "address": "1111",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_tp_info": {
+     "id": "flow_tp_info",
+     "name": "flow_tp_info",
+     "label": "flow_tp_info",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1113",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_flags12": {
+     "id": "flow_flags12",
+     "name": "flow_flags12",
+     "label": "flow_flags12",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1115",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_alarms": {
+     "id": "flow_alarms",
+     "name": "flow_alarms",
+     "label": "flow_alarms",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1116",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_batt": {
+     "id": "flow_batt",
+     "name": "flow_batt",
+     "label": "flow_batt",
+     "type": "UInt16",
+     "memaddress": "400000",
+     "address": "1117",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    },
+    "flow_ios_stat": {
+     "id": "flow_ios_stat",
+     "name": "flow_ios_stat",
+     "label": "flow_ios_stat",
+     "type": "Int16",
+     "memaddress": "400000",
+     "address": "1604",
+     "divisor": 1,
+     "format": 0,
+     "daq": {
+      "enabled": false,
+      "changed": false,
+      "interval": 60,
+      "restored": false
+     },
+     "init": "",
+     "options": {}
+    }
+   }
+  }
+ },
+ "charts": [],
+ "graphs": [],
+ "alarms": [
+  {
+   "name": "AL_VSD1_FAULT",
+   "property": {
+    "variableId": "vsd1_fault",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "VSD1 TRIPPED (fault)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD1_COMM",
+   "property": {
+    "variableId": "vsd1_comm_lost",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "VSD1 komunikasi RS485 putus (drive Last speed)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD2_FAULT",
+   "property": {
+    "variableId": "vsd2_fault",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "VSD2 TRIPPED (fault)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD2_COMM",
+   "property": {
+    "variableId": "vsd2_comm_lost",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "VSD2 komunikasi RS485 putus (drive Last speed)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD3_FAULT",
+   "property": {
+    "variableId": "vsd3_fault",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "VSD3 TRIPPED (fault)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD3_COMM",
+   "property": {
+    "variableId": "vsd3_comm_lost",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "VSD3 komunikasi RS485 putus (drive Last speed)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD4_FAULT",
+   "property": {
+    "variableId": "vsd4_fault",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "VSD4 TRIPPED (fault)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD4_COMM",
+   "property": {
+    "variableId": "vsd4_comm_lost",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "VSD4 komunikasi RS485 putus (drive Last speed)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD5_FAULT",
+   "property": {
+    "variableId": "vsd5_fault",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "VSD5 TRIPPED (fault)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_VSD5_COMM",
+   "property": {
+    "variableId": "vsd5_comm_lost",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "VSD5 komunikasi RS485 putus (drive Last speed)",
+    "group": "VSD",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_FLOW_COMM",
+   "property": {
+    "variableId": "flow_comm_lost",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "Flow meter komunikasi RS485 putus",
+    "group": "FLOW",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_FLOW_EMPTY",
+   "property": {
+    "variableId": "flow_pipe_empty",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": true,
+    "text": "Flow meter: pipa kosong",
+    "group": "FLOW",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#f57c00",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_FLOW_COIL",
+   "property": {
+    "variableId": "flow_coil_err",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "Flow meter: coil excitation error",
+    "group": "FLOW",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 1,
+    "max": 1,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  },
+  {
+   "name": "AL_ESTOP",
+   "property": {
+    "variableId": "mode_estop_ok",
+    "permission": 0
+   },
+   "highhigh": {
+    "enabled": true,
+    "text": "E-STOP panel aktif",
+    "group": "PANEL",
+    "ackmode": "alarm.ack-active",
+    "bkcolor": "#d32f2f",
+    "color": "#ffffff",
+    "checkdelay": 1,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "high": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "low": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "info": {
+    "enabled": false,
+    "text": "",
+    "group": "",
+    "ackmode": "alarm.ack-float",
+    "bkcolor": "",
+    "color": "",
+    "checkdelay": 0,
+    "min": 0,
+    "max": 0,
+    "timedelay": 0
+   },
+   "actions": {
+    "enabled": false,
+    "values": []
+   },
+   "value": ""
+  }
+ ],
+ "recipes": [],
+ "notifications": [],
+ "scripts": [],
+ "reports": [],
+ "texts": [],
+ "mapsLocations": []
+}

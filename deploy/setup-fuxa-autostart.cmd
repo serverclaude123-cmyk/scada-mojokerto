@@ -1,8 +1,10 @@
 @echo off
 setlocal
 set LOG=%~dp0setup-fuxa-autostart.log
-set NODE=C:\Users\AIOPC\Tools\node-v22.23.4-win-x64\node.exe
-set MAIN=C:\Users\AIOPC\Tools\npm-global\node_modules\@frangoteam\fuxa\main.js
+REM Server = PC#2: Node + FUXA di C:\Tools (default setup-server-pc2.ps1 / setup-fuxa-pc.ps1).
+REM Kalau versi Node beda (lihat manifest backup), ubah baris NODE.
+set NODE=C:\Tools\node-v22.23.4-win-x64\node.exe
+set MAIN=C:\Tools\npm-global\node_modules\@frangoteam\fuxa\main.js
 set TASK=FUXA
 set DATA=C:\ProgramData\fuxa
 

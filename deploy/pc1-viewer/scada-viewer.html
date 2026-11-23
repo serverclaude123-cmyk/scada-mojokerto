@@ -1,0 +1,93 @@
+<!doctype html>
+<!--
+  scada-viewer.html -- pembungkus FUXA untuk PC#1 (viewer lewat Tailscale).
+
+  Masalah yang diatasi: kalau PC#2 (server) restart/mati, halaman FUXA di browser TIDAK
+  berubah apa pun -- Gateway tetap "online", angka tetap, karena itu nilai TERAKHIR yang
+  diterima browser. Operator mengira data masih jalan.
+
+  Halaman ini menampilkan FUXA di iframe dan setiap 3 detik mengecek server.
+  Server tidak menjawab 2x berturut-turut -> layar FUXA diabu-abukan dan muncul spanduk
+  merah "SERVER OFFLINE" + jam terakhir terhubung. Server kembali -> FUXA dimuat ulang
+  otomatis dan spanduk hilang.
+
+  Alamat server lewat query string: scada-viewer.html?url=http://100.122.186.109:1881
+-->
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCADA Mojokerto</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; font-family: Segoe UI, Arial, sans-serif; }
+  iframe { border: 0; width: 100%; height: 100%; display: block; background: #fff; transition: filter .3s; }
+  body.down iframe { filter: grayscale(1) opacity(.35); pointer-events: none; }
+  #banner { display: none; position: fixed; left: 0; right: 0; top: 0; z-index: 10;
+            background: #c62828; color: #fff; padding: 18px 24px; text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,.5); }
+  body.down #banner { display: block; animation: blink 1.2s step-start infinite; }
+  @keyframes blink { 50% { background: #8e0000; } }
+  #banner b { display: block; font-size: 28px; letter-spacing: .5px; }
+  #banner span { font-size: 16px; }
+  #status { position: fixed; right: 8px; bottom: 6px; z-index: 5; font-size: 11px;
+            color: #2e7d32; background: rgba(255,255,255,.85); padding: 2px 8px; border-radius: 10px; }
+  body.down #status { color: #c62828; }
+</style>
+</head>
+<body>
+<div id="banner">
+  <b>SERVER SCADA (PC#2) OFFLINE</b>
+  <span>Data di layar TIDAK update. Terakhir terhubung: <span id="last">-</span> &middot; mencoba lagi otomatis&hellip;</span>
+</div>
+<iframe id="fx" title="FUXA"></iframe>
+<div id="status">server: cek&hellip;</div>
+<script>
+  // Normalnya halaman ini disajikan oleh FUXA sendiri (http://<server>:1881/_widgets/scada-viewer.html),
+  // jadi cek server = satu origin, tidak kena CORS / Private Network Access browser.
+  // Dibuka sebagai file lokal terbukti bisa salah menampilkan OFFLINE di PC#1 (23 Nov 2026).
+  var url = new URLSearchParams(location.search).get('url') ||
+            (/^https?:$/.test(location.protocol) ? location.origin : 'http://100.122.186.109:1881');
+  url = url.replace(/\/+$/, '');
+  var fx = document.getElementById('fx'), st = document.getElementById('status'), last = document.getElementById('last');
+  // Toleran terhadap jalur lambat: PC#1 lewat Wi-Fi/Tailscale terukur ping 1,2-1,5 s dan kadang
+  // tidak menjawab (23 Nov 2026). Dengan batas lama (2,5 s, 2x gagal) layar berkedip OFFLINE/online.
+  // Sekarang: cek tiap 5 s, batas 8 s, OFFLINE setelah 3x gagal berturut-turut (~15-40 s).
+  // FUXA hanya dimuat ulang kalau server benar-benar lama hilang (>= RELOAD_AFTER_MS);
+  // gangguan singkat dipulihkan sendiri oleh koneksi socket FUXA.
+  var INTERVAL = 5000, TIMEOUT = 8000, FAIL_LIMIT = 3, RELOAD_AFTER_MS = 30000;
+  var fails = 0, down = false, lastOk = null, downSince = null;
+  fx.src = url + '/';
+
+  function hhmmss(d) { return d.toLocaleTimeString('id-ID', { hour12: false }); }
+
+  function ping() {
+    var ctl = new AbortController(), t = setTimeout(function () { ctl.abort(); }, TIMEOUT);
+    // no-cors: jawaban "opaque" tetap berarti server hidup; gagal jaringan -> reject
+    return fetch(url + '/api/version?t=' + Date.now(), { mode: 'no-cors', cache: 'no-store', signal: ctl.signal })
+      .then(function () { clearTimeout(t); return true; }, function () { clearTimeout(t); return false; });
+  }
+
+  function tick() {
+    ping().then(function (ok) {
+      if (ok) {
+        lastOk = new Date();
+        fails = 0;
+        if (down) {
+          down = false;
+          document.body.classList.remove('down');
+          if (Date.now() - downSince >= RELOAD_AFTER_MS) fx.src = url + '/?r=' + Date.now();
+        }
+        st.textContent = 'server: online ' + hhmmss(lastOk);
+      } else if (++fails >= FAIL_LIMIT && !down) {
+        down = true;
+        downSince = Date.now();
+        document.body.classList.add('down');
+        last.textContent = lastOk ? hhmmss(lastOk) : 'belum pernah';
+        st.textContent = 'server: OFFLINE';
+      }
+    }).then(function () { setTimeout(tick, INTERVAL); });
+  }
+  tick();
+</script>
+</body>
+</html>

@@ -1,7 +1,10 @@
 @echo off
 setlocal
 set LOG=%~dp0setup-admin.log
-set MQ=C:\Users\AIOPC\Tools\mosquitto
+REM Server = PC#2. Instalasi Mosquitto di Program Files, data (passwd) di ProgramData.
+set MQINST=C:\Program Files\mosquitto
+set MQ=C:\ProgramData\mosquitto
+if not exist "%MQ%" mkdir "%MQ%"
 
 REM ============================================================
 REM  Setup broker Mosquitto -- PERLU HAK ADMINISTRATOR
@@ -34,8 +37,9 @@ echo [2/6] Stop service...
 net stop mosquitto 2>&1
 
 echo.
-echo [3/6] Salin passwd ke folder instalasi...
+echo [3/6] Salin passwd ke %MQ% dan mosquitto.conf ke %MQINST%...
 copy /Y "%~dp0passwd" "%MQ%\passwd" 2>&1
+copy /Y "%~dp0mosquitto.conf" "%MQINST%\mosquitto.conf" 2>&1
 
 echo.
 echo [4/6] Hapus log lama ber-ACL LocalSystem...
@@ -58,6 +62,13 @@ REM aturan profile=private di atas TIDAK berlaku untuknya. Aturan ini dibatasi
 REM ke rentang alamat Tailscale saja -- 1883 tetap tertutup untuk jaringan lain.
 netsh advfirewall firewall delete rule name="Mosquitto 1883 Tailscale" >nul 2>&1
 netsh advfirewall firewall add rule name="Mosquitto 1883 Tailscale" dir=in action=allow protocol=TCP localport=1883 remoteip=100.64.0.0/10 2>&1
+
+echo.
+echo [6c] FUXA web 1881: LAN privat + peer Tailscale (PC#1 sekarang melihat lewat browser)...
+netsh advfirewall firewall delete rule name="FUXA 1881" >nul 2>&1
+netsh advfirewall firewall add rule name="FUXA 1881" dir=in action=allow protocol=TCP localport=1881 profile=private 2>&1
+netsh advfirewall firewall delete rule name="FUXA 1881 Tailscale" >nul 2>&1
+netsh advfirewall firewall add rule name="FUXA 1881 Tailscale" dir=in action=allow protocol=TCP localport=1881 remoteip=100.64.0.0/10 2>&1
 
 echo.
 echo ===================== HASIL =====================
