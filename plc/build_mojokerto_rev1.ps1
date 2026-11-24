@@ -9,7 +9,9 @@
 param(
   [string]$Src = "C:\Users\Admin\claude\mojokerto.smbp",
   [string]$Out = "C:\Users\Admin\claude\mojokerto-rev1.smbp",
-  [int]$Cycle = 50          # cycle time channel IOScanner, satuan 10 ms -> 50 = 500 ms
+  [int]$Cycle = 50,         # cycle time channel IOScanner, satuan 10 ms -> 50 = 500 ms
+  [int]$DevTimeout = 3,     # response timeout per device, satuan 100 ms -> 3 = 300 ms (rev4: 10 = 1 s)
+  [int]$RetrySec = 15       # tiap berapa detik IOScanner di-reset kalau ada device yang gagal
 )
 $ErrorActionPreference = 'Stop'
 $enc = New-Object System.Text.UTF8Encoding($true)
@@ -61,6 +63,7 @@ foreach ($p in $plan) {
   $de = $io.Devices.SerialLineIoScannerDeviceEntity | Where-Object { $_.DeviceId -eq [string]$p.dev }
   if (-not $de) { throw "Device $($p.dev) tidak ada di file sumber" }
   $d = 100 + $p.dev
+  $de.SelectSingleNode('ResponseTime').InnerText = [string]$DevTimeout   # device yang tidak ada tidak menahan bus 1 s per channel
   $chs = $de.SelectSingleNode('Channels'); Clear-Node $chs
   for ($c = 0; $c -lt $p.ch.Count; $c++) {
     $k = $p.ch[$c]; $isW = ($k.a -eq $WR16)
@@ -127,7 +130,32 @@ AddRung 'RAW_FLOW' 'Salin data IOScanner flow meter MV145 (slave ID 4) ke %MW142
 
 # --- COMM_OK (%IWNS = 2: device ada dan ter-scan) + alarm comm lost
 $comm = @(@{b='%M60';w=1600;t='VSD1'},@{b='%M61';w=1601;t='VSD2'},@{b='%M62';w=1602;t='VSD3'},@{b='%M65';w=1603;t='FLOW'},@{b='%M63';w=1604;t='VSD4'},@{b='%M64';w=1605;t='VSD5'})
-foreach ($c in $comm) { AddRung "COMM_OK_$($c.t)" "$($c.t): komunikasi OK bila status device IOScanner = 2" @((Ln "LD    [ %MW$($c.w) = 2 ]"), (Ln "ST    $($c.b)")) }
+# rev5: status 1 (sedang inisialisasi sesudah reset IOScanner) juga dianggap OK supaya alarm tidak berkedip
+# rev7: rev5/6 menganggap status 1 = OK -> device yang TIDAK terpasang ikut hijau tiap reset (terlihat di FUXA
+# 24 Nov 2026). Sekarang: SET hanya di status 2, RESET hanya di status error (bukan 2 dan bukan 1),
+# status 1 (init sesudah reset) tidak mengubah apa-apa -> VSD1 tidak berkedip, device absen tetap merah.
+foreach ($c in $comm) {
+  AddRung "COMM_OK_SET_$($c.t)" "$($c.t): komunikasi OK saat status device IOScanner = 2" @((Ln "LD    [ %MW$($c.w) = 2 ]"), (Ln "S     $($c.b)"))
+  AddRung "COMM_OK_RST_$($c.t)" "$($c.t): komunikasi putus saat status bukan 2 dan bukan 1 (1 = init sesudah reset, abaikan)" @(
+    (Ln "LD    [ %MW$($c.w) <> 2 ]"), (Ln "AND   [ %MW$($c.w) <> 1 ]"), (Ln "R     $($c.b)"))
+}
+
+# rev5: AUTO-RETRY IOScanner. Help M221: "If a communication interruption occurs, the IOScanner stops"
+# -> device yang sekali gagal tidak di-scan lagi (terbukti di lapangan 24 Nov 2026: LED SL1 berkedip 4x
+# lalu mati, semua device status 3). Tiap $RetrySec detik, kalau %SW210 <> 2 (tidak semua device
+# ter-scan), set %S110 = reset Modbus Serial IOScanner SL1 supaya device yang gagal dicoba lagi.
+AddRung 'IOS_STATE' 'Salin %SW210 (status IOScanner SL1: 0 stop, 1 init, 2 operasional, 3 sebagian, 4 suspend) untuk FUXA/diagnosa' @(
+  (Ln 'LD    1'), (Ln '[ %MW1606 := %SW210 ]'))
+# rev6: 'LDR %S6' ditolak compiler (sisi naik tidak boleh pada bit sistem) -> deteksi sisi naik manual
+AddRung 'RETRY_SEC' 'Hitung detik: %S6 (basis waktu 1 s) = 1 dan scan sebelumnya 0 (%M112)' @(
+  (Ln 'LD    %S6'), (Ln 'ANDN  %M112' '%S6 scan sebelumnya'), (Ln '[ %MW1610 := %MW1610 + 1 ]'))
+AddRung 'RETRY_SEC_MEM' 'Simpan %S6 untuk deteksi sisi naik di scan berikutnya' @((Ln 'LD    %S6'), (Ln 'ST    %M112'))
+AddRung 'RETRY_PULSE' "Pulse satu scan tiap $RetrySec detik" @((Ln "LD    [ %MW1610 >= $RetrySec ]"), (Ln 'ST    %M111'))
+AddRung 'RETRY_CNT_CLR' 'Nol-kan hitungan detik setelah pulse' @((Ln 'LD    %M111'), (Ln '[ %MW1610 := 0 ]'))
+AddRung 'RETRY_RESET' 'IOScanner tidak operasional penuh -> reset IOScanner SL1 (%S110) + hitung jumlah reset' @(
+  (Ln 'LD    %M111'), (Ln 'AND   [ %SW210 <> 2 ]'), (Ln 'S     %S110' 'reset Modbus Serial IOScanner SL1'), (Ln '[ %MW1611 := %MW1611 + 1 ]' 'jumlah reset (diagnosa)'))
+AddRung 'RETRY_RESET_CLR' 'Pengaman: kalau sistem belum menurunkan %S110 setelah 3 s, turunkan' @(
+  (Ln 'LD    %S110'), (Ln 'AND   [ %MW1610 >= 3 ]'), (Ln 'R     %S110'))
 AddRung 'COMM_LOST' 'Alarm komunikasi putus (FUXA). VSD3 hanya bila %M90 = 1 (drive sudah terpasang)' @(
   (Ln 'LDN   %M60'), (Ln 'ST    %M70' 'VSD1 comm lost'))
 AddRung 'COMM_LOST_VSD2' '' @((Ln 'LDN   %M61'), (Ln 'ST    %M71'))
@@ -269,6 +297,7 @@ $bits[65] = @('FLOW_COMM_OK','Flow meter IOScanner status = 2'); $bits[75] = @('
 $bits[80] = @('FLOW_PIPE_EMPTY','Flow: pipa kosong'); $bits[81] = @('FLOW_COIL_ERR','Flow: coils excitation error')
 $bits[82] = @('FLOW_MIN','Flow: di bawah MIN'); $bits[83] = @('FLOW_MAX','Flow: di atas MAX')
 $bits[30] = @('MODE_REMOTE','1 = selector REMOTE (SCADA), 0 = LOCAL (PB panel)'); $bits[31] = @('MODE_ESTOP_OK','Salinan %I0.1 untuk FUXA: 1 = e-stop sehat')
+$bits[111] = @('RETRY_PULSE','Pulse auto-retry IOScanner (rev5)'); $bits[112] = @('S6_PREV','%S6 scan sebelumnya (deteksi sisi naik)')
 $bits[90] = @('VSD3_INSTALLED','1 = VSD3 sudah terpasang, alarm comm lost VSD3 aktif')
 $bits[99] = @('WORD_SWAP','0 = tukar word 32-bit (default), 1 = lurus')
 foreach ($k in ($bits.Keys | Sort-Object)) { Sym-Bit $k $bits[$k][0] $bits[$k][1] }
@@ -283,6 +312,7 @@ foreach ($v in $vsd) { $n = $v.n; $b = $v.base
   $words[$b+4] = @("VSD${n}_VOUT", "VSD$n Vout V"); $words[$b+5] = @("VSD${n}_REF_RB", "VSD$n ref1 terbaca Hz x10")
   $words[$b+6] = @("VSD${n}_SP", "VSD$n setpoint dari FUXA Hz x10"); $words[1600+$v.dev] = @("VSD${n}_IOS_STAT", "VSD$n status device IOScanner") }
 $words[1603] = @('FLOW_IOS_STAT','Flow status device IOScanner')
+$words[1606] = @('IOS_SL1_STATE','%SW210: 0 stop 1 init 2 OK 3 sebagian 4 suspend'); $words[1610] = @('RETRY_SEC_CNT','Hitungan detik auto-retry IOScanner'); $words[1611] = @('IOS_RESET_COUNT','Jumlah reset IOScanner SL1 oleh program')
 $words[1112] = @('FLOW_TP_INFO','T+ MSB overflow LSB desimal'); $words[1113] = @('FLOW_TN_INFO','T- info')
 $words[1114] = @('FLOW_FLAGS12','Flag 1/2 reg 0020'); $words[1115] = @('FLOW_ALARMS','Jumlah alarm'); $words[1116] = @('FLOW_BATT','Baterai %'); $words[1117] = @('FLOW_FLAGS34','Flag 3/4 reg 0051')
 foreach ($k in ($words.Keys | Sort-Object)) { Sym-Word $k $words[$k][0] $words[$k][1] }
@@ -290,7 +320,7 @@ foreach ($k in ($words.Keys | Sort-Object)) { Sym-Word $k $words[$k][0] $words[$
 $wl = $sc.SelectSingleNode('WatchLists')
 $we = El $wl 'WatchListEntity' $null; [void](El $we 'Name' 'Commissioning')
 $wi = El $we 'WatchListItemEntities' $null
-$watch = @('%MW1600','%MW1601','%MW1602','%MW1603','%MW1604','%MW1605','%M99','%MW1000','%MW1020','%MW1001','%MW1021','%MW1022','%MW1006','%MW1026','%MF1100','%MF1102','%MD1108','%MW1112','%MW1114')
+$watch = @('%MW1606','%MW1611','%IWNS100.0','%IWNS100.1','%IWNS100.2','%MW1600','%MW1601','%MW1602','%MW1603','%MW1604','%MW1605','%M99','%MW1000','%MW1020','%MW1001','%MW1021','%MW1022','%MW1006','%MW1026','%MF1100','%MF1102','%MD1108','%MW1112','%MW1114')
 foreach ($a in $watch) { $e = El $wi 'WatchListItemEntity' $null; [void](El $e 'Address' $a); [void](El $e 'IsTraced' 'false'); [void](El $e 'ValueRepresentation' 'Decimal') }
 
 # --- simbol input/output fisik (urutan elemen seperti contoh Schneider Compact_Hardwired_M221.smbe:

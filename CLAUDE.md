@@ -102,12 +102,21 @@ Pin dari silkscreen board (belum dikonfirmasi ke dokumentasi vendor, tidak ada d
   start/stop hardwired, fault via status word, comm loss = Last speed.
   Rencana: `docs/rs485-bus-plc-master.md`. Program + commissioning: `docs/plc-program-m221.md`.
   Urutan slave mengikuti proyek user: ID1 VSD1 ACS550, ID2 VSD2, ID3 VSD3 (belum terpasang,
-  `%M90`), ID4 flow MV145, ID5 VSD4, ID6 VSD5. Proyek PLC `plc/mojokerto-rev4.smbp` dibuat oleh
+  `%M90`), ID4 flow MV145, ID5 VSD4, ID6 VSD5. Proyek PLC `plc/mojokerto-rev7.smbp` dibuat oleh
   `plc/build_mojokerto_rev1.ps1` (di PC#2: `C:\Users\Admin\claude\`) — **compile tanpa error** (23 Nov 2026), belum
   di-download / diuji. Selector LOCAL/REMOTE + PB ON/OFF panel ada di `%I0.0`–`%I0.11`.
+- [x] **PLC M221 membaca VSD1 ACS550 lewat RS485** (24 Nov 2026, rev6): status IOScanner 2, semua channel 0.
+  Jebakan: Serial IOScanner M221 BERHENTI men-scan device setelah satu error ("If a communication
+  interruption occurs, the IOScanner stops") -> rev5/6 reset `%S110` tiap 15 s. `LDR` pada bit sistem
+  (`%S6`) ditolak compiler. Polarization SL1 bawaan tetap 4,7 kΩ (abu-abu, tidak bisa diubah).
 - **FUXA untuk arsitektur PLC** (23 Nov 2026): `fuxa/scada-mojokerto-plc.fuxap` dari `fuxa/make_project_plc.js`
-  (Node). Diuji di FUXA sementara port 1891: termuat tanpa error, layar ter-render; data live belum
-  (PLC .113 tidak menjawab saat uji). BELUM dipasang di FUXA produksi — pasang saat cut-over, lihat `fuxa/README.md`.
+  (Node). **TERPASANG di FUXA produksi 24 Nov 2026** (rev `ff677152 (PLC)`), PLC menjalankan rev7.
+  Terbukti live: VSD1 COMM/REM, DC bus 266 V, setpoint dari FUXA ditulis ke drive (25 Hz -> par 0111 benar),
+  VSD2/4/5 COMM merah (belum terpasang). Device MQTT dihapus dari FUXA; ESP32 dipensiunkan.
+  Backup proyek lama: Desktop PC#2 `fuxa-produksi-backup-20261124-1055.fuxap` (berisi password broker, JANGAN di-commit).
+  Lupa password admin FUXA: `deploy/reset-fuxa-login.ps1` -> admin / 123456. Menu Open Project = editor, ikon disket kiri atas.
+- [ ] Belum diuji: START/STOP hardwired (selector LOCAL/REMOTE, PB panel), fault, comm lost, interlock e-stop,
+      flow meter MV145 (word order `%M99`, pembagi totalizer), VSD2–VSD5.
       Tailscale PC#2 SUDAH terpasang: **100.122.186.109**, run unattended, key expiry dimatikan.
       PC#1 buka FUXA di `http://100.122.186.109:1881`; HP pakai host MQTT `100.122.186.109`.
 - [x] Firmware ditulis untuk board KhursLabs, ditambah tegangan DC/output.

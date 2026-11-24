@@ -4,7 +4,7 @@ Status (23 Nov 2026): rev4 = rev3 + simbol input/output fisik (SEL_REMOTE, ESTOP
 dalam satu rung IL tidak boleh); diperbaiki di rev2 (dipecah jadi `CLR_START_*` / `CLR_STOP_*`). **rev2 belum di-compile,
 BELUM di-download, BELUM diuji.**
 
-- Proyek: `C:\Users\Admin\claude\mojokerto-rev4.smbp` (PC#2), dibuat oleh
+- Proyek: `C:\Users\Admin\claude\mojokerto-rev7.smbp` (PC#2), dibuat oleh
   `C:\Users\Admin\claude\build_mojokerto_rev1.ps1` dari `mojokerto.smbp` buatan user
   (konfigurasi Ethernet + SL1 IOScanner 6 device). File sumber tidak diubah.
 - **Sumber kebenaran = skrip generator.** Kalau program diubah di Machine Expert Basic, skrip
@@ -16,6 +16,16 @@ Dicek ke help Machine Expert Basic yang terpasang di PC#2 (`Help\en-GB\*.chm`):
 cycle time channel satuan **10 ms**; maks 16 device, **10 channel per device**;
 `LD 1` untuk rung tanpa syarat; `DINT_TO_REAL`/`REAL_TO_INT` ada; **tidak ada MIN/MAX** (pakai
 perbandingan). Nama enum channel diambil dari `SchneiderElectric.SoMachineBasic.Entities.dll`.
+
+### rev5/rev6 (24 Nov 2026): IOScanner auto-retry (rev6: `LDR %S6` ditolak compiler, diganti deteksi sisi naik manual dengan `%M112`)
+Temuan lapangan: setelah download rev4 semua device status **3**, LED SL1 hanya berkedip 4x saat
+start lalu mati, counter ACS550 5306/5307/5308 tidak bergerak. Help M221: *"If a communication
+interruption occurs, the IOScanner stops"* — device yang sekali gagal tidak di-scan lagi.
+- Rung `RETRY_*`: tiap 15 s, kalau `%SW210` ≠ 2, program men-set **`%S110`** (reset Modbus Serial
+  IOScanner SL1). `%MW1606` = salinan `%SW210`, `%MW1611` = jumlah reset.
+- rev7: `COMM_OK` di-SET saat status 2, di-RESET saat status error (bukan 2 dan bukan 1); status 1 (init sesudah reset) tidak mengubahnya. rev5/6 menganggap 1 = OK sehingga device yang tidak terpasang ikut hijau (terlihat di FUXA 24 Nov).
+- Response timeout per device 10 → **3 (300 ms)** supaya device yang belum terpasang tidak menahan bus.
+- **TERBUKTI 24 Nov 2026 (rev6 di PLC):** `%MW1600` VSD1 = **2**, `%IWNS100.0/.1/.2` = 0 (ketiga channel ACS550 OK), `%SW210` = 3 (karena VSD2–5 + flow belum terpasang), `%MW1611` naik. Kabel PLC SL1 ↔ ACS550 dan setting 19200 8N1 ID1 benar.
 
 ## 1. Device (urutan sesuai file user)
 
@@ -123,7 +133,7 @@ Comm lost **tidak** mematikan RUN (keputusan: drive Last speed). Skala `/40` dan
 bila **46.02 (ACS580) dan 1105 (ACS550) = 50,0 Hz**.
 
 ## 5. Langkah di Machine Expert Basic sebelum download
-1. Tutup `mojokerto.smbp`, buka **`mojokerto-rev4.smbp`**.
+1. Tutup `mojokerto.smbp`, buka **`mojokerto-rev7.smbp`**.
 2. SL1 Polarization **tidak bisa diubah** (abu-abu, "4.7 kΩ"): SL1 bawaan M221 punya bias internal tetap 4,7 kΩ (impedansi tinggi). Bias kuat diambil dari drive — lihat `docs/rs485-bus-plc-master.md` §Aturan fisik bus.
 3. Cek IOScanner → tiap device: channel dan offset sesuai §2.
 4. **Compile.** Kalau ada rung merah, catat nama rung + pesan errornya.

@@ -31,13 +31,15 @@ Yang belum pasti, dicek saat commissioning:
 - Konfirmasi tombol START/STOP belum ada (sama seperti proyek lama).
 
 ### Cara pasang (SAAT CUT-OVER, setelah PLC rev4 terbukti)
-1. **Backup proyek yang jalan:** FUXA → ☰ → *Save project* (simpan `.fuxap` ke Desktop).
-2. ☰ → *Open project* → pilih `scada-mojokerto-plc.fuxap`.
+1. **Backup proyek yang jalan.** Di FUXA 1.3.5 menunya ada di **editor** (`http://localhost:1881/editor`),
+   klik **ikon disket di pojok kiri atas** → *Save Project As...* (bukan ☰ di layar view).
+2. Ikon disket yang sama → **Open Project** → pilih `scada-mojokerto-plc.fuxap`.
+   Lupa password admin: `deploy/reset-fuxa-login.ps1` (Administrator) → login bawaan admin / 123456.
 3. Pojok kanan atas harus `rev ff677152 (PLC)`.
 4. PC#1 (viewer) tidak perlu diubah: pembungkus `/_widgets/scada-viewer.html` tetap memuat FUXA.
 5. Broker Mosquitto boleh tetap jalan; tidak dipakai FUXA lagi. HP lihat FUXA lewat browser/Tailscale.
 
-Jangan pasang sebelum PLC menjalankan program rev4: program PLC lama tidak mengisi `%MW1000+`,
+**Status: TERPASANG di produksi 24 Nov 2026**, data live VSD1 terbukti (PLC rev7). Dulu: jangan pasang sebelum PLC menjalankan program baru: program PLC lama tidak mengisi `%MW1000+`,
 jadi layar akan kosong.
 
 ---

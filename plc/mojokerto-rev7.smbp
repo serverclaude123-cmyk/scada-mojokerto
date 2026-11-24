@@ -2,8 +2,8 @@
 <ProjectDescriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ProjectVersion>2.9.0.0</ProjectVersion>
   <ManagementLevel>FunctLevelMan20_0</ManagementLevel>
-  <Name>mojokerto-rev4</Name>
-  <FullName>C:\Users\Admin\claude\mojokerto-rev4.smbp</FullName>
+  <Name>mojokerto-rev7</Name>
+  <FullName>C:\Users\Admin\claude\mojokerto-rev7.smbp</FullName>
   <CurrentCultureName>en-GB</CurrentCultureName>
   <SoftwareConfiguration>
     <Pous>
@@ -442,12 +442,33 @@
                 <Comment></Comment>
               </InstructionLineEntity>
               <InstructionLineEntity>
-                <InstructionLine>ST    %M60</InstructionLine>
+                <InstructionLine>S     %M60</InstructionLine>
                 <Comment></Comment>
               </InstructionLineEntity>
             </InstructionLines>
-            <Name>COMM_OK_VSD1</Name>
-            <MainComment>VSD1: komunikasi OK bila status device IOScanner = 2</MainComment>
+            <Name>COMM_OK_SET_VSD1</Name>
+            <MainComment>VSD1: komunikasi OK saat status device IOScanner = 2</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    [ %MW1600 &lt;&gt; 2 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %MW1600 &lt;&gt; 1 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>R     %M60</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>COMM_OK_RST_VSD1</Name>
+            <MainComment>VSD1: komunikasi putus saat status bukan 2 dan bukan 1 (1 = init sesudah reset, abaikan)</MainComment>
             <Label />
             <IsLadderSelected>false</IsLadderSelected>
           </RungEntity>
@@ -459,12 +480,33 @@
                 <Comment></Comment>
               </InstructionLineEntity>
               <InstructionLineEntity>
-                <InstructionLine>ST    %M61</InstructionLine>
+                <InstructionLine>S     %M61</InstructionLine>
                 <Comment></Comment>
               </InstructionLineEntity>
             </InstructionLines>
-            <Name>COMM_OK_VSD2</Name>
-            <MainComment>VSD2: komunikasi OK bila status device IOScanner = 2</MainComment>
+            <Name>COMM_OK_SET_VSD2</Name>
+            <MainComment>VSD2: komunikasi OK saat status device IOScanner = 2</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    [ %MW1601 &lt;&gt; 2 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %MW1601 &lt;&gt; 1 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>R     %M61</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>COMM_OK_RST_VSD2</Name>
+            <MainComment>VSD2: komunikasi putus saat status bukan 2 dan bukan 1 (1 = init sesudah reset, abaikan)</MainComment>
             <Label />
             <IsLadderSelected>false</IsLadderSelected>
           </RungEntity>
@@ -476,12 +518,33 @@
                 <Comment></Comment>
               </InstructionLineEntity>
               <InstructionLineEntity>
-                <InstructionLine>ST    %M62</InstructionLine>
+                <InstructionLine>S     %M62</InstructionLine>
                 <Comment></Comment>
               </InstructionLineEntity>
             </InstructionLines>
-            <Name>COMM_OK_VSD3</Name>
-            <MainComment>VSD3: komunikasi OK bila status device IOScanner = 2</MainComment>
+            <Name>COMM_OK_SET_VSD3</Name>
+            <MainComment>VSD3: komunikasi OK saat status device IOScanner = 2</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    [ %MW1602 &lt;&gt; 2 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %MW1602 &lt;&gt; 1 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>R     %M62</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>COMM_OK_RST_VSD3</Name>
+            <MainComment>VSD3: komunikasi putus saat status bukan 2 dan bukan 1 (1 = init sesudah reset, abaikan)</MainComment>
             <Label />
             <IsLadderSelected>false</IsLadderSelected>
           </RungEntity>
@@ -493,12 +556,33 @@
                 <Comment></Comment>
               </InstructionLineEntity>
               <InstructionLineEntity>
-                <InstructionLine>ST    %M65</InstructionLine>
+                <InstructionLine>S     %M65</InstructionLine>
                 <Comment></Comment>
               </InstructionLineEntity>
             </InstructionLines>
-            <Name>COMM_OK_FLOW</Name>
-            <MainComment>FLOW: komunikasi OK bila status device IOScanner = 2</MainComment>
+            <Name>COMM_OK_SET_FLOW</Name>
+            <MainComment>FLOW: komunikasi OK saat status device IOScanner = 2</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    [ %MW1603 &lt;&gt; 2 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %MW1603 &lt;&gt; 1 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>R     %M65</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>COMM_OK_RST_FLOW</Name>
+            <MainComment>FLOW: komunikasi putus saat status bukan 2 dan bukan 1 (1 = init sesudah reset, abaikan)</MainComment>
             <Label />
             <IsLadderSelected>false</IsLadderSelected>
           </RungEntity>
@@ -510,12 +594,33 @@
                 <Comment></Comment>
               </InstructionLineEntity>
               <InstructionLineEntity>
-                <InstructionLine>ST    %M63</InstructionLine>
+                <InstructionLine>S     %M63</InstructionLine>
                 <Comment></Comment>
               </InstructionLineEntity>
             </InstructionLines>
-            <Name>COMM_OK_VSD4</Name>
-            <MainComment>VSD4: komunikasi OK bila status device IOScanner = 2</MainComment>
+            <Name>COMM_OK_SET_VSD4</Name>
+            <MainComment>VSD4: komunikasi OK saat status device IOScanner = 2</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    [ %MW1604 &lt;&gt; 2 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %MW1604 &lt;&gt; 1 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>R     %M63</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>COMM_OK_RST_VSD4</Name>
+            <MainComment>VSD4: komunikasi putus saat status bukan 2 dan bukan 1 (1 = init sesudah reset, abaikan)</MainComment>
             <Label />
             <IsLadderSelected>false</IsLadderSelected>
           </RungEntity>
@@ -527,12 +632,168 @@
                 <Comment></Comment>
               </InstructionLineEntity>
               <InstructionLineEntity>
-                <InstructionLine>ST    %M64</InstructionLine>
+                <InstructionLine>S     %M64</InstructionLine>
                 <Comment></Comment>
               </InstructionLineEntity>
             </InstructionLines>
-            <Name>COMM_OK_VSD5</Name>
-            <MainComment>VSD5: komunikasi OK bila status device IOScanner = 2</MainComment>
+            <Name>COMM_OK_SET_VSD5</Name>
+            <MainComment>VSD5: komunikasi OK saat status device IOScanner = 2</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    [ %MW1605 &lt;&gt; 2 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %MW1605 &lt;&gt; 1 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>R     %M64</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>COMM_OK_RST_VSD5</Name>
+            <MainComment>VSD5: komunikasi putus saat status bukan 2 dan bukan 1 (1 = init sesudah reset, abaikan)</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    1</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>[ %MW1606 := %SW210 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>IOS_STATE</Name>
+            <MainComment>Salin %SW210 (status IOScanner SL1: 0 stop, 1 init, 2 operasional, 3 sebagian, 4 suspend) untuk FUXA/diagnosa</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    %S6</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>ANDN  %M112</InstructionLine>
+                <Comment>%S6 scan sebelumnya</Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>[ %MW1610 := %MW1610 + 1 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>RETRY_SEC</Name>
+            <MainComment>Hitung detik: %S6 (basis waktu 1 s) = 1 dan scan sebelumnya 0 (%M112)</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    %S6</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>ST    %M112</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>RETRY_SEC_MEM</Name>
+            <MainComment>Simpan %S6 untuk deteksi sisi naik di scan berikutnya</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    [ %MW1610 &gt;= 15 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>ST    %M111</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>RETRY_PULSE</Name>
+            <MainComment>Pulse satu scan tiap 15 detik</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    %M111</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>[ %MW1610 := 0 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>RETRY_CNT_CLR</Name>
+            <MainComment>Nol-kan hitungan detik setelah pulse</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    %M111</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %SW210 &lt;&gt; 2 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>S     %S110</InstructionLine>
+                <Comment>reset Modbus Serial IOScanner SL1</Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>[ %MW1611 := %MW1611 + 1 ]</InstructionLine>
+                <Comment>jumlah reset (diagnosa)</Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>RETRY_RESET</Name>
+            <MainComment>IOScanner tidak operasional penuh -&gt; reset IOScanner SL1 (%S110) + hitung jumlah reset</MainComment>
+            <Label />
+            <IsLadderSelected>false</IsLadderSelected>
+          </RungEntity>
+          <RungEntity>
+            <LadderElements />
+            <InstructionLines>
+              <InstructionLineEntity>
+                <InstructionLine>LD    %S110</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>AND   [ %MW1610 &gt;= 3 ]</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+              <InstructionLineEntity>
+                <InstructionLine>R     %S110</InstructionLine>
+                <Comment></Comment>
+              </InstructionLineEntity>
+            </InstructionLines>
+            <Name>RETRY_RESET_CLR</Name>
+            <MainComment>Pengaman: kalau sistem belum menurunkan %S110 setelah 3 s, turunkan</MainComment>
             <Label />
             <IsLadderSelected>false</IsLadderSelected>
           </RungEntity>
@@ -2681,6 +2942,31 @@
         <Name>Commissioning</Name>
         <WatchListItemEntities>
           <WatchListItemEntity>
+            <Address>%MW1606</Address>
+            <IsTraced>false</IsTraced>
+            <ValueRepresentation>Decimal</ValueRepresentation>
+          </WatchListItemEntity>
+          <WatchListItemEntity>
+            <Address>%MW1611</Address>
+            <IsTraced>false</IsTraced>
+            <ValueRepresentation>Decimal</ValueRepresentation>
+          </WatchListItemEntity>
+          <WatchListItemEntity>
+            <Address>%IWNS100.0</Address>
+            <IsTraced>false</IsTraced>
+            <ValueRepresentation>Decimal</ValueRepresentation>
+          </WatchListItemEntity>
+          <WatchListItemEntity>
+            <Address>%IWNS100.1</Address>
+            <IsTraced>false</IsTraced>
+            <ValueRepresentation>Decimal</ValueRepresentation>
+          </WatchListItemEntity>
+          <WatchListItemEntity>
+            <Address>%IWNS100.2</Address>
+            <IsTraced>false</IsTraced>
+            <ValueRepresentation>Decimal</ValueRepresentation>
+          </WatchListItemEntity>
+          <WatchListItemEntity>
             <Address>%MW1600</Address>
             <IsTraced>false</IsTraced>
             <ValueRepresentation>Decimal</ValueRepresentation>
@@ -3128,6 +3414,18 @@
         <Index>99</Index>
         <Symbol>WORD_SWAP</Symbol>
         <Comment>0 = tukar word 32-bit (default), 1 = lurus</Comment>
+      </MemoryBit>
+      <MemoryBit>
+        <Address>%M111</Address>
+        <Index>111</Index>
+        <Symbol>RETRY_PULSE</Symbol>
+        <Comment>Pulse auto-retry IOScanner (rev5)</Comment>
+      </MemoryBit>
+      <MemoryBit>
+        <Address>%M112</Address>
+        <Index>112</Index>
+        <Symbol>S6_PREV</Symbol>
+        <Comment>%S6 scan sebelumnya (deteksi sisi naik)</Comment>
       </MemoryBit>
     </MemoryBits>
     <SystemBits>
@@ -4720,6 +5018,24 @@
         <Symbol>VSD5_IOS_STAT</Symbol>
         <Comment>VSD5 status device IOScanner</Comment>
       </MemoryWord>
+      <MemoryWord>
+        <Address>%MW1606</Address>
+        <Index>1606</Index>
+        <Symbol>IOS_SL1_STATE</Symbol>
+        <Comment>%SW210: 0 stop 1 init 2 OK 3 sebagian 4 suspend</Comment>
+      </MemoryWord>
+      <MemoryWord>
+        <Address>%MW1610</Address>
+        <Index>1610</Index>
+        <Symbol>RETRY_SEC_CNT</Symbol>
+        <Comment>Hitungan detik auto-retry IOScanner</Comment>
+      </MemoryWord>
+      <MemoryWord>
+        <Address>%MW1611</Address>
+        <Index>1611</Index>
+        <Symbol>IOS_RESET_COUNT</Symbol>
+        <Comment>Jumlah reset IOScanner SL1 oleh program</Comment>
+      </MemoryWord>
     </MemoryWords>
     <MemoryDoubleWords />
     <MemoryFloats />
@@ -5365,7 +5681,7 @@
             <DeviceTypeName>Generic device</DeviceTypeName>
             <DeviceTypeId>8</DeviceTypeId>
             <SlaveAddress>1</SlaveAddress>
-            <ResponseTime>10</ResponseTime>
+            <ResponseTime>3</ResponseTime>
             <Name>vsd1acs550</Name>
             <Channels>
               <SerialLineIoScannerChannelEntity>
@@ -5422,7 +5738,7 @@
             <DeviceTypeName>Generic device</DeviceTypeName>
             <DeviceTypeId>8</DeviceTypeId>
             <SlaveAddress>2</SlaveAddress>
-            <ResponseTime>10</ResponseTime>
+            <ResponseTime>3</ResponseTime>
             <Name>vsd2</Name>
             <Channels>
               <SerialLineIoScannerChannelEntity>
@@ -5509,7 +5825,7 @@
             <DeviceTypeName>Generic device</DeviceTypeName>
             <DeviceTypeId>8</DeviceTypeId>
             <SlaveAddress>3</SlaveAddress>
-            <ResponseTime>10</ResponseTime>
+            <ResponseTime>3</ResponseTime>
             <Name>vsd3future</Name>
             <Channels>
               <SerialLineIoScannerChannelEntity>
@@ -5596,7 +5912,7 @@
             <DeviceTypeName>Generic device</DeviceTypeName>
             <DeviceTypeId>8</DeviceTypeId>
             <SlaveAddress>4</SlaveAddress>
-            <ResponseTime>10</ResponseTime>
+            <ResponseTime>3</ResponseTime>
             <Name>flowmeter</Name>
             <Channels>
               <SerialLineIoScannerChannelEntity>
@@ -5653,7 +5969,7 @@
             <DeviceTypeName>Generic device</DeviceTypeName>
             <DeviceTypeId>8</DeviceTypeId>
             <SlaveAddress>5</SlaveAddress>
-            <ResponseTime>10</ResponseTime>
+            <ResponseTime>3</ResponseTime>
             <Name>vsd4</Name>
             <Channels>
               <SerialLineIoScannerChannelEntity>
@@ -5740,7 +6056,7 @@
             <DeviceTypeName>Generic device</DeviceTypeName>
             <DeviceTypeId>8</DeviceTypeId>
             <SlaveAddress>6</SlaveAddress>
-            <ResponseTime>10</ResponseTime>
+            <ResponseTime>3</ResponseTime>
             <Name>vsd5</Name>
             <Channels>
               <SerialLineIoScannerChannelEntity>
